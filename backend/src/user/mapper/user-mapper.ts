@@ -1,0 +1,24 @@
+import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { ResponseUserDto } from '../dto/response-user.dto';
+import { User } from '../entities/user.entity';
+
+@Injectable()
+export class UserMapper {
+  toDto(entity: User): ResponseUserDto {
+    const dto = new ResponseUserDto();
+    dto.id = entity.id;
+    dto.name = entity.name;
+    dto.email = entity.email;
+    dto.role = entity.role;
+    return dto;
+  }
+
+  toEntity(dto: CreateUserDto): User {
+    const entity = new User();
+    entity.name = dto.name;
+    entity.email = dto.email;
+    entity.password = dto.password;
+    return entity;
+  }
+}
