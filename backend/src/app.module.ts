@@ -19,7 +19,8 @@ import { UserModule } from './user/user.module';
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_DATABASE'),
         autoLoadEntities: config.get<boolean>('DB_AUTOLOAD_ENTITIES'),
-        synchronize: config.get<boolean>('DB_SYNCHRONIZE'),
+        synchronize: config.get<boolean>('DB_SYNCHRONIZE'), // Nunca usar true em produção
+        migrations: ['src/migrations/*{.ts,.js}'],
       }),
     }),
     UserModule,
