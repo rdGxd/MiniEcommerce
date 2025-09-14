@@ -28,7 +28,7 @@ export class AuthService {
   ) {}
 
   async login(dto: LoginAuthDto): Promise<ResponseTokenDto> {
-    const user = await this.userService.findByEmail(dto.email);
+    const user = await this.userService.findUserByEmailAddress(dto.email);
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -66,7 +66,7 @@ export class AuthService {
         },
       );
 
-      const user = await this.userService.findEntityById(sub);
+      const user = await this.userService.findUserById(sub);
       if (!user) {
         throw new NotFoundException('User not found');
       }

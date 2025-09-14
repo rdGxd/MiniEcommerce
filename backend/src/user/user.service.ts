@@ -61,9 +61,8 @@ export class UserService {
   }
 
   // Métodos adicionais para autenticação
-  async findByEmail(email: string): Promise<User> {
+  async findUserByEmailAddress(email: string): Promise<User> {
     const user = await this.userRepository.findOneBy({ email });
-    console.log('User found:', user);
     if (!user) {
       throw new NotFoundException('Usuário nao encontrado');
     }
@@ -71,7 +70,11 @@ export class UserService {
     return user;
   }
 
-  async findEntityById(id: string): Promise<User | null> {
-    return await this.userRepository.findOneBy({ id });
+  async findUserById(id: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException('Usuário nao encontrado');
+    }
+    return user;
   }
 }
