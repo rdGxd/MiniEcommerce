@@ -2,7 +2,7 @@
 
 ## Tarefas
 
-- [ ] Criar entidade `Product` → [Product Entity](/backend/src/products/entities/product.entity.ts)
+- [x] Criar entidade `Product` → [Product Entity](/backend/src/products/entities/product.entity.ts)
 - [ ] Criar entidade `Category` → [Category Entity](/backend/src/products/entities/category.entity.ts)
 - [ ] Criar DTOs (`CreateProductDto`, `UpdateProductDto`) → [DTOs](/backend/src/products/dto)
 - [ ] CRUD de produtos e categorias

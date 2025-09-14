@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { AuthAndPolicyGuard } from './auth/guards/auth-and-policy.guard';
 import { HashingModule } from './common/hashing/hashing.module';
 import { UserModule } from './user/user.module';
+import { ProductModule } from './product/product.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { UserModule } from './user/user.module';
     }),
     UserModule,
     AuthModule,
+    ProductModule,
+    CategoryModule,
   ],
   providers: [
     {
