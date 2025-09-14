@@ -1,3 +1,6 @@
+import { REQUEST_TOKEN_PAYLOAD_KEY } from '@/auth/constants/auth.constants';
+import { jwtConfig } from '@/common/config/jwt-config';
+import { UserService } from '@/user/user.service';
 import {
   CanActivate,
   ExecutionContext,
@@ -9,9 +12,6 @@ import {
 import type { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { jwtConfig } from 'src/common/config/jwt-config';
-import { UserService } from 'src/user/user.service';
-import { REQUEST_TOKEN_PAYLOAD_KEY } from '../constants/auth.constants';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

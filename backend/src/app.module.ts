@@ -1,13 +1,13 @@
+import { AuthModule } from '@/auth/auth.module';
+import { AuthAndPolicyGuard } from '@/auth/guards/auth-and-policy.guard';
+import { CategoryModule } from '@/category/category.module';
+import { HashingModule } from '@/common/hashing/hashing.module';
+import { ProductModule } from '@/product/product.module';
+import { UserModule } from '@/user/user.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { AuthAndPolicyGuard } from './auth/guards/auth-and-policy.guard';
-import { HashingModule } from './common/hashing/hashing.module';
-import { UserModule } from './user/user.module';
-import { ProductModule } from './product/product.module';
-import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [

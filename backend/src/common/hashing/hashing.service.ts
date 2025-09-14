@@ -1,6 +1,6 @@
+import { HashingProtocol } from '@/common/hashing/hashing-protocol';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { HashingProtocol } from './hashing-protocol';
 
 @Injectable()
 export class HashingService extends HashingProtocol {

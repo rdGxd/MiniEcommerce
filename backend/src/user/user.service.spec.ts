@@ -1,10 +1,10 @@
+import { HashingProtocol } from '@/common/hashing/hashing-protocol';
+import { User } from '@/user/entities/user.entity';
+import { UserMapper } from '@/user/mapper/user-mapper';
+import { UserService } from '@/user/user.service';
 import { Test, type TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { HashingProtocol } from 'src/common/hashing/hashing-protocol';
 import { type Repository } from 'typeorm';
-import { User } from './entities/user.entity';
-import { UserMapper } from './mapper/user-mapper';
-import { UserService } from './user.service';
 
 describe('UserService', () => {
   let service: UserService;

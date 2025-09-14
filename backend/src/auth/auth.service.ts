@@ -1,3 +1,13 @@
+import { LoginAuthDto } from '@/auth/dto/login-auth.dto';
+import { RefreshTokenDto } from '@/auth/dto/refresh-token.dto';
+import { ResponseTokenDto } from '@/auth/dto/response-token.dto';
+import { jwtConfig } from '@/common/config/jwt-config';
+import { PayloadDto } from '@/common/dto/payload.dto';
+import { HashingProtocol } from '@/common/hashing/hashing-protocol';
+import { CreateUserDto } from '@/user/dto/create-user.dto';
+import { ResponseUserDto } from '@/user/dto/response-user.dto';
+import { User } from '@/user/entities/user.entity';
+import { UserService } from '@/user/user.service';
 import {
   Inject,
   Injectable,
@@ -6,16 +16,6 @@ import {
 } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConfig } from 'src/common/config/jwt-config';
-import { PayloadDto } from 'src/common/dto/payload.dto';
-import { HashingProtocol } from 'src/common/hashing/hashing-protocol';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { ResponseUserDto } from 'src/user/dto/response-user.dto';
-import { User } from 'src/user/entities/user.entity';
-import { UserService } from 'src/user/user.service';
-import { LoginAuthDto } from './dto/login-auth.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { ResponseTokenDto } from './dto/response-token.dto';
 
 @Injectable()
 export class AuthService {
