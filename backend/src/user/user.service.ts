@@ -6,7 +6,11 @@ import { ResponseUserDto } from '@/user/dto/response-user.dto';
 import { UpdateUserDto } from '@/user/dto/update-user.dto';
 import { User } from '@/user/entities/user.entity';
 import { UserMapper } from '@/user/mapper/user-mapper';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -18,10 +22,13 @@ export class UserService {
     private readonly hashingService: HashingProtocol,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<ResponseUserDto> {
+  async create(createUserDto: CreateUserDto) {
     const user = this.userMapper.toEntity(createUserDto);
     user.password = await this.hashingService.hash(user.password);
     const savedUser = await this.userRepository.save(user);
+    if (!savedUser) {
+      throw new BadRequestException(USER_ERRORS.DATABASE_ERROR);
+    }
     return this.userMapper.toDto(savedUser);
   }
 
@@ -47,7 +54,7 @@ export class UserService {
     };
   }
 
-  async findOne(id: string): Promise<ResponseUserDto> {
+  async findOne(id: string) {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
@@ -55,32 +62,40 @@ export class UserService {
     return this.userMapper.toDto(user);
   }
 
-  async update(
-    id: string,
-    updateUserDto: UpdateUserDto,
-  ): Promise<ResponseUserDto> {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
+    user.email = updateUserDto?.email ?? user.email;
+    user.role = updateUserDto?.role ?? user.role;
 
-    this.userRepository.merge(user, updateUserDto);
+    if (updateUserDto.password) {
+      user.password = await this.hashingService.hash(updateUserDto.password);
+    }
+
     const userUpdated = await this.userRepository.save(user);
+    if (!userUpdated) {
+      throw new BadRequestException(USER_ERRORS.UPDATE_FAILED);
+    }
 
     return this.userMapper.toDto(userUpdated);
   }
 
-  async remove(id: string): Promise<boolean> {
+  async remove(id: string) {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
-    await this.userRepository.delete(id);
-    return true;
+    const result = await this.userRepository.remove(user);
+    if (!result) {
+      throw new BadRequestException(USER_ERRORS.DELETION_FAILED);
+    }
+    return this.userMapper.toDto(result);
   }
 
   // Métodos adicionais para autenticação
-  async findUserByEmailAddress(email: string): Promise<User> {
+  async findUserByEmailAddress(email: string) {
     const user = await this.userRepository.findOneBy({ email });
     if (!user) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
@@ -89,7 +104,7 @@ export class UserService {
     return user;
   }
 
-  async findUserById(id: string): Promise<User> {
+  async findUserById(id: string) {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);

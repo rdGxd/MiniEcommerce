@@ -7,4 +7,7 @@ export const CATEGORY_ERRORS = {
   PARENT_CATEGORY_NOT_FOUND: 'Categoria pai não encontrada',
   CANNOT_SET_PARENT_TO_SELF:
     'Não é possível definir a categoria pai como ela mesma',
+  FAILED_CREATED: 'Falha ao criar a categoria',
+  FAILED_UPDATED: 'Falha ao atualizar a categoria',
+  FAILED_DELETED: 'Falha ao deletar a categoria',
 };

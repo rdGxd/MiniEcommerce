@@ -16,11 +16,12 @@ export class CategoryService {
     private readonly categoryMapper: CategoryMapper,
   ) {}
 
-  async create(
-    createCategoryDto: CreateCategoryDto,
-  ): Promise<ResponseCategoryDto> {
+  async create(createCategoryDto: CreateCategoryDto) {
     const category = this.categoryMapper.toEntity(createCategoryDto);
     const savedCategory = await this.categoryRepository.save(category);
+    if (!savedCategory) {
+      throw new NotFoundException(CATEGORY_ERRORS.FAILED_CREATED);
+    }
     return this.categoryMapper.toDto(savedCategory);
   }
 
@@ -29,7 +30,7 @@ export class CategoryService {
     return allCategories.map(category => this.categoryMapper.toDto(category));
   }
 
-  async findOne(id: string): Promise<ResponseCategoryDto> {
+  async findOne(id: string) {
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
       throw new NotFoundException(CATEGORY_ERRORS.NOT_FOUND);
@@ -38,30 +39,30 @@ export class CategoryService {
   }
 
   // TODO: Falta pegar o token do usuário logado para fazer a atualização
-  async update(
-    id: string,
-    updateCategoryDto: UpdateCategoryDto,
-  ): Promise<ResponseCategoryDto> {
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
       throw new NotFoundException(CATEGORY_ERRORS.NOT_FOUND);
     }
+    category.name = updateCategoryDto.name ?? category.name;
 
-    const updatedCategory = this.categoryRepository.merge(
-      category,
-      updateCategoryDto,
-    );
-
-    const savedCategory = await this.categoryRepository.save(updatedCategory);
+    const savedCategory = await this.categoryRepository.save(category);
+    if (!savedCategory) {
+      throw new NotFoundException(CATEGORY_ERRORS.FAILED_UPDATED);
+    }
     return this.categoryMapper.toDto(savedCategory);
   }
 
   // TODO: Falta pegar o token do usuário logado para fazer a atualização
-  async remove(id: string): Promise<void> {
+  async remove(id: string) {
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
       throw new NotFoundException(CATEGORY_ERRORS.NOT_FOUND);
     }
-    await this.categoryRepository.remove(category);
+    const result = await this.categoryRepository.remove(category);
+    if (!result) {
+      throw new NotFoundException(CATEGORY_ERRORS.FAILED_DELETED);
+    }
+    return result;
   }
 }

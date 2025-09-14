@@ -1,7 +1,11 @@
 import { PRODUCT_ERRORS } from '@/constants/product.constants';
 import { CreateProductDto } from '@/product/dto/create-product.dto';
 import { UpdateProductDto } from '@/product/dto/update-product.dto';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
@@ -18,6 +22,9 @@ export class ProductService {
   async create(createProductDto: CreateProductDto) {
     const product = this.productMapper.toEntity(createProductDto);
     const savedProduct = await this.productRepository.save(product);
+    if (!savedProduct) {
+      throw new BadRequestException(PRODUCT_ERRORS.CREATION_FAILED);
+    }
     return this.productMapper.toDto(savedProduct);
   }
 
@@ -46,9 +53,17 @@ export class ProductService {
     if (!product) {
       throw new NotFoundException(PRODUCT_ERRORS.NOT_FOUND);
     }
-    this.productRepository.merge(product, updateProductDto);
-    await this.productRepository.save(product);
-    return this.productMapper.toDto(product);
+    product.name = updateProductDto.name ?? product.name;
+    product.description = updateProductDto.description ?? product.description;
+    product.price = updateProductDto.price ?? product.price;
+    product.stock = updateProductDto.stock ?? product.stock;
+    product.imageUrl = updateProductDto.imageUrl ?? product.imageUrl;
+
+    const updatedProduct = await this.productRepository.save(product);
+    if (!updatedProduct) {
+      throw new BadRequestException(PRODUCT_ERRORS.UPDATE_FAILED);
+    }
+    return this.productMapper.toDto(updatedProduct);
   }
 
   async remove(id: string) {
@@ -56,6 +71,10 @@ export class ProductService {
     if (!product) {
       throw new NotFoundException(PRODUCT_ERRORS.NOT_FOUND);
     }
-    await this.productRepository.remove(product);
+    const result = await this.productRepository.remove(product);
+    if (!result) {
+      throw new BadRequestException(PRODUCT_ERRORS.DELETION_FAILED);
+    }
+    return this.productMapper.toDto(result);
   }
 }

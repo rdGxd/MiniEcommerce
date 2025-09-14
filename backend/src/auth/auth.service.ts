@@ -1,12 +1,10 @@
 import { LoginAuthDto } from '@/auth/dto/login-auth.dto';
 import { RefreshTokenDto } from '@/auth/dto/refresh-token.dto';
-import { ResponseTokenDto } from '@/auth/dto/response-token.dto';
 import { jwtConfig } from '@/common/config/jwt-config';
 import { PayloadDto } from '@/common/dto/payload.dto';
 import { HashingProtocol } from '@/common/hashing/hashing-protocol';
 import { USER_ERRORS } from '@/constants/user.constants';
 import { CreateUserDto } from '@/user/dto/create-user.dto';
-import { ResponseUserDto } from '@/user/dto/response-user.dto';
 import { User } from '@/user/entities/user.entity';
 import { UserService } from '@/user/user.service';
 import {
@@ -28,7 +26,7 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
-  async login(dto: LoginAuthDto): Promise<ResponseTokenDto> {
+  async login(dto: LoginAuthDto) {
     const user = await this.userService.findUserByEmailAddress(dto.email);
 
     if (!user) {
@@ -46,17 +44,15 @@ export class AuthService {
     return await this.generateToken(user);
   }
 
-  async register(dto: CreateUserDto): Promise<ResponseUserDto> {
+  async register(dto: CreateUserDto) {
     return await this.userService.create(dto);
   }
 
-  async getProfile(tokenPayload: PayloadDto): Promise<ResponseUserDto> {
+  async getProfile(tokenPayload: PayloadDto) {
     return await this.userService.findOne(tokenPayload.sub);
   }
 
-  async refreshToken(
-    refreshTokenDto: RefreshTokenDto,
-  ): Promise<ResponseTokenDto> {
+  async refreshToken(refreshTokenDto: RefreshTokenDto) {
     try {
       const { sub } = await this.jwtService.verifyAsync(
         refreshTokenDto.refreshToken,
@@ -66,6 +62,10 @@ export class AuthService {
           issuer: this.jwtConfiguration.signOptions.issuer,
         },
       );
+
+      if (!sub) {
+        throw new UnauthorizedException(USER_ERRORS.INVALID_CREDENTIALS);
+      }
 
       const user = await this.userService.findUserById(sub);
       if (!user) {
@@ -79,7 +79,7 @@ export class AuthService {
     }
   }
 
-  async generateToken(user: User): Promise<ResponseTokenDto> {
+  async generateToken(user: User) {
     const accessTokenPromise = this.signJwtAsync(
       user,
       this.jwtConfiguration.signOptions.expiresIn,
@@ -106,7 +106,7 @@ export class AuthService {
     };
   }
 
-  private async signJwtAsync(user: User, expiresIn: number): Promise<string> {
+  private async signJwtAsync(user: User, expiresIn: number) {
     return await this.jwtService.signAsync(
       { sub: user.id, roles: user.role },
       {
