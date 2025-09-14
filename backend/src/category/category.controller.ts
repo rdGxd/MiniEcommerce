@@ -1,3 +1,4 @@
+import { Public } from '@/auth/decorators/set-is-public-policy.decorator';
 import { CategoryService } from '@/category/category.service';
 import { CreateCategoryDto } from '@/category/dto/create-category.dto';
 import { UpdateCategoryDto } from '@/category/dto/update-category.dto';
@@ -21,25 +22,29 @@ export class CategoryController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.categoryService.findAll();
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(+id);
+    return this.categoryService.findOne(id);
   }
 
+  // TODO: Falta pegar o token do usuário logado para fazer a atualização
   @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoryService.update(+id, updateCategoryDto);
+    return this.categoryService.update(id, updateCategoryDto);
   }
 
+  // TODO: Falta pegar o token do usuário logado para fazer a atualização
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
+    return this.categoryService.remove(id);
   }
 }

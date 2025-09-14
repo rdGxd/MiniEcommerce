@@ -1,26 +1,66 @@
 import { CreateCategoryDto } from '@/category/dto/create-category.dto';
 import { UpdateCategoryDto } from '@/category/dto/update-category.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ResponseCategoryDto } from './dto/response-category.dto';
+import { Category } from './entities/category.entity';
+import { CategoryMapper } from './mapper/category-mapper';
 
 @Injectable()
 export class CategoryService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(
+    @InjectRepository(Category)
+    private readonly categoryRepository: Repository<Category>,
+    private readonly categoryMapper: CategoryMapper,
+  ) {}
+
+  async create(
+    createCategoryDto: CreateCategoryDto,
+  ): Promise<ResponseCategoryDto> {
+    const category = this.categoryMapper.toEntity(createCategoryDto);
+    const savedCategory = await this.categoryRepository.save(category);
+    return this.categoryMapper.toDto(savedCategory);
   }
 
-  findAll() {
-    return `This action returns all category`;
+  async findAll(): Promise<ResponseCategoryDto[]> {
+    const allCategories = await this.categoryRepository.find();
+    return allCategories.map(category => this.categoryMapper.toDto(category));
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string): Promise<ResponseCategoryDto> {
+    const category = await this.categoryRepository.findOneBy({ id });
+    if (!category) {
+      throw new NotFoundException('Categoria não encontrada');
+    }
+    return this.categoryMapper.toDto(category);
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  // TODO: Falta pegar o token do usuário logado para fazer a atualização
+  async update(
+    id: string,
+    updateCategoryDto: UpdateCategoryDto,
+  ): Promise<ResponseCategoryDto> {
+    const category = await this.categoryRepository.findOneBy({ id });
+    if (!category) {
+      throw new NotFoundException('Categoria não encontrada');
+    }
+
+    const updatedCategory = this.categoryRepository.merge(
+      category,
+      updateCategoryDto,
+    );
+
+    const savedCategory = await this.categoryRepository.save(updatedCategory);
+    return this.categoryMapper.toDto(savedCategory);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  // TODO: Falta pegar o token do usuário logado para fazer a atualização
+  async remove(id: string): Promise<void> {
+    const category = await this.categoryRepository.findOneBy({ id });
+    if (!category) {
+      throw new NotFoundException('Categoria não encontrada');
+    }
+    await this.categoryRepository.remove(category);
   }
 }

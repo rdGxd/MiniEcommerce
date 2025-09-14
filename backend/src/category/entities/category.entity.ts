@@ -1,5 +1,11 @@
 import { Product } from '@/product/entities/product.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Category {
@@ -11,4 +17,10 @@ export class Category {
 
   @ManyToMany(type => Product, product => product.categories)
   products: Product[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @CreateDateColumn()
+  updatedAt: Date;
 }
