@@ -8,6 +8,6 @@ export default registerAs('database', () => ({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   autoLoadEntities: Boolean(process.env.DB_AUTOLOAD_ENTITIES),
-  synchronize: Boolean(process.env.DB_SYNCHRONIZE), // Nunca usar true em produção
+  synchronize: Boolean(process.env.DB_SYNCHRONIZE), // * SEMPRE COLOCAR COMO FALSE EM PRODUÇÃO
   migrations: ['dist/migrations/*{.ts,.js}'],
 }));
