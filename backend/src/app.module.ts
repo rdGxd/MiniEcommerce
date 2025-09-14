@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { AuthAndPolicyGuard } from './auth/guards/auth-and-policy.guard';
+import { HashingModule } from './common/hashing/hashing.module';
 import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
+    HashingModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -20,12 +25,18 @@ import { UserModule } from './user/user.module';
         database: config.get('DB_DATABASE'),
         autoLoadEntities: config.get<boolean>('DB_AUTOLOAD_ENTITIES'),
         synchronize: config.get<boolean>('DB_SYNCHRONIZE'), // Nunca usar true em produção
-        migrations: ['src/migrations/*{.ts,.js}'],
+        migrations: ['dist/migrations/*{.ts,.js}'],
       }),
     }),
     UserModule,
+    AuthModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthAndPolicyGuard,
+    },
+  ],
   controllers: [],
   exports: [],
 })

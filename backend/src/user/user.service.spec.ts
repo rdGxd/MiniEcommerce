@@ -1,6 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { HashingProtocol } from 'src/common/hashing/hashing-protocol';
+import { type Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UserMapper } from './mapper/user-mapper';
 import { UserService } from './user.service';
@@ -9,6 +10,7 @@ describe('UserService', () => {
   let service: UserService;
   let userRepository: Repository<User>;
   let userMapper: UserMapper;
+  let hashingService: HashingProtocol;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -31,17 +33,26 @@ describe('UserService', () => {
             delete: jest.fn(),
           },
         },
+        {
+          provide: HashingProtocol,
+          useValue: {
+            hash: jest.fn(),
+            compare: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<UserService>(UserService);
     userRepository = module.get<Repository<User>>(getRepositoryToken(User));
     userMapper = module.get<UserMapper>(UserMapper);
+    hashingService = module.get<HashingProtocol>(HashingProtocol);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
     expect(userRepository).toBeDefined();
     expect(userMapper).toBeDefined();
+    expect(hashingService).toBeDefined();
   });
 });
