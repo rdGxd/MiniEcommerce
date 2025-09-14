@@ -1,26 +1,60 @@
 import { CreateProductDto } from '@/product/dto/create-product.dto';
 import { UpdateProductDto } from '@/product/dto/update-product.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Product } from './entities/product.entity';
+import { ProductMapper } from './mapper/product-mapper';
 
 @Injectable()
 export class ProductService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+    private readonly productMapper: ProductMapper,
+  ) {}
+
+  async create(createProductDto: CreateProductDto) {
+    const product = this.productMapper.toEntity(createProductDto);
+    const savedProduct = await this.productRepository.save(product);
+    return this.productMapper.toDto(savedProduct);
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findAll() {
+    const products = await this.productRepository.find({
+      relations: ['categories'],
+    });
+    return products.map(prod => this.productMapper.toDto(prod));
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string) {
+    const product = await this.productRepository.findOne({
+      where: { id: id },
+      relations: ['categories'],
+    });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return this.productMapper.toDto(product);
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    const product = await this.productRepository.findOne({ where: { id: id } });
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+    this.productRepository.merge(product, updateProductDto);
+    await this.productRepository.save(product);
+    return this.productMapper.toDto(product);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: string) {
+    const product = await this.productRepository.findOneBy({ id: id });
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+    await this.productRepository.remove(product);
   }
 }
