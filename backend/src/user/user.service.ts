@@ -19,8 +19,8 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<ResponseUserDto> {
     const user = this.userMapper.toEntity(createUserDto);
     user.password = await this.hashingService.hash(user.password);
-    await this.userRepository.save(user);
-    return this.userMapper.toDto(user);
+    const savedUser = await this.userRepository.save(user);
+    return this.userMapper.toDto(savedUser);
   }
 
   async findAll(): Promise<ResponseUserDto[]> {
@@ -61,8 +61,14 @@ export class UserService {
   }
 
   // Métodos adicionais para autenticação
-  async findByEmail(email: string): Promise<User | null> {
-    return await this.userRepository.findOneBy({ email });
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({ email });
+    console.log('User found:', user);
+    if (!user) {
+      throw new NotFoundException('Usuário nao encontrado');
+    }
+
+    return user;
   }
 
   async findEntityById(id: string): Promise<User | null> {

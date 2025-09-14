@@ -7,8 +7,10 @@ import { PayloadDto } from '@/common/dto/payload.dto';
 import { CreateUserDto } from '@/user/dto/create-user.dto';
 import { ResponseUserDto } from '@/user/dto/response-user.dto';
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Public } from './decorators/set-is-public-policy.decorator';
 
 @Controller('auth')
+@Public()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

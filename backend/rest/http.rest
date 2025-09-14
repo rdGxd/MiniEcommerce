@@ -1,0 +1,187 @@
+@baseUrl = http://localhost:3001
+@adminEmailForTesting = admin1@ecommerce.com
+@adminPasswordForTesting = admin1234
+@adminToken = {{adminLogin.response.body.accessToken}}
+@refreshToken = {{adminLogin.response.body.refreshToken}}
+@userEmailForTesting = user1@ecommerce.com
+@userPasswordForTesting = user1234
+@userToken = {{userLogin.response.body.accessToken}}
+@userToken = {{userLogin.response.body.refreshToken}}
+@productId = {{createProduct.response.body.id}}
+@addressId = {{addAddress.response.body.id}}
+@userId = {{userLogin.response.body.id}}
+
+### Admin Login
+# @name adminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmailForTesting}}",
+  "password": "{{adminPasswordForTesting}}"
+}
+
+### User Login
+# @name userLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{userEmailForTesting}}",
+  "password": "{{userPasswordForTesting}}"
+}
+
+### Register New User
+# @name registerUser
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Novo Usuario",
+  "email": "{{userEmailForTesting}}",
+  "password": "{{userPasswordForTesting}}"
+}
+
+### Get All Products (Public Endpoint)
+# @name getAllProducts
+GET {{baseUrl}}/products
+Content-Type: application/json
+
+### Get Product by ID (Public Endpoint)
+# @name getProductById
+GET {{baseUrl}}/products/{{productId}}
+Content-Type: application/json
+
+### Create Product (Admin Only - requires token)
+# @name createProduct
+POST {{baseUrl}}/products/create
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Produto Teste",
+  "description": "Descrição do produto teste",
+  "price": 99.99,
+  "quantity": 10,
+  "category": "ELETRONICOS",
+  "imageUrl": "https://example.com/image.jpg",
+  "isSale": false,
+  "isTopSeller": false
+}
+
+### Add Address (Authenticated)
+# @name addAddress
+POST {{baseUrl}}/address/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "street": "Rua das Flores",
+  "number": "123",
+  "neighborhood": "Centro",
+  "city": "São Paulo",
+  "state": "SP",
+  "zipCode": "01234567"
+}
+
+### Get User Addresses (Authenticated)
+# @name getUserAddresses
+GET {{baseUrl}}/address/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+### Update Address (Authenticated)
+# @name updateAddress
+PUT {{baseUrl}}/address/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "id": "{{addressId}}",
+  "street": "Rua das Flores Atualizada",
+  "number": "456",
+  "neighborhood": "Centro",
+  "city": "São Paulo",
+  "state": "SP",
+  "zipCode": "01234567"
+}
+
+### Delete Address (Authenticated)
+# @name deleteAddress
+DELETE {{baseUrl}}/address/{{userId}}/{{addressId}}
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+### Get User Cart (Authenticated)
+# @name getUserCart
+GET {{baseUrl}}/cart/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+### Add Item to Cart (Authenticated)
+# @name addToCart
+POST {{baseUrl}}/cart/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "productId": "{{productId}}",
+  "quantity": 2,
+  "priceUnitario": 99.99,
+  "totalPrice": 199.98
+}
+
+### Get All Users (Admin Only)
+# @name getAllUsers
+GET {{baseUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+### Test Migrations (Admin Only)
+# @name testMigrations
+GET {{baseUrl}}/admin/migrations/test
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+### Get Migration Status (Admin Only)
+# @name getMigrationStatus
+GET {{baseUrl}}/admin/migrations/status
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+### Health Check
+# @name healthCheck
+GET {{baseUrl}}/actuator/health
+Content-Type: application/json
+
+### Refresh Token
+# @name refreshToken
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Logout
+# @name logout
+POST {{baseUrl}}/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}://localhost:8080
+@userNameForTesting = Admin
+@userEmailForTesting = admin@email.com
+@userPasswordForTesting = admin
+@userNewPasswordForTesting = admin
+
+### Auth login
+# @name authLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{userEmailForTesting}}",
+  "password": "{{userPasswordForTesting}}"
+}
