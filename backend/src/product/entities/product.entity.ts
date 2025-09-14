@@ -1,4 +1,5 @@
 import { Category } from '@/category/entities/category.entity';
+import { BaseEntityProps } from '@/common/interfaces/base-entity-props';
 import {
   Column,
   CreateDateColumn,
@@ -10,11 +11,11 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Product {
+export class Product implements BaseEntityProps {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   name: string;
 
   @Column({ nullable: false })

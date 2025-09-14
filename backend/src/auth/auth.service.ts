@@ -4,6 +4,7 @@ import { ResponseTokenDto } from '@/auth/dto/response-token.dto';
 import { jwtConfig } from '@/common/config/jwt-config';
 import { PayloadDto } from '@/common/dto/payload.dto';
 import { HashingProtocol } from '@/common/hashing/hashing-protocol';
+import { USER_ERRORS } from '@/constants/user.constants';
 import { CreateUserDto } from '@/user/dto/create-user.dto';
 import { ResponseUserDto } from '@/user/dto/response-user.dto';
 import { User } from '@/user/entities/user.entity';
@@ -31,7 +32,7 @@ export class AuthService {
     const user = await this.userService.findUserByEmailAddress(dto.email);
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
 
     const isValidPassword = await this.hashingService.compare(
@@ -40,7 +41,7 @@ export class AuthService {
     );
 
     if (!isValidPassword) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException(USER_ERRORS.INVALID_CREDENTIALS);
     }
     return await this.generateToken(user);
   }
@@ -68,13 +69,13 @@ export class AuthService {
 
       const user = await this.userService.findUserById(sub);
       if (!user) {
-        throw new NotFoundException('User not found');
+        throw new NotFoundException(USER_ERRORS.NOT_FOUND);
       }
 
       return await this.generateToken(user);
     } catch (error) {
       console.error('Refresh token error', error);
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException(USER_ERRORS.INVALID_CREDENTIALS);
     }
   }
 

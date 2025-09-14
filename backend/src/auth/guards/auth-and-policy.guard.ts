@@ -1,6 +1,6 @@
-import { IS_PUBLIC_KEY } from '@/auth/constants/public.constants';
 import { AuthGuard } from '@/auth/guards/auth.guard';
 import { RolesGuard } from '@/auth/guards/roles-guard.guard';
+import { IS_PUBLIC_KEY } from '@/constants/public.constants';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 

@@ -1,4 +1,4 @@
-import { ROUTE_POLICY_KEY } from '@/auth/constants/route.constants';
+import { ROUTE_POLICY_KEY } from '@/constants/route.constants';
 import { UserRoles } from '@/user/enums/roles.enum';
 import { CustomDecorator, SetMetadata } from '@nestjs/common';
 

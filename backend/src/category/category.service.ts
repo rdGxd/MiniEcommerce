@@ -1,5 +1,6 @@
 import { CreateCategoryDto } from '@/category/dto/create-category.dto';
 import { UpdateCategoryDto } from '@/category/dto/update-category.dto';
+import { CATEGORY_ERRORS } from '@/constants/category.constants';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -31,7 +32,7 @@ export class CategoryService {
   async findOne(id: string): Promise<ResponseCategoryDto> {
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
-      throw new NotFoundException('Categoria não encontrada');
+      throw new NotFoundException(CATEGORY_ERRORS.NOT_FOUND);
     }
     return this.categoryMapper.toDto(category);
   }
@@ -43,7 +44,7 @@ export class CategoryService {
   ): Promise<ResponseCategoryDto> {
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
-      throw new NotFoundException('Categoria não encontrada');
+      throw new NotFoundException(CATEGORY_ERRORS.NOT_FOUND);
     }
 
     const updatedCategory = this.categoryRepository.merge(
@@ -59,7 +60,7 @@ export class CategoryService {
   async remove(id: string): Promise<void> {
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
-      throw new NotFoundException('Categoria não encontrada');
+      throw new NotFoundException(CATEGORY_ERRORS.NOT_FOUND);
     }
     await this.categoryRepository.remove(category);
   }

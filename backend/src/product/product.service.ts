@@ -1,3 +1,4 @@
+import { PRODUCT_ERRORS } from '@/constants/product.constants';
 import { CreateProductDto } from '@/product/dto/create-product.dto';
 import { UpdateProductDto } from '@/product/dto/update-product.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -34,7 +35,7 @@ export class ProductService {
     });
 
     if (!product) {
-      throw new NotFoundException('Product not found');
+      throw new NotFoundException(PRODUCT_ERRORS.NOT_FOUND);
     }
 
     return this.productMapper.toDto(product);
@@ -43,7 +44,7 @@ export class ProductService {
   async update(id: string, updateProductDto: UpdateProductDto) {
     const product = await this.productRepository.findOne({ where: { id: id } });
     if (!product) {
-      throw new NotFoundException('Product not found');
+      throw new NotFoundException(PRODUCT_ERRORS.NOT_FOUND);
     }
     this.productRepository.merge(product, updateProductDto);
     await this.productRepository.save(product);
@@ -53,7 +54,7 @@ export class ProductService {
   async remove(id: string) {
     const product = await this.productRepository.findOneBy({ id: id });
     if (!product) {
-      throw new NotFoundException('Product not found');
+      throw new NotFoundException(PRODUCT_ERRORS.NOT_FOUND);
     }
     await this.productRepository.remove(product);
   }

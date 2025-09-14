@@ -1,5 +1,5 @@
-import { REQUEST_TOKEN_PAYLOAD_KEY } from '@/auth/constants/auth.constants';
-import { ROUTE_POLICY_KEY } from '@/auth/constants/route.constants';
+import { REQUEST_TOKEN_PAYLOAD_KEY } from '@/constants/auth.constants';
+import { ROUTE_POLICY_KEY } from '@/constants/route.constants';
 import { UserRoles } from '@/user/enums/roles.enum';
 import {
   CanActivate,

@@ -1,5 +1,6 @@
-import { REQUEST_TOKEN_PAYLOAD_KEY } from '@/auth/constants/auth.constants';
 import { jwtConfig } from '@/common/config/jwt-config';
+import { REQUEST_TOKEN_PAYLOAD_KEY } from '@/constants/auth.constants';
+import { USER_ERRORS } from '@/constants/user.constants';
 import { UserService } from '@/user/user.service';
 import {
   CanActivate,
@@ -40,7 +41,7 @@ export class AuthGuard implements CanActivate {
       const user = await this.userService.findOne(payload.sub);
 
       if (!user) {
-        throw new NotFoundException('Usuário não encontrado');
+        throw new NotFoundException(USER_ERRORS.NOT_FOUND);
       }
 
       payload['roles'] = [user.role];

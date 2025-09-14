@@ -1,4 +1,6 @@
 import { HashingProtocol } from '@/common/hashing/hashing-protocol';
+import { PaginatedResult } from '@/common/interfaces/paginated-result';
+import { USER_ERRORS } from '@/constants/user.constants';
 import { CreateUserDto } from '@/user/dto/create-user.dto';
 import { ResponseUserDto } from '@/user/dto/response-user.dto';
 import { UpdateUserDto } from '@/user/dto/update-user.dto';
@@ -23,15 +25,32 @@ export class UserService {
     return this.userMapper.toDto(savedUser);
   }
 
-  async findAll(): Promise<ResponseUserDto[]> {
-    const getAll = await this.userRepository.find();
-    return getAll.map(user => this.userMapper.toDto(user));
+  async findAll(
+    page = 1,
+    limit = 10,
+  ): Promise<PaginatedResult<ResponseUserDto>> {
+    const [items, total] = await this.userRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      items: items.map(user => this.userMapper.toDto(user)),
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+      hasNext: page * limit < total,
+      hasPrevious: page > 1,
+    };
   }
 
   async findOne(id: string): Promise<ResponseUserDto> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
-      throw new NotFoundException('Usuário nao encontrado');
+      throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
     return this.userMapper.toDto(user);
   }
@@ -42,7 +61,7 @@ export class UserService {
   ): Promise<ResponseUserDto> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
-      throw new NotFoundException('Usuário nao encontrado');
+      throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
 
     this.userRepository.merge(user, updateUserDto);
@@ -54,7 +73,7 @@ export class UserService {
   async remove(id: string): Promise<boolean> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
-      throw new NotFoundException('Usuário nao encontrado');
+      throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
     await this.userRepository.delete(id);
     return true;
@@ -64,7 +83,7 @@ export class UserService {
   async findUserByEmailAddress(email: string): Promise<User> {
     const user = await this.userRepository.findOneBy({ email });
     if (!user) {
-      throw new NotFoundException('Usuário nao encontrado');
+      throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
 
     return user;
@@ -73,7 +92,7 @@ export class UserService {
   async findUserById(id: string): Promise<User> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
-      throw new NotFoundException('Usuário nao encontrado');
+      throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
     return user;
   }
