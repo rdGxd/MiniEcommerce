@@ -24,7 +24,12 @@
     "migration:generate": "pnpm exec typeorm-ts-node-commonjs migration:generate --data-source src/database/data-source.ts",
     "migration:run": "pnpm exec typeorm-ts-node-commonjs migration:run --data-source src/database/data-source.ts",
     "migration:revert": "pnpm exec typeorm-ts-node-commonjs migration:revert --data-source src/database/data-source.ts",
-    "migration:show": "pnpm exec typeorm-ts-node-commonjs migration:show --data-source src/database/data-source.ts"
+    "migration:show": "pnpm exec typeorm-ts-node-commonjs migration:show --data-source src/database/data-source.ts",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "eslint --fix",
+    "*.{js,jsx,ts,tsx,json,css,md}": "prettier --write"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -52,14 +57,16 @@
     "@nestjs/testing": "^11.0.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.10.7",
+    "@types/node": "^24.4.0",
     "@types/supertest": "^6.0.2",
     "cross-env": "^10.0.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
     "jest": "^30.0.0",
+    "lint-staged": "^16.1.6",
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
