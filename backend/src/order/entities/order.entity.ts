@@ -22,7 +22,7 @@ export class Order {
   })
   user: User;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   total: number;
 
   @Column({
@@ -40,4 +40,13 @@ export class Order {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  calculateTotal(): void {
+    if (this.orderItems && this.orderItems.length > 0) {
+      this.total = this.orderItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
+    }
+  }
 }
