@@ -1,11 +1,13 @@
 import { Category } from '@/category/entities/category.entity';
 import { BaseEntityProps } from '@/common/interfaces/base-entity-props';
+import { OrderItem } from '@/order-item/entities/order-item.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -26,6 +28,9 @@ export class Product implements BaseEntityProps {
 
   @Column()
   stock: number;
+
+  @OneToMany(() => OrderItem, orderItem => orderItem.product)
+  orderItems: OrderItem[];
 
   @ManyToMany(type => Category, category => category.products)
   @JoinTable()

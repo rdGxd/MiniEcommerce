@@ -1,10 +1,12 @@
 import { BaseEntityProps } from '@/common/interfaces/base-entity-props';
+import { Order } from '@/order/entities/order.entity';
 import { UserRoles } from '@/user/enums/roles.enum';
 import {
   Column,
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -30,6 +32,9 @@ export class User implements BaseEntityProps {
     default: UserRoles.USER,
   })
   role: UserRoles;
+
+  @OneToMany(() => Order, order => order.user)
+  orders: Order[];
 
   @CreateDateColumn()
   createdAt: Date;

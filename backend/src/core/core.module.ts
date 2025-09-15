@@ -1,3 +1,4 @@
+import { AuthModule } from '@/auth/auth.module';
 import { AuthAndPolicyGuard } from '@/auth/guards/auth-and-policy.guard';
 import { HttpExceptionFilter } from '@/common/exceptions/http-exception.filter';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
@@ -7,10 +8,15 @@ import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
 @Module({
+  imports: [AuthModule],
   providers: [
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthAndPolicyGuard,
     },
     {
       provide: APP_FILTER,
@@ -28,10 +34,6 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
     {
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: AuthAndPolicyGuard,
     },
   ],
 })

@@ -19,6 +19,6 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     HashingModule,
   ],
-  exports: [AuthService, AuthGuard, AuthAndPolicyGuard, RolesGuard, JwtModule],
+  exports: [AuthService, AuthGuard, RolesGuard, AuthAndPolicyGuard, JwtModule],
 })
 export class AuthModule {}
