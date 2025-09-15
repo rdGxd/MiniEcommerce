@@ -1,6 +1,8 @@
 import { OrderItem } from '@/order-item/entities/order-item.entity';
 import { User } from '@/user/entities/user.entity';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -32,7 +34,10 @@ export class Order {
   })
   status: OrderStatus;
 
-  @OneToMany(() => OrderItem, orderItem => orderItem.order)
+  @OneToMany(() => OrderItem, orderItem => orderItem.order, {
+    cascade: true,
+    eager: true,
+  })
   orderItems: OrderItem[];
 
   @CreateDateColumn()
@@ -41,12 +46,44 @@ export class Order {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @BeforeInsert()
+  @BeforeUpdate()
   calculateTotal(): void {
     if (this.orderItems && this.orderItems.length > 0) {
       this.total = this.orderItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0,
       );
+    }
+  }
+
+  addItem(item: OrderItem): void {
+    if (!this.orderItems) {
+      this.orderItems = [];
+    }
+    this.orderItems.push(item);
+    this.calculateTotal();
+  }
+
+  removeItem(item: OrderItem): void {
+    if (this.orderItems) {
+      this.orderItems = this.orderItems.filter(i => i.id !== item.id);
+      this.calculateTotal();
+    }
+  }
+
+  clearItems(): void {
+    this.orderItems = [];
+    this.total = 0;
+  }
+
+  updateQuantity(item: OrderItem, quantity: number): void {
+    if (quantity < 0) return;
+
+    const orderItem = this.orderItems.find(i => i.id === item.id);
+    if (orderItem) {
+      orderItem.quantity = quantity;
+      this.calculateTotal();
     }
   }
 }
