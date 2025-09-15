@@ -1,8 +1,6 @@
 import { Order } from '@/order/entities/order.entity';
 import { Product } from '@/product/entities/product.entity';
 import {
-  BeforeInsert,
-  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -42,17 +40,5 @@ export class OrderItem {
 
   getTotal(): number {
     return this.quantity * this.price;
-  }
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  validate(): void {
-    if (this.quantity < 0) {
-      throw new Error('Quantidade deve ser maior ou igual a zero.');
-    }
-
-    if (this.price < 0) {
-      throw new Error('Preço não pode ser negativo.');
-    }
   }
 }

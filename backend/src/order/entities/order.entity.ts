@@ -78,8 +78,6 @@ export class Order {
   }
 
   updateQuantity(item: OrderItem, quantity: number): void {
-    if (quantity < 0) return;
-
     const orderItem = this.orderItems.find(i => i.id === item.id);
     if (orderItem) {
       orderItem.quantity = quantity;
