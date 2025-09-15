@@ -1,14 +1,14 @@
-import { AuthController } from '@/auth/auth.controller';
-import { AuthService } from '@/auth/auth.service';
-import { AuthAndPolicyGuard } from '@/auth/guards/auth-and-policy.guard';
-import { AuthGuard } from '@/auth/guards/auth.guard';
-import { RolesGuard } from '@/auth/guards/roles-guard.guard';
-import { jwtConfig } from '@/common/config/jwt-config';
-import { HashingModule } from '@/common/hashing/hashing.module';
-import { UserModule } from '@/user/user.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { jwtConfig } from '../common/config/jwt-config';
+import { HashingModule } from '../common/hashing/hashing.module';
+import { UserModule } from '../user/user.module';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { AuthAndPolicyGuard } from './guards/auth-and-policy.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { RolesGuard } from './guards/roles-guard.guard';
 
 @Module({
   controllers: [AuthController],

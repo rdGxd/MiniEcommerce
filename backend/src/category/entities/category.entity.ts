@@ -1,5 +1,3 @@
-import { BaseEntityProps } from '@/common/interfaces/base-entity-props';
-import { Product } from '@/product/entities/product.entity';
 import {
   Column,
   CreateDateColumn,
@@ -7,9 +5,10 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Product } from '../../product/entities/product.entity';
 
 @Entity()
-export class Category implements BaseEntityProps {
+export class Category {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

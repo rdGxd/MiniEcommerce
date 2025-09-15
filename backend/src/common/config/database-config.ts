@@ -10,5 +10,5 @@ export default registerAs('database', () => ({
   database: process.env.DB_DATABASE,
   autoLoadEntities: Boolean(process.env.DB_AUTOLOAD_ENTITIES),
   synchronize: Boolean(process.env.DB_SYNCHRONIZE), // * SEMPRE COLOCAR COMO FALSE EM PRODUÇÃO
-  migrations: ['dist/database/migrations/*{.ts,.js}'],
+  migrations: ['dist/src/database/migrations/*{.ts,.js}'],
 }));

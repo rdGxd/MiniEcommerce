@@ -1,10 +1,10 @@
-import { CreateCategoryDto } from '@/category/dto/create-category.dto';
-import { UpdateCategoryDto } from '@/category/dto/update-category.dto';
-import { CATEGORY_ERRORS } from '@/constants/category.constants';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CATEGORY_ERRORS } from '../constants/category.constants';
+import { CreateCategoryDto } from './dto/create-category.dto';
 import { ResponseCategoryDto } from './dto/response-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 import { CategoryMapper } from './mapper/category-mapper';
 

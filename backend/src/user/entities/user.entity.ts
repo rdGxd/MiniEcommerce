@@ -1,6 +1,3 @@
-import { BaseEntityProps } from '@/common/interfaces/base-entity-props';
-import { Order } from '@/order/entities/order.entity';
-import { UserRoles } from '@/user/enums/roles.enum';
 import {
   Column,
   CreateDateColumn,
@@ -10,9 +7,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Order } from '../../order/entities/order.entity';
+import { Payment } from '../../payment/entities/payment.entity';
+import { UserRoles } from '../enums/roles.enum';
 
 @Entity()
-export class User implements BaseEntityProps {
+export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -25,6 +25,9 @@ export class User implements BaseEntityProps {
 
   @Column({ type: 'varchar', nullable: false })
   password: string;
+
+  @OneToMany(() => Payment, payment => payment.user, { eager: true })
+  payments: Payment[];
 
   @Column({
     type: 'enum',

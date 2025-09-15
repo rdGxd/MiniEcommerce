@@ -1,7 +1,7 @@
-import { ORDER_ITEM_ERRORS } from '@/constants/order-item.constants';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ORDER_ITEM_ERRORS } from '../constants/order-item.constants';
 import { CreateOrderItemDto } from './dto/create-order-item.dto';
 import { UpdateOrderItemDto } from './dto/update-order-item.dto';
 import { OrderItem } from './entities/order-item.entity';

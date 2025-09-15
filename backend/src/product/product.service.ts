@@ -1,13 +1,13 @@
-import { PRODUCT_ERRORS } from '@/constants/product.constants';
-import { CreateProductDto } from '@/product/dto/create-product.dto';
-import { UpdateProductDto } from '@/product/dto/update-product.dto';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PRODUCT_ERRORS } from 'src/constants/product.constants';
 import { Repository } from 'typeorm';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { ProductMapper } from './mapper/product-mapper';
 

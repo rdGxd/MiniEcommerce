@@ -1,4 +1,3 @@
-import { ORDER_ERRORS } from '@/constants/order.constants';
 import {
   BadRequestException,
   Injectable,
@@ -6,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ORDER_ERRORS } from '../constants/order.constants';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';

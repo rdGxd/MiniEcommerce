@@ -1,5 +1,3 @@
-import { OrderItem } from '@/order-item/entities/order-item.entity';
-import { User } from '@/user/entities/user.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -11,6 +9,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { OrderItem } from '../../order-item/entities/order-item.entity';
+import { User } from '../../user/entities/user.entity';
 import { OrderStatus } from '../enums/order-enum';
 
 @Entity()
