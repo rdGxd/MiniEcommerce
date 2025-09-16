@@ -1,8 +1,10 @@
+import { Injectable } from '@nestjs/common';
 import { Product } from '../../product/entities/product.entity';
 import { CreateOrderItemDto } from '../dto/create-order-item.dto';
 import { ResponseOrderItemDto } from '../dto/response-order-item.dto';
 import { OrderItem } from '../entities/order-item.entity';
 
+@Injectable()
 export class OrderItemMapper {
   toEntity(dto: CreateOrderItemDto) {
     const entity = new OrderItem();

@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { UserRoles } from 'src/user/enums/roles.enum';
+import { UserRoles } from 'src/common/enums/role.enum';
 
 export class PayloadDto {
   @IsString()

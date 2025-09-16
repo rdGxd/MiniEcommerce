@@ -5,7 +5,7 @@ import {
   IsPositive,
   IsString,
 } from 'class-validator';
-import { PaymentMethod } from '../enums/payment-enums';
+import { PaymentMethod } from '../../common/enums/payment-enums';
 
 export class CreatePaymentDto {
   @IsNotEmpty({ message: 'Amount é obrigatório' })

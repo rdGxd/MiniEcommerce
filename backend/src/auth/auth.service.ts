@@ -54,7 +54,7 @@ export class AuthService {
 
   async refreshToken(refreshTokenDto: RefreshTokenDto) {
     try {
-      const { sub } = await this.jwtService.verifyAsync(
+      const { sub } = await this.jwtService.verifyAsync<{ sub: string }>(
         refreshTokenDto.refreshToken,
         {
           secret: this.jwtConfiguration.secret,

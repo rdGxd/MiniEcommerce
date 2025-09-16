@@ -1,11 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PayloadDto } from 'src/common/dto/payload.dto';
+import { UserService } from 'src/user/user.service';
+import { Repository } from 'typeorm';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { Payment } from './entities/payment.entity';
+import { PaymentMapper } from './mapper/payment-mapper';
 
 @Injectable()
 export class PaymentService {
-  create(createPaymentDto: CreatePaymentDto) {
-    return 'This action adds a new payment';
+  constructor(
+    @InjectRepository(Payment)
+    private readonly paymentRepository: Repository<Payment>,
+    private readonly userService: UserService,
+    private readonly paymentMapper: PaymentMapper,
+  ) {}
+
+  async create(createPaymentDto: CreatePaymentDto, payload: PayloadDto) {
+    const user = await this.userService.findOne(payload.sub);
+    const paymentEntity = this.paymentMapper.toEntity(
+      createPaymentDto,
+      user.id,
+    );
+
+    const savedPayment = await this.paymentRepository.save(paymentEntity);
+    if (!savedPayment) {
+      throw new BadRequestException('Payment could not be processed');
+    }
+
+    return this.paymentMapper.toDto(savedPayment);
   }
 
   findAll() {

@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { PaymentMethod, PaymentStatus } from '../../common/enums/payment-enums';
 import { User } from '../../user/entities/user.entity';
-import { PaymentMethod, PaymentStatus } from '../enums/payment-enums';
 
 @Entity()
 export class Payment {
