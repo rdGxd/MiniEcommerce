@@ -37,12 +37,4 @@ export class Payment {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  paymentProcess() {
-    if (Math.random() < 0.1) {
-      this.status = PaymentStatus.FAILED;
-      return;
-    }
-    this.status = PaymentStatus.COMPLETED;
-  }
 }

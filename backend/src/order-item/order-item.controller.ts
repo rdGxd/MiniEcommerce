@@ -1,15 +1,17 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { OrderItemService } from './order-item.service';
+import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
+import { UserRoles } from 'src/common/enums/role.enum';
 import { CreateOrderItemDto } from './dto/create-order-item.dto';
 import { UpdateOrderItemDto } from './dto/update-order-item.dto';
+import { OrderItemService } from './order-item.service';
 
 @Controller('order-item')
 export class OrderItemController {
@@ -21,6 +23,7 @@ export class OrderItemController {
   }
 
   @Get()
+  @SetRoutePolicy(UserRoles.ADMIN)
   findAll() {
     return this.orderItemService.findAll();
   }

@@ -8,6 +8,8 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
+import { UserRoles } from 'src/common/enums/role.enum';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderService } from './order.service';
@@ -22,6 +24,7 @@ export class OrderController {
   }
 
   @Get()
+  @SetRoutePolicy(UserRoles.ADMIN)
   findAll() {
     return this.orderService.findAll();
   }

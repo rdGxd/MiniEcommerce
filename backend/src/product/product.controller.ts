@@ -7,6 +7,8 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
+import { UserRoles } from 'src/common/enums/role.enum';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductService } from './product.service';
@@ -21,6 +23,7 @@ export class ProductController {
   }
 
   @Get()
+  @SetRoutePolicy(UserRoles.ADMIN)
   findAll() {
     return this.productService.findAll();
   }
@@ -31,11 +34,13 @@ export class ProductController {
   }
 
   @Patch(':id')
+  @SetRoutePolicy(UserRoles.ADMIN)
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(id, updateProductDto);
   }
 
   @Delete(':id')
+  @SetRoutePolicy(UserRoles.ADMIN)
   remove(@Param('id') id: string) {
     return this.productService.remove(id);
   }
