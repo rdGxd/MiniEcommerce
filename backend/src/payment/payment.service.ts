@@ -1,12 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PayloadDto } from 'src/common/dto/payload.dto';
-import { PAYMENT_ERRORS } from 'src/constants/payment.constants';
+import { PaymentStatus } from 'src/common/enums/payment-enums';
 import { USER_ERRORS } from 'src/constants/user.constants';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Payment } from './entities/payment.entity';
 import { PaymentMapper } from './mapper/payment-mapper';
 
@@ -25,94 +24,23 @@ export class PaymentService {
       throw new BadRequestException(USER_ERRORS.NOT_FOUND);
     }
 
-    const paymentEntity = this.paymentMapper.toEntity(
-      createPaymentDto,
-      user.id,
-    );
+    // Simulação do processamento do pagamento
+    const statuses = Object.values(PaymentStatus);
+    const status = statuses[Math.floor(Math.random() * statuses.length)];
 
-    const savedPayment = await this.paymentRepository.save(paymentEntity);
-
-    if (!savedPayment) {
-      throw new BadRequestException(PAYMENT_ERRORS.PROCESSING_ERROR);
-    }
-
-    return this.paymentMapper.toDto(savedPayment);
-  }
-
-  async findAll(payload: PayloadDto) {
-    const payments = await this.paymentRepository.find({
-      where: { user: { id: payload.sub } },
+    const payment = this.paymentRepository.create({
+      ...createPaymentDto,
+      user: { id: payload.sub },
+      status,
     });
 
-    if (payments.length === 0) {
-      throw new BadRequestException(PAYMENT_ERRORS.NOT_FOUND);
-    }
-
-    return payments.map(payment => this.paymentMapper.toDto(payment));
-  }
-
-  async findOne(id: string, payload: PayloadDto) {
-    const payment = await this.paymentRepository.findOne({
-      where: { id, user: { id: payload.sub } },
-    });
-    if (!payment) {
-      throw new BadRequestException(PAYMENT_ERRORS.NOT_FOUND);
-    }
     return this.paymentMapper.toDto(payment);
   }
 
-  async update(
-    id: string,
-    updatePaymentDto: UpdatePaymentDto,
-    payload: PayloadDto,
-  ) {
-    const payment = await this.paymentRepository.findOne({
-      where: { id, user: { id: payload.sub } },
+  async findAll(userId: string): Promise<Payment[]> {
+    return this.paymentRepository.find({
+      where: { user: { id: userId } },
+      order: { createdAt: 'DESC' },
     });
-    if (!payment) {
-      throw new BadRequestException(PAYMENT_ERRORS.NOT_FOUND);
-    }
-
-    payment.amount = updatePaymentDto.amount ?? payment.amount;
-    payment.currency = updatePaymentDto.currency ?? payment.currency;
-    payment.method = updatePaymentDto.method ?? payment.method;
-
-    const updatedPayment = await this.paymentRepository.save(payment);
-    if (!updatedPayment) {
-      throw new BadRequestException(PAYMENT_ERRORS.PROCESSING_ERROR);
-    }
-    return this.paymentMapper.toDto(updatedPayment);
-  }
-
-  async remove(id: string, payload: PayloadDto) {
-    const payment = await this.paymentRepository.findOne({
-      where: { id, user: { id: payload.sub } },
-    });
-    if (!payment) {
-      throw new BadRequestException(PAYMENT_ERRORS.NOT_FOUND);
-    }
-
-    const removedPayment = await this.paymentRepository.remove(payment);
-    if (!removedPayment) {
-      throw new BadRequestException(PAYMENT_ERRORS.PROCESSING_ERROR);
-    }
-
-    return this.paymentMapper.toDto(removedPayment);
-  }
-
-  async sendPaymentNotification(id: string, payload: PayloadDto) {
-    const payment = await this.paymentRepository.findOne({
-      where: { id, user: { id: payload.sub } },
-    });
-
-    if (!payment) {
-      throw new BadRequestException(PAYMENT_ERRORS.NOT_FOUND);
-    }
-
-    // Logic to send payment notification (e.g., email, SMS)
-    return {
-      message: `Notification sent for payment ID: ${payment.id} completed successfully`,
-      payment: this.paymentMapper.toDto(payment),
-    };
   }
 }
