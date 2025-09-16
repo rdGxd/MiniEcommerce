@@ -1,6 +1,14 @@
-import { CategoryController } from '@/category/category.controller';
-import { CategoryService } from '@/category/category.service';
 import { Test, TestingModule } from '@nestjs/testing';
+import { CategoryController } from '../category.controller';
+import { CategoryService } from '../category.service';
+
+const categoryServiceMock = {
+  create: jest.fn(),
+  findAll: jest.fn(),
+  findOne: jest.fn(),
+  update: jest.fn(),
+  remove: jest.fn(),
+};
 
 describe('CategoryController', () => {
   let controller: CategoryController;
@@ -8,7 +16,7 @@ describe('CategoryController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CategoryController],
-      providers: [CategoryService],
+      providers: [{ provide: CategoryService, useValue: categoryServiceMock }],
     }).compile();
 
     controller = module.get<CategoryController>(CategoryController);

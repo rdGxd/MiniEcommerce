@@ -1,6 +1,11 @@
-import { AuthController } from '@/auth/auth.controller';
-import { AuthService } from '@/auth/auth.service';
 import { Test, type TestingModule } from '@nestjs/testing';
+import { AuthController } from '../auth.controller';
+import { AuthService } from '../auth.service';
+
+const authServiceMock: Partial<AuthService> = {
+  login: jest.fn(),
+  refreshToken: jest.fn(),
+};
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -8,7 +13,7 @@ describe('AuthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [AuthService],
+      providers: [{ provide: AuthService, useValue: authServiceMock }],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);

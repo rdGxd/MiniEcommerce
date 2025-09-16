@@ -14,6 +14,21 @@ export default tseslint.config(
       'migrations/**/*.js',
     ],
   },
+  // Relax strict TypeScript ESLint rules for tests to reduce false positives on mocks
+  {
+    // apply relaxed rules to any test files (specs and __tests__ folders)
+    files: ['**/__tests__/**/*.ts', 'test/**/*.ts', '**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/unbound-method': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/require-await': 'off',
+    },
+  },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   eslintPluginPrettierRecommended,

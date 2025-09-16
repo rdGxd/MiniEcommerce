@@ -1,6 +1,14 @@
-import { ProductController } from '@/product/product.controller';
-import { ProductService } from '@/product/product.service';
 import { Test, TestingModule } from '@nestjs/testing';
+import { ProductController } from '../product.controller';
+import { ProductService } from '../product.service';
+
+const productServiceMock = {
+  create: jest.fn(),
+  findAll: jest.fn(),
+  findOne: jest.fn(),
+  update: jest.fn(),
+  remove: jest.fn(),
+};
 
 describe('ProductController', () => {
   let controller: ProductController;
@@ -8,7 +16,7 @@ describe('ProductController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProductController],
-      providers: [ProductService],
+      providers: [{ provide: ProductService, useValue: productServiceMock }],
     }).compile();
 
     controller = module.get<ProductController>(ProductController);
