@@ -2,6 +2,7 @@ import { Test, type TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { HashingProtocol } from 'src/common/hashing/hashing-protocol';
 import { type Repository } from 'typeorm';
+import { ResponseUserDto } from '../dto/response-user.dto';
 import { User } from '../entities/user.entity';
 import { UserMapper } from '../mapper/user-mapper';
 import { UserService } from '../user.service';
@@ -58,8 +59,16 @@ describe('UserService', () => {
 
   describe('create', () => {
     it('should create a new user and return the user DTO', async () => {
-      const createUserDto = {
+      const responseUserDto: ResponseUserDto = {
         email: 'test@example.com',
+        id: '1',
+        name: 'Test User',
+        role: 'user',
+      };
+
+      const createUser = {
+        email: 'test@example.com',
+        name: 'Test User',
         password: 'password',
       };
 
@@ -73,16 +82,16 @@ describe('UserService', () => {
       // hashing service should be called and return the hashed password
       jest.spyOn(hashingService, 'hash').mockResolvedValue('hashed_password');
 
-      jest.spyOn(userMapper, 'toEntity').mockReturnValue(userEntity);
+      jest.spyOn(userMapper, 'toEntity').mockReturnValue(userEntity as any);
       jest
         .spyOn(userRepository, 'save')
         .mockImplementation(async (u: any) => ({ ...u }));
-      jest.spyOn(userMapper, 'toDto').mockReturnValue(createUserDto);
+      jest.spyOn(userMapper, 'toDto').mockReturnValue(responseUserDto);
 
-      const result = await service.create(createUserDto);
+      const result = await service.create(createUser);
 
-      expect(result).toEqual(createUserDto);
-      expect(userMapper.toEntity).toHaveBeenCalledWith(createUserDto);
+      expect(result).toEqual(responseUserDto);
+      expect(userMapper.toEntity).toHaveBeenCalledWith(createUser);
       expect(userRepository.save).toHaveBeenCalledWith(userEntity);
       expect(userMapper.toDto).toHaveBeenCalledWith(userEntity);
       expect(hashingService.hash).toHaveBeenCalledWith('password');
