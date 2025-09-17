@@ -1,8 +1,11 @@
+import { NewArrivals } from "@/components/new-arrivals";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function Home() {
   return (
     <>
+      {/* Texto da HOME */}
       <div className="flex flex-col items-center justify-center gap-6 p-4 text-center">
         <h1 className="font-bold text-4xl">Find clothes that matches your style</h1>
         <p className="text-center text-lg sm:text-2xl max-w-2xl">
@@ -28,7 +31,27 @@ export default function Home() {
           <p className="font-bold text-2xl">30,000+</p>
           <span>Happy Customers</span>
         </div>
+        {/* Image do casal  */}
+        <div className="flex items-center justify-center col-span-2 sm:col-span-1 mt-5">
+          <Image
+            src="/CasalDaHome.svg"
+            alt="Clothes 1"
+            width={500}
+            height={500}
+            className="w-full h-auto object-cover rounded-lg"
+          />
+        </div>
+
+        {/* Logos das marcas  */}
+        <div className="grid grid-cols-3 gap-5 col-span-2 sm:col-span-1 mt-5 p-2 items-center dark:bg-gray-500 bg-black rounded-lg border border-gray-300">
+          <Image src={"/versace.svg"} alt="Versace" width={500} height={500} />
+          <Image src={"/zara-logo-1.svg"} alt="Zara" width={500} height={500} />
+          <Image src={"/gucci-logo-1.svg"} alt="Gucci" width={500} height={500} />
+          <Image src={"/prada-logo-1.svg"} alt="Prada" width={500} height={500} />
+          <Image src={"/Calvin.svg"} alt="Calvin Klein" width={500} height={500} className=" col-span-2 " />
+        </div>
       </div>
+      <NewArrivals />
     </>
   );
 }
