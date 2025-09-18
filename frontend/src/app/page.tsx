@@ -1,5 +1,6 @@
 import { CommentsHome } from "@/components/comments-home";
 import { DressStyle } from "@/components/dress-style";
+import { FormNews } from "@/components/form-news";
 import { TopSelling } from "@/components/new-arrivals";
 import { NewArrivals } from "@/components/top-selling";
 import { Button } from "@/components/ui/button";
@@ -66,6 +67,7 @@ export default function Home() {
       <TopSelling />
       <DressStyle />
       <CommentsHome />
+      <FormNews />
     </>
   );
 }
