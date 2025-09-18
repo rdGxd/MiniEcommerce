@@ -1,3 +1,4 @@
+import { CommentsHome } from "@/components/comments-home";
 import { DressStyle } from "@/components/dress-style";
 import { TopSelling } from "@/components/new-arrivals";
 import { NewArrivals } from "@/components/top-selling";
@@ -64,6 +65,7 @@ export default function Home() {
       <NewArrivals />
       <TopSelling />
       <DressStyle />
+      <CommentsHome />
     </>
   );
 }
