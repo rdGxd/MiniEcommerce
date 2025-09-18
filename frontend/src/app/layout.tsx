@@ -1,3 +1,4 @@
+import { Footer } from "@/components/footer";
 import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
@@ -16,7 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Ecommerce",
-  description: "An ecommerce website built with Next.js and Tailwind CSS and backend with NestJS",
+  description:
+    "An ecommerce website built with Next.js and Tailwind CSS and backend with NestJS",
 };
 
 export default function RootLayout({
@@ -26,10 +28,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <Header />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
