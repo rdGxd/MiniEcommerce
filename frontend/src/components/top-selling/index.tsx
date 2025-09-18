@@ -1,15 +1,15 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
 
-export function TopSelling() {
+export function NewArrivals() {
   return (
     <div className="flex flex-col items-center justify-center p-2">
-      <h3 className="text-4xl font-semibold uppercase">Top Selling</h3>
+      <h3 className="text-4xl font-semibold uppercase">New Arrivals</h3>
       <div className="grid w-full max-w-3xl grid-cols-2 gap-4 p-2 sm:grid-cols-3">
         <div className="flex flex-col gap-2">
           <Image
             src={"https://picsum.photos/200/300"}
-            alt="Top Selling"
+            alt="New Arrival"
             width={200}
             height={200}
             className="bg-gray-400"
