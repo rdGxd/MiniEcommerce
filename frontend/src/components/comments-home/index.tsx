@@ -1,3 +1,4 @@
+import { getStarRating } from "@/helper/rating";
 import { ArrowLeftIcon, ArrowRightIcon, CircleCheckIcon } from "lucide-react";
 
 export function CommentsHome() {
@@ -15,7 +16,7 @@ export function CommentsHome() {
         </div>
       </div>
       <div className="m-2 flex flex-col rounded-2xl border border-gray-300 p-4">
-        <span className="font-bold">Stars</span>
+        {getStarRating({ value: 5 })}
         <p className="mt-4 flex gap-2 font-bold">
           Sarah M. <CircleCheckIcon className="text-green-500" />
         </p>
