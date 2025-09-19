@@ -15,12 +15,12 @@ export function CommentsHome() {
           <ArrowRightIcon />
         </div>
       </div>
-      <div className="m-2 flex flex-col rounded-2xl border border-gray-300 p-4">
-        {getStarRating({ value: 5 })}
+      <div className="m-2 flex flex-col rounded-2xl border border-gray-300 p-4 md:grid md:items-center md:-grid-cols-3">
+        <div>
+        {getStarRating(5)}
         <p className="mt-4 flex gap-2 font-bold">
           Sarah M. <CircleCheckIcon className="text-green-500" />
         </p>
-
         <p className="max-w-2xl text-center text-lg text-gray-400 sm:text-2xl">
           "I recently purchased a dress from this online store, and I couldn't
           be happier with my experience. The website was easy to navigate, and I
@@ -31,6 +31,7 @@ export function CommentsHome() {
           responses to my inquiries. I highly recommend this store to anyone
           looking for stylish and high-quality clothing."
         </p>
+        </div>
       </div>
       <div className="flex w-full items-center justify-center gap-2 p-4">
         <span className="h-2 w-2 rounded-full bg-black"></span>

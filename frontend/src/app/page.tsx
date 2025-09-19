@@ -18,7 +18,7 @@ export default function Home() {
           Discover a wide range of clothing options tailored to your unique
           taste and preferences.
         </p>
-        <Button size="lg" className="w-full cursor-pointer">
+        <Button size="lg" className="w-full cursor-pointer md:w-1/2">
           Shop Now
         </Button>
       </div>
@@ -29,7 +29,7 @@ export default function Home() {
           <span>International Brands</span>
         </div>
 
-        <div className="flex flex-col items-center justify-center">
+        <div className="tailwind_fiv flex flex-col items-center justify-center">
           <p className="text-2xl font-bold">2000+</p>
           <span>High-Quality Products</span>
         </div>
@@ -39,7 +39,7 @@ export default function Home() {
           <span>Happy Customers</span>
         </div>
         {/* Image do casal  */}
-        <div className="col-span-2 mt-5 flex items-center justify-center sm:col-span-1">
+        <div className="col-span-2 mt-5 flex items-center justify-center sm:col-span-1 md:col-span-3">
           <Image
             src="/CasalDaHome.svg"
             alt="Clothes 1"
@@ -50,7 +50,7 @@ export default function Home() {
         </div>
       </div>
       {/* Logos das marcas  */}
-      <div className="col-span-2 grid h-full grid-cols-3 items-center justify-items-center gap-5 rounded-lg border border-gray-300 bg-black p-2 sm:col-span-1 dark:bg-gray-500">
+      <div className="col-span-2 grid h-full grid-cols-3 items-center justify-items-center gap-5 rounded-lg border border-gray-300 bg-black p-2 sm:col-span-1 md:flex md:h-20 md:justify-around md:rounded-none md:border-none dark:bg-gray-500">
         <Image src={"/versace.svg"} alt="Versace" width={116} height={23} />
         <Image src={"/zara-logo-1.svg"} alt="Zara" width={63} height={26} />
         <Image src={"/gucci-logo-1.svg"} alt="Gucci" width={109} height={25} />

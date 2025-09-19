@@ -2,11 +2,11 @@ import Image from "next/image";
 
 export function DressStyle() {
   return (
-    <div className="ml-2 flex w-sm flex-col content-center items-center justify-center rounded-xl bg-gray-200 p-2">
+    <div className="ml-2 flex w-sm flex-col content-center items-center justify-center rounded-xl bg-gray-200 p-2 md:w-full">
       <h3 className="p-4 text-center text-4xl font-extrabold uppercase">
         Browse by dress style
       </h3>
-      <div className="grid w-xs max-w-3xl grid-cols-1 gap-4 p-2 sm:grid-cols-3">
+      <div className="grid w-xs max-w-3xl grid-cols-1 gap-4 p-2 sm:grid-cols-3 md:grid-cols-3 md:w-full">
         <div className="flex content-center justify-around gap-2 rounded-md bg-white p-2">
           <p className="text-2xl font-bold">Casual</p>
           <Image
@@ -17,7 +17,7 @@ export function DressStyle() {
             className="rounded-md bg-gray-400"
           />
         </div>
-        <div className="flex content-center justify-around gap-2 rounded-md bg-white p-2">
+        <div className="flex content-center justify-around gap-2 rounded-md bg-white p-2 md:col-span-2">
           <p className="text-2xl font-bold">Formal</p>
           <Image
             src={"https://picsum.photos/200/300"}
@@ -28,7 +28,7 @@ export function DressStyle() {
           />
         </div>
 
-        <div className="flex content-center justify-around gap-2 rounded-md bg-white p-2">
+        <div className="flex content-center justify-around gap-2 rounded-md bg-white p-2 md:col-span-2">
           <p className="text-2xl font-bold">Party</p>
           <Image
             src={"https://picsum.photos/200/300"}
