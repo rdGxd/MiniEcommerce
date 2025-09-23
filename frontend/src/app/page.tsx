@@ -8,9 +8,9 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <>
+    <div className="flex w-full flex-col items-center justify-center gap-10 p-4 lg:gap-16">
       {/* Texto da HOME */}
-      <div className="flex flex-col items-center justify-center gap-6 p-4 text-center">
+      <div className="flex flex-col items-center justify-center gap-6 p-4 text-center lg:gap-10">
         <h1 className="text-4xl font-bold">
           Find clothes that matches your style
         </h1>
@@ -23,7 +23,7 @@ export default function Home() {
         </Button>
       </div>
 
-      <div className="grid w-full max-w-3xl grid-cols-2 gap-4 p-2 sm:grid-cols-3">
+      <div className="grid w-full max-w-3xl grid-cols-2 gap-4 p-2 sm:grid-cols-3 lg:col-span-10 lg:max-w-5xl">
         <div className="flex flex-col items-center justify-center">
           <p className="text-2xl font-bold">200+</p>
           <span>International Brands</span>
@@ -39,7 +39,7 @@ export default function Home() {
           <span>Happy Customers</span>
         </div>
         {/* Image do casal  */}
-        <div className="col-span-2 mt-5 flex items-center justify-center sm:col-span-1 md:col-span-3">
+        <div className="col-span-2 mt-5 flex items-center justify-center sm:col-span-1 md:col-span-3 lg:col-span-10">
           <Image
             src="/CasalDaHome.svg"
             alt="Clothes 1"
@@ -50,7 +50,7 @@ export default function Home() {
         </div>
       </div>
       {/* Logos das marcas  */}
-      <div className="col-span-2 grid h-full grid-cols-3 items-center justify-items-center gap-5 rounded-lg border border-gray-300 bg-black p-2 sm:col-span-1 md:flex md:h-20 md:justify-around md:rounded-none md:border-none dark:bg-gray-500">
+      <div className="col-span-2 grid h-full grid-cols-3 items-center justify-items-center gap-5 rounded-lg border border-gray-300 bg-black p-2 sm:col-span-1 md:flex md:h-20 md:justify-around md:rounded-none md:border-none dark:bg-gray-500 w-full">
         <Image src={"/versace.svg"} alt="Versace" width={116} height={23} />
         <Image src={"/zara-logo-1.svg"} alt="Zara" width={63} height={26} />
         <Image src={"/gucci-logo-1.svg"} alt="Gucci" width={109} height={25} />
@@ -68,6 +68,6 @@ export default function Home() {
       <DressStyle />
       <CommentsHome />
       <FormNews />
-    </>
+    </div>
   );
 }

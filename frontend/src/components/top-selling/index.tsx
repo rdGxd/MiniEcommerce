@@ -4,9 +4,9 @@ import { Button } from "../ui/button";
 
 export function NewArrivals() {
   return (
-    <div className="flex flex-col items-center justify-center p-2">
+    <div className="flex w-full flex-col items-center justify-center p-2 lg:gap-5">
       <h3 className="text-4xl font-semibold uppercase">New Arrivals</h3>
-      <div className="grid w-full max-w-3xl grid-cols-2 gap-4 p-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div className="lg:scrollbar-hide grid w-full max-w-3xl grid-cols-2 gap-4 p-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:max-w-5xl lg:grid-cols-5 lg:space-x-4 lg:overflow-x-auto lg:p-0 lg:pr-2 lg:pb-4">
         <div className="flex flex-col gap-2">
           <Image
             src={"https://picsum.photos/200/300"}
