@@ -1,5 +1,7 @@
 "use client";
 
+import { DetailsProducts } from "@/components/details-products";
+
 interface Props {
   readonly params: {
     readonly id: string;
@@ -7,11 +9,5 @@ interface Props {
 }
 
 export default function ProductDetails({ params }: Props) {
-  const { id } = params;
-
-  return (
-    <>
-      <p>Page content for product {id}</p>
-    </>
-  );
+  return <DetailsProducts />;
 }
