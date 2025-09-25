@@ -3,6 +3,7 @@
 import { getStarRating } from "@/helper/rating";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
@@ -75,11 +76,27 @@ const MOCK_PRODUCT: Product = {
   ],
 };
 
+const MOCK_REVIEWS = {
+  averageRating: 4.5,
+  totalReviews: 150,
+  ratingsBreakdown: {
+    5: 100,
+    4: 30,
+    3: 10,
+    2: 5,
+    1: 5,
+  },
+};
+
 export const DetailsProducts = ({
   product = MOCK_PRODUCT,
 }: {
   product?: Product;
 }) => {
+  const [activeTab, setActiveTab] = useState<"details" | "reviews" | "faqs">(
+    "details",
+  );
+
   const { register, handleSubmit, control, setValue, watch } =
     useForm<ProductFormData>({
       defaultValues: {
@@ -339,6 +356,83 @@ export const DetailsProducts = ({
         </div>
       </div>
       {/* Aqui você adicionaria outras seções como "Product Details", "Reviews", "You Might Also Like" */}
+      
+      {/* TODO: REMOVER DEPOIS */}
+      <div className="mt-5 rounded-lg bg-yellow-50 p-6 text-center text-sm text-yellow-800">
+        <strong className="font-semibold">Nota:</strong> Esta é uma página de
+        detalhes de produto simulada para fins de demonstração. As imagens e
+        dados são fictícios.
+      </div>
+      <div className="flex justify-around border-b-2 border-gray-200 pt-6 pb-6 text-center text-gray-700">
+        <div>
+          <button
+            type="button"
+            className="m-0 cursor-pointer border-none bg-transparent p-0 text-inherit"
+            onClick={() => setActiveTab("details")}
+            aria-pressed={activeTab === "details"}
+          >
+            Product Details
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            className="m-0 cursor-pointer border-none bg-transparent p-0 font-semibold text-inherit"
+            onClick={() => setActiveTab("reviews")}
+            aria-pressed={activeTab === "reviews"}
+          >
+            Rating & Reviews
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            className="m-0 cursor-pointer border-none bg-transparent p-0 text-inherit"
+            onClick={() => setActiveTab("faqs")}
+            aria-pressed={activeTab === "faqs"}
+          >
+            FAQs
+          </button>
+        </div>
+      </div>
+      <div className="mt-6">
+        {activeTab === "details" && (
+          <div>
+            <h2 className="mb-4 text-2xl font-bold text-gray-900">
+              Product Details
+            </h2>
+            <p className="text-gray-700">
+              Here are the detailed specifications and features of the product.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+              euismod, nunc ut laoreet facilisis, nunc nisl aliquam nunc, eget
+              aliquam nisl nunc euismod nunc.
+            </p>
+          </div>
+        )}
+        {activeTab === "reviews" && (
+          <div>
+            <h2 className="mb-4 text-2xl font-bold text-gray-900">
+              Rating & Reviews
+            </h2>
+            <p className="text-gray-700">
+              Average Rating: {MOCK_REVIEWS.averageRating} / 5 from{" "}
+              {MOCK_REVIEWS.totalReviews} reviews.
+            </p>
+            {/* Aqui você pode adicionar mais detalhes sobre a distribuição das avaliações */}
+          </div>
+        )}
+        {activeTab === "faqs" && (
+          <div>
+            <h2 className="mb-4 text-2xl font-bold text-gray-900">FAQs</h2>
+            <p className="text-gray-700">
+              Here are some frequently asked questions about the product. Lorem
+              ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod,
+              nunc ut laoreet facilisis, nunc nisl aliquam nunc, eget aliquam
+              nisl nunc euismod nunc.
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
