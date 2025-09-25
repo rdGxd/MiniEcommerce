@@ -93,7 +93,6 @@ export default function Home() {
       <TopSelling />
       <DressStyle />
       <CommentsHome />
-      <FormNews />
     </div>
   );
 }

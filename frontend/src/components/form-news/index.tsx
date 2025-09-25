@@ -9,7 +9,7 @@ export function FormNews() {
   };
 
   return (
-    <div className="flex w-full max-w-5xl flex-col items-center justify-center px-4">
+    <div className="flex w-full max-w-5xl flex-col items-center justify-center p-4">
       <form
         className="flex w-full flex-col items-center justify-center gap-4 rounded-xl bg-black p-6 sm:flex-row"
         onSubmit={handleSubmit}

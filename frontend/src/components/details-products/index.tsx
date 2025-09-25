@@ -2,7 +2,9 @@
 
 import { getStarRating } from "@/helper/rating";
 import Image from "next/image";
+import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import {
   Carousel,
@@ -12,7 +14,6 @@ import {
   CarouselPrevious,
 } from "../ui/carousel";
 import { Label } from "../ui/label"; // Ainda podemos usar Label para semântica
-import Link from "next/link";
 
 // Interfaces para os dados do produto (atualizadas com hex para cores)
 interface Color {
@@ -294,47 +295,46 @@ export const DetailsProducts = ({
             </div>
 
             {/* -- QUANTIDADE -- */}
-            <div>
-              <Label
-                htmlFor="quantity"
-                className="mb-2 block text-base font-semibold text-gray-800"
-              >
-                Quantidade
-              </Label>
-              <div className="flex w-32 items-center rounded-md border border-gray-300">
-                <button
-                  type="button"
-                  onClick={() => handleQuantityChange("decrement")}
-                  className="rounded-l-md px-3 py-2 text-gray-600 hover:bg-gray-100"
-                  disabled={currentQuantity <= 1}
+            <div className="flex items-center justify-between gap-4 md:gap-8">
+              <div>
+                <Label
+                  htmlFor="quantity"
+                  className="mb-2 block text-base font-semibold text-gray-800"
                 >
-                  -
-                </button>
-                <input
-                  id="quantity"
-                  type="text" // Usar text para evitar setas do navegador, mas tratar como number
-                  readOnly // Não permitir digitação direta se for só botões
-                  value={currentQuantity}
-                  {...register("quantity", { valueAsNumber: true })}
-                  className="w-full border-r border-l border-gray-300 py-2 text-center focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleQuantityChange("increment")}
-                  className="rounded-r-md px-3 py-2 text-gray-600 hover:bg-gray-100"
-                  disabled={currentQuantity >= 10}
-                >
-                  +
-                </button>
+                  Quantidade
+                </Label>
+                <div className="flex w-32 items-center rounded-md border border-gray-300">
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange("decrement")}
+                    className="rounded-l-md px-3 py-2 text-gray-600 hover:bg-gray-100"
+                    disabled={currentQuantity <= 1}
+                  >
+                    -
+                  </button>
+                  <input
+                    id="quantity"
+                    type="text" // Usar text para evitar setas do navegador, mas tratar como number
+                    readOnly // Não permitir digitação direta se for só botões
+                    value={currentQuantity}
+                    {...register("quantity", { valueAsNumber: true })}
+                    className="w-full border-r border-l border-gray-300 py-2 text-center focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange("increment")}
+                    className="rounded-r-md px-3 py-2 text-gray-600 hover:bg-gray-100"
+                    disabled={currentQuantity >= 10}
+                  >
+                    +
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <button
-              type="submit"
-              className="w-full rounded-md bg-black px-6 py-3 text-lg font-semibold text-white transition hover:bg-gray-800 focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 focus:outline-none"
-            >
-              Adicionar ao Carrinho
-            </button>
+              <Button type="submit" className="mt-8 flex flex-1 rounded-full">
+                Adicionar ao Carrinho
+              </Button>
+            </div>
           </form>
         </div>
       </div>

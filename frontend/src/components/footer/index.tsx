@@ -9,10 +9,12 @@ import {
   SiVisa,
   SiX,
 } from "@icons-pack/react-simple-icons";
+import { FormNews } from "../form-news";
 
 export function Footer() {
   return (
-    <footer className="mt-20 flex w-full flex-col border-t bg-gray-200 px-4 py-10 text-sm">
+    <footer className="mt-5 flex w-full flex-col border-t bg-gray-200 px-4 text-sm">
+      <FormNews />
       <p className="text-left text-4xl font-extrabold text-black">SHOP.CO</p>
       <p className="mt-2 max-w-2xl text-lg text-gray-600 sm:text-2xl">
         We have clothes that suits your style and which you’re proud to wear.
