@@ -1,9 +1,10 @@
 "use client";
 
 import { getStarRating } from "@/helper/rating";
+import { CircleCheckIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
@@ -97,14 +98,13 @@ export const DetailsProducts = ({
     "details",
   );
 
-  const { register, handleSubmit, control, setValue, watch } =
-    useForm<ProductFormData>({
-      defaultValues: {
-        selectedColor: product.colors[0]?.value || "",
-        selectedSize: product.sizes[0]?.value || "",
-        quantity: 1,
-      },
-    });
+  const { register, handleSubmit, setValue, watch } = useForm<ProductFormData>({
+    defaultValues: {
+      selectedColor: product.colors[0]?.value || "",
+      selectedSize: product.sizes[0]?.value || "",
+      quantity: 1,
+    },
+  });
 
   const onSubmit: SubmitHandler<ProductFormData> = (data) => {
     console.log("Adicionando ao carrinho:", {
@@ -118,6 +118,21 @@ export const DetailsProducts = ({
 
   // Watch para a quantidade para poder incrementar/decrementar
   const currentQuantity = watch("quantity");
+
+  // Número de avaliações: inicializamos com um valor determinístico para
+  // evitar mismatch entre render server/client. Depois, atualizamos no
+  // cliente (useEffect) se quisermos mostrar um valor "aleatório".
+  const [reviewsCount, setReviewsCount] = useState<number>(
+    MOCK_REVIEWS.totalReviews,
+  );
+
+  useEffect(() => {
+    // Atualiza somente no cliente — assim o HTML inicial (servidor) bate com
+    // o HTML do cliente na hidratação. A mudança acontece após a hidratação.
+    const rnd = Math.floor(Math.random() * 200) + 50;
+    setReviewsCount(rnd);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleQuantityChange = (type: "increment" | "decrement") => {
     let newQuantity = currentQuantity;
@@ -225,8 +240,7 @@ export const DetailsProducts = ({
           <div className="mb-6 flex items-center">
             <span className="text-yellow-400">{getStarRating(5)}</span>
             <span className="ml-2 text-sm text-gray-600">
-              {product.rating.toFixed(1)}/5 (
-              {Math.floor(Math.random() * 200) + 50} Avaliações)
+              {product.rating.toFixed(1)}/5 ({reviewsCount} Avaliações)
             </span>
           </div>
 
@@ -356,8 +370,7 @@ export const DetailsProducts = ({
         </div>
       </div>
       {/* Aqui você adicionaria outras seções como "Product Details", "Reviews", "You Might Also Like" */}
-      
-      {/* TODO: REMOVER DEPOIS */}
+
       <div className="mt-5 rounded-lg bg-yellow-50 p-6 text-center text-sm text-yellow-800">
         <strong className="font-semibold">Nota:</strong> Esta é uma página de
         detalhes de produto simulada para fins de demonstração. As imagens e
@@ -410,13 +423,21 @@ export const DetailsProducts = ({
           </div>
         )}
         {activeTab === "reviews" && (
-          <div>
+          <div className="space-y-2">
             <h2 className="mb-4 text-2xl font-bold text-gray-900">
-              Rating & Reviews
+              All Reviews
             </h2>
-            <p className="text-gray-700">
-              Average Rating: {MOCK_REVIEWS.averageRating} / 5 from{" "}
-              {MOCK_REVIEWS.totalReviews} reviews.
+            <p className="text-gray-700">{getStarRating(2)}</p>
+            <p className="">
+              <span className="flex items-center gap-2">
+                <strong>Samantha D.</strong>
+                <CircleCheckIcon className="text-green-500" />
+              </span>{" "}
+              Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit
+              amet, consectetur adipisicing elit. Dolor culpa ullam harum. Autem
+              dicta exercitationem ab voluptate, dolorem ipsum ut libero nemo
+              harum, soluta ratione, dignissimos veritatis optio aperiam
+              tempora.
             </p>
             {/* Aqui você pode adicionar mais detalhes sobre a distribuição das avaliações */}
           </div>
