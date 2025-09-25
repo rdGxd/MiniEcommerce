@@ -13,6 +13,7 @@ export function DressStyle() {
             src={"https://picsum.photos/200/300"}
             alt="Dress Style"
             width={120}
+            layout="responsive"
             height={120}
             className="rounded-md bg-gray-400"
           />
@@ -23,6 +24,7 @@ export function DressStyle() {
             src={"https://picsum.photos/200/300"}
             alt="Dress Style"
             width={120}
+            layout="responsive"
             height={120}
             className="rounded-md bg-gray-400"
           />
@@ -35,6 +37,7 @@ export function DressStyle() {
             alt="Dress Style"
             width={120}
             height={120}
+            layout="responsive"
             className="rounded-md bg-gray-400"
           />
         </div>
@@ -46,6 +49,7 @@ export function DressStyle() {
             alt="Dress Style"
             width={120}
             height={120}
+            layout="responsive"
             className="rounded-md bg-gray-400"
           />
         </div>

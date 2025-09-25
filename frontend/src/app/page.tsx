@@ -44,23 +44,49 @@ export default function Home() {
             src="/CasalDaHome.svg"
             alt="Clothes 1"
             width={500}
+            layout="responsive"
             height={500}
             className="h-auto w-full rounded-lg object-cover"
           />
         </div>
       </div>
       {/* Logos das marcas  */}
-      <div className="col-span-2 grid h-full grid-cols-3 items-center justify-items-center gap-5 rounded-lg border border-gray-300 bg-black p-2 sm:col-span-1 md:flex md:h-20 md:justify-around md:rounded-none md:border-none dark:bg-gray-500 w-full">
-        <Image src={"/versace.svg"} alt="Versace" width={116} height={23} />
-        <Image src={"/zara-logo-1.svg"} alt="Zara" width={63} height={26} />
-        <Image src={"/gucci-logo-1.svg"} alt="Gucci" width={109} height={25} />
-        <Image src={"/prada-logo-1.svg"} alt="Prada" width={127} height={21} />
+      <div className="col-span-2 grid h-full w-full grid-cols-3 items-center justify-items-center gap-5 rounded-lg border border-gray-300 bg-black p-2 sm:col-span-1 md:flex md:h-20 md:justify-around md:rounded-none md:border-none dark:bg-gray-500">
+        <Image
+          src={"/versace.svg"}
+          alt="Versace"
+          width={116}
+          height={23}
+          layout="responsive"
+        />
+        <Image
+          src={"/zara-logo-1.svg"}
+          alt="Zara"
+          width={63}
+          height={26}
+          layout="responsive"
+        />
+        <Image
+          src={"/gucci-logo-1.svg"}
+          alt="Gucci"
+          width={109}
+          height={25}
+          layout="responsive"
+        />
+        <Image
+          src={"/prada-logo-1.svg"}
+          alt="Prada"
+          width={127}
+          height={21}
+          layout="responsive"
+        />
         <Image
           src={"/Calvin.svg"}
           alt="Calvin Klein"
           width={134}
           height={21}
           className="col-span-2"
+          layout="responsive"
         />
       </div>
       <NewArrivals />
