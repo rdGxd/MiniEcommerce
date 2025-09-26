@@ -89,6 +89,74 @@ const MOCK_REVIEWS = {
   },
 };
 
+// Mock de detalhes do produto (especificações)
+const MOCK_PRODUCT_DETAILS = [
+  {
+    title: "Material",
+    content:
+      "Composição: 60% algodão, 40% poliéster. Malha macia e respirável, ideal para uso diário.",
+  },
+  {
+    title: "Instruções de Lavagem",
+    content:
+      "Lavar à máquina em água fria. Não usar alvejante. Secar à sombra e passar em temperatura baixa.",
+  },
+  {
+    title: "Dimensões",
+    content:
+      "O modelo da foto usa tamanho M e mede 1,82m. Consulte a tabela de medidas para escolher o tamanho ideal.",
+  },
+  {
+    title: "Garantia",
+    content:
+      "Garantia de 30 dias contra defeitos de fabricação. Não cobre danos por uso indevido.",
+  },
+];
+
+// Mock de reviews detalhados
+const MOCK_REVIEWS_LIST = [
+  {
+    id: "r1",
+    name: "Samantha D.",
+    rating: 5,
+    verified: true,
+    date: "2025-09-10",
+    text: "Adorei a camiseta! O tecido é super confortável e o caimento ficou perfeito. Recomendo.",
+  },
+  {
+    id: "r2",
+    name: "Carlos M.",
+    rating: 4,
+    verified: false,
+    date: "2025-08-22",
+    text: "Boa qualidade, mas a cor ficou um pouco diferente do anúncio. Ainda assim vale a compra.",
+  },
+  {
+    id: "r3",
+    name: "Ana P.",
+    rating: 5,
+    verified: true,
+    date: "2025-07-30",
+    text: "Entrega rápida e produto conforme descrito. Atendimento excelente.",
+  },
+];
+
+// Mock de FAQs
+const MOCK_FAQS = [
+  {
+    q: "Qual o prazo de entrega?",
+    a: "O prazo de entrega depende da sua região. Normalmente entre 3 a 7 dias úteis para capitais.",
+  },
+  {
+    q: "Posso trocar o tamanho?",
+    a: "Sim — aceitamos trocas em até 30 dias após o recebimento, desde que o produto esteja nas condições originais.",
+  },
+  {
+    q: "As cores do produto no site são fiéis à realidade?",
+    a: "Fazemos o possível para reproduzir as cores, mas pode haver pequenas variações dependendo da tela do dispositivo.",
+  },
+];
+
 export const DetailsProducts = ({
   product = MOCK_PRODUCT,
 }: {
@@ -414,43 +482,68 @@ export const DetailsProducts = ({
             <h2 className="mb-4 text-2xl font-bold text-gray-900">
               Product Details
             </h2>
-            <p className="text-gray-700">
-              Here are the detailed specifications and features of the product.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              euismod, nunc ut laoreet facilisis, nunc nisl aliquam nunc, eget
-              aliquam nisl nunc euismod nunc.
-            </p>
+            <div className="space-y-4 text-gray-700">
+              {MOCK_PRODUCT_DETAILS.map((item) => (
+                <div key={item.title}>
+                  <h3 className="mb-1 font-semibold text-gray-900">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm">{item.content}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
+
         {activeTab === "reviews" && (
-          <div className="space-y-2">
+          <div>
             <h2 className="mb-4 text-2xl font-bold text-gray-900">
-              All Reviews
+              Avaliações
             </h2>
-            <p className="text-gray-700">{getStarRating(2)}</p>
-            <p className="">
-              <span className="flex items-center gap-2">
-                <strong>Samantha D.</strong>
-                <CircleCheckIcon className="text-green-500" />
-              </span>{" "}
-              Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit
-              amet, consectetur adipisicing elit. Dolor culpa ullam harum. Autem
-              dicta exercitationem ab voluptate, dolorem ipsum ut libero nemo
-              harum, soluta ratione, dignissimos veritatis optio aperiam
-              tempora.
-            </p>
-            {/* Aqui você pode adicionar mais detalhes sobre a distribuição das avaliações */}
+
+            <div className="mb-4 flex items-center gap-4">
+              <div className="text-yellow-400">
+                {getStarRating(MOCK_REVIEWS.averageRating)}
+              </div>
+              <div className="text-sm text-gray-600">
+                {MOCK_REVIEWS.totalReviews} avaliações
+              </div>
+            </div>
+
+            <div className="space-y-6 text-gray-700">
+              {MOCK_REVIEWS_LIST.map((r) => (
+                <article key={r.id} className="rounded-md border p-4">
+                  <header className="mb-2 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <strong>{r.name}</strong>
+                      {r.verified && (
+                        <span className="flex items-center text-green-600">
+                          <CircleCheckIcon className="h-4 w-4" />
+                          <span className="sr-only">verificado</span>
+                        </span>
+                      )}
+                    </div>
+                    <time className="text-sm text-gray-500">{r.date}</time>
+                  </header>
+                  <div className="mb-2">{getStarRating(r.rating)}</div>
+                  <p className="text-sm">{r.text}</p>
+                </article>
+              ))}
+            </div>
           </div>
         )}
+
         {activeTab === "faqs" && (
           <div>
             <h2 className="mb-4 text-2xl font-bold text-gray-900">FAQs</h2>
-            <p className="text-gray-700">
-              Here are some frequently asked questions about the product. Lorem
-              ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod,
-              nunc ut laoreet facilisis, nunc nisl aliquam nunc, eget aliquam
-              nisl nunc euismod nunc.
-            </p>
+            <dl className="space-y-4 text-gray-700">
+              {MOCK_FAQS.map((f) => (
+                <div key={f.q}>
+                  <dt className="font-semibold text-gray-900">{f.q}</dt>
+                  <dd className="text-sm">{f.a}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         )}
       </div>

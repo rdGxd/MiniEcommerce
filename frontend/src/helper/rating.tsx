@@ -1,19 +1,81 @@
 export function getStarRating(value: number) {
+  const maxStars = 5;
+  // Round to nearest 0.5 to allow half stars
+  const rounded = Math.round(value * 2) / 2;
+
+  const starPath =
+    "M12 .587l3.668 7.431 8.204 1.193-5.936 5.787 1.402 8.168L12 18.896 4.662 23.166l1.402-8.168L0.128 9.211l8.204-1.193L12 .587z";
+
   return (
-    <div className="gapx-3 flex items-center text-yellow-500">
-      {Array(value)
-        .fill(0)
-        .map((item, index) => (
+    <div className="flex items-center gap-2 text-yellow-400" aria-hidden>
+      {Array.from({ length: maxStars }).map((_, idx) => {
+        const i = idx + 1;
+        const diff = rounded - (i - 1);
+        const id = `star-half-${i}-${Math.round(value * 10)}`; // deterministic id
+
+        if (diff >= 1) {
+          // full star
+          return (
+            <svg
+              key={i}
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="text-yellow-400"
+              aria-hidden
+            >
+              <path d={starPath} />
+            </svg>
+          );
+        }
+
+        if (diff >= 0.5) {
+          // half star: left half filled via linearGradient, right half transparent with stroke
+          return (
+            <svg
+              key={i}
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              className="text-yellow-400"
+              aria-hidden
+            >
+              <defs>
+                <linearGradient id={id} x1="0" x2="1">
+                  <stop offset="50%" stopColor="currentColor" />
+                  <stop offset="50%" stopColor="transparent" />
+                </linearGradient>
+              </defs>
+              <path d={starPath} fill={`url(#${id})`} />
+              <path
+                d={starPath}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.6"
+              />
+            </svg>
+          );
+        }
+
+        // empty star
+        return (
           <svg
-            key={`star-${value}-${index}`}
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+            key={i}
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.6"
+            className="text-gray-300"
+            aria-hidden
           >
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            <path d={starPath} />
           </svg>
-        ))}
+        );
+      })}
+      <span className="sr-only">Avaliação: {value} de 5</span>
     </div>
   );
 }
