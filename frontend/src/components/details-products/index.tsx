@@ -223,19 +223,19 @@ export const DetailsProducts = ({
             <Link href="#" className="hover:underline">
               Home
             </Link>
-            <span className="mx-2">/</span>
+            <span className="mx-2">&gt;</span>
           </li>
           <li className="flex items-center">
             <Link href="#" className="hover:underline">
               Shop
             </Link>
-            <span className="mx-2">/</span>
+            <span className="mx-2">&gt;</span>
           </li>
           <li className="flex items-center">
             <Link href="#" className="hover:underline">
               T-Shirts
             </Link>
-            <span className="mx-2">/</span>
+            <span className="mx-2">&gt;</span>
           </li>
           <li className="flex items-center text-gray-700">{product.name}</li>
         </ol>

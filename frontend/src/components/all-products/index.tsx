@@ -1,5 +1,15 @@
 import { getStarRating } from "@/helper/rating";
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../ui/pagination";
+import { ShoppingCartIcon } from "lucide-react";
+import Link from "next/link";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
 
 const MOCK_STYLES = [
   { id: 1, name: "Casual" },
@@ -100,10 +110,30 @@ const MOCK_PRODUCTS = [
 export default function AllProducts() {
   return (
     <div className="p-2 md:p-4 lg:p-8">
-      <h2 className="text-4xl font-bold">{MOCK_STYLES[0].name}</h2>
+      <nav className="mb-6 text-sm">
+        <ol className="inline-flex list-none p-0">
+          <li className="flex items-center">
+            <Link href="#" className="hover:underline">
+              Home
+            </Link>
+            <span className="mx-2">&gt;</span>
+          </li>
+          <li className="flex items-center">
+            <Link href="#" className="font-semibold hover:underline">
+              Casual
+            </Link>
+          </li>
+        </ol>
+      </nav>
+      <div className="flex items-center justify-around p-2 text-center">
+        <h1 className="text-4xl font-bold">{MOCK_STYLES[0].name} </h1>
+        <p className="text-gray-600">
+          Exibindo 10 produtos no total de {MOCK_PRODUCTS.length}
+        </p>
+      </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {MOCK_PRODUCTS.map((product) => (
-          <div key={product.id} className="m-2 w-48 border border-gray-300 p-2">
+          <div key={product.id} className="m-2 w-48 rounded-2xl border p-2">
             <img
               src={product.image}
               alt={product.name}
@@ -114,25 +144,27 @@ export default function AllProducts() {
               <p className="text-sm">{getStarRating(product.rating)}</p>
               <span className="text-gray-600">{product.rating}/5</span>
             </div>
-            <p className="text-lg font-bold">R$ {product.price.toFixed(2)}</p>
-            <button className="rounded bg-blue-500 px-2 py-1 text-white">
-              Adicionar ao carrinho
-            </button>
+            <div className="flex items-center justify-between">
+              <p className="text-lg font-bold">R$ {product.price.toFixed(2)}</p>
+              <button className="rounded bg-blue-500 px-2 py-1 text-white">
+                <ShoppingCartIcon className="inline h-4 w-4" />
+              </button>
+            </div>
           </div>
         ))}
-        <div className="col-span-2 md:col-span-3 lg:col-span-4 flex justify-center mt-4">
+        <div className="col-span-2 mt-4 flex justify-center md:col-span-3 lg:col-span-4">
           <Pagination>
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious href="#" />
               </PaginationItem>
               <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
+                <PaginationLink href="#" isActive>
+                  1
+                </PaginationLink>
               </PaginationItem>
               <PaginationItem>
-                <PaginationLink href="#" isActive>
-                  2
-                </PaginationLink>
+                <PaginationLink href="#">2</PaginationLink>
               </PaginationItem>
               <PaginationItem>
                 <PaginationLink href="#">3</PaginationLink>
