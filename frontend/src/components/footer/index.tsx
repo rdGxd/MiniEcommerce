@@ -13,7 +13,7 @@ import { FormNews } from "../form-news";
 
 export function Footer() {
   return (
-    <footer className="mt-5 flex w-full flex-col border-t bg-gray-200 px-4 text-sm">
+    <footer className="mt-5 flex w-full flex-col border-t bg-gray-200 px-4 text-sm sm:px-8 md:px-16 lg:px-32 xl:px-48 2xl:px-64 dark:bg-gray-900">
       <FormNews />
       <p className="text-left text-4xl font-extrabold text-black">SHOP.CO</p>
       <p className="mt-2 max-w-2xl text-lg text-gray-600 sm:text-2xl">
