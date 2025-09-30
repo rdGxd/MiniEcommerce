@@ -55,12 +55,12 @@ const MOCK_PRODUCT: Product = {
   rating: 4.8,
   description:
     "Made from a soft and breathable cotton-blend, this classic graphic tee combines comfort with style. Featuring a unique graphic print, it's perfect for casual wear. Available in multiple colors and sizes to suit your preference.",
-  mainImage: "https://picsum.photos/id/1/600/700", // Imagem principal maior
+  mainImage: "https://picsum.photos/200/300?random=1", // Imagem principal maior
   galleryImages: [
-    "https://picsum.photos/id/10/100/120",
-    "https://picsum.photos/id/20/100/120",
-    "https://picsum.photos/id/30/100/120",
-    "https://picsum.photos/id/40/100/120",
+    "https://picsum.photos/200/300?random=2",
+    "https://picsum.photos/200/300?random=3",
+    "https://picsum.photos/200/300?random=4",
+    "https://picsum.photos/200/300?random=5",
   ],
   colors: [
     { name: "Verde Militar", value: "military-green", hex: "#4B5320" },

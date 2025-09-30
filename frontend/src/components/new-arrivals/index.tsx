@@ -9,7 +9,7 @@ export function TopSelling() {
       <div className="lg:scrollbar-hide grid w-full max-w-3xl grid-cols-2 gap-4 p-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:max-w-5xl lg:grid-cols-5 lg:space-x-4 lg:overflow-x-auto lg:p-0 lg:pr-2 lg:pb-4">
         <div className="flex flex-col gap-2">
           <Image
-            src={"https://picsum.photos/200/300"}
+            src={"https://picsum.photos/200/300?random=1"}
             alt="Top Selling"
             layout="responsive"
             width={200}
@@ -22,7 +22,7 @@ export function TopSelling() {
         </div>
         <div className="flex flex-col gap-2">
           <Image
-            src={"https://picsum.photos/200/300"}
+            src={"https://picsum.photos/200/300?random=2"}
             alt="Top Selling"
             width={200}
             layout="responsive"
@@ -35,7 +35,7 @@ export function TopSelling() {
         </div>
         <div className="flex flex-col gap-2">
           <Image
-            src={"https://picsum.photos/200/300"}
+            src={"https://picsum.photos/200/300?random=3"}
             alt="Top Selling"
             width={200}
             layout="responsive"
@@ -48,7 +48,7 @@ export function TopSelling() {
         </div>
         <div className="flex flex-col gap-2">
           <Image
-            src={"https://picsum.photos/200/300"}
+            src={"https://picsum.photos/200/300?random=4"}
             alt="New Arrival"
             width={200}
             layout="responsive"
