@@ -529,6 +529,12 @@ export const DetailsProducts = ({
                   <p className="text-sm">{r.text}</p>
                 </article>
               ))}
+
+              <div className="flex justify-center">
+                <Button className="cursor-pointer rounded-2xl bg-blue-500 text-white hover:bg-blue-600">
+                  Carregar mais avaliações
+                </Button>
+              </div>
             </div>
           </div>
         )}
@@ -546,6 +552,52 @@ export const DetailsProducts = ({
             </dl>
           </div>
         )}
+      </div>
+      <div className="mt-10">
+        <h3 className="flex items-center justify-center text-4xl font-bold text-gray-900">
+          You Might Also Like
+        </h3>
+        <div className="mt-4 grid grid-cols-2 gap-4 xl:grid-cols-4">
+          {/* Aqui você pode mapear produtos relacionados ou recomendados */}
+          <Card className="max-w-xs">
+            <CardContent className="p-4">
+              <Image
+                src="https://picsum.photos/id/50/300/350"
+                alt="Produto Relacionado 1"
+                width={300}
+                height={350}
+                objectFit="cover"
+                className="mb-4 rounded-md"
+              />
+              <h4 className="mb-2 text-lg font-semibold text-gray-900">
+                Produto Relacionado 1
+              </h4>
+              <p className="text-sm text-gray-700">
+                Descrição breve do produto relacionado.
+              </p>
+              <p className="mt-2 font-bold text-gray-800">R$199,00</p>
+            </CardContent>
+          </Card>
+          <Card className="max-w-xs">
+            <CardContent className="p-4">
+              <Image
+                src="https://picsum.photos/id/60/300/350"
+                alt="Produto Relacionado 2"
+                width={300}
+                height={350}
+                objectFit="cover"
+                className="mb-4 rounded-md"
+              />
+              <h4 className="mb-2 text-lg font-semibold text-gray-900">
+                Produto Relacionado 2
+              </h4>
+              <p className="text-sm text-gray-700">
+                Descrição breve do produto relacionado.
+              </p>
+              <p className="mt-2 font-bold text-gray-800">R$249,00</p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
