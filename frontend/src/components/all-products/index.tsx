@@ -1,184 +1,293 @@
-import { getStarRating } from "@/helper/rating";
-import { ShoppingCartIcon } from "lucide-react";
-import Link from "next/link";
+"use client";
+
+import { FilterIcon } from "lucide-react";
+import { useMemo, useState } from "react";
+import { FilterPanel } from "../filter-panel";
+import { ProductCard } from "../product-card";
+import { Button } from "../ui/button";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
 
-const MOCK_STYLES = [
-  { id: 1, name: "Casual" },
-  { id: 2, name: "Esportivo" },
-  { id: 3, name: "Formal" },
-  { id: 4, name: "Vintage" },
-  { id: 5, name: "Boho" },
-  { id: 6, name: "Chic" },
-  { id: 7, name: "Streetwear" },
-  { id: 8, name: "Preppy" },
-  { id: 9, name: "Gótico" },
-  { id: 10, name: "Minimalista" },
-];
-
 const MOCK_PRODUCTS = [
   {
     id: 1,
-    name: "Produto 1",
-    price: 10.0,
-    description: "Descrição do Produto 1",
-    image: "https://picsum.photos/id/50/300/350",
+    name: "Produto A",
+    image: "/produto-a.jpg",
+    price: 199.99,
     rating: 4.5,
   },
   {
     id: 2,
-    name: "Produto 2",
-    price: 20.0,
-    description: "Descrição do Produto 2",
-    image: "https://picsum.photos/id/100/300/350",
+    name: "Produto B",
+    image: "/produto-b.jpg",
+    price: 299.99,
     rating: 4.0,
   },
   {
     id: 3,
-    name: "Produto 3",
-    price: 30.0,
-    description: "Descrição do Produto 3",
-    image: "https://picsum.photos/id/200/300/350",
+    name: "Produto C",
+    image: "/produto-c.jpg",
+    price: 399.99,
     rating: 3.5,
   },
   {
     id: 4,
-    name: "Produto 4",
-    price: 40.0,
-    description: "Descrição do Produto 4",
-    image: "https://picsum.photos/id/300/300/350",
-    rating: 4.8,
+    name: "Produto D",
+    image: "/produto-d.jpg",
+    price: 499.99,
+    rating: 5.0,
   },
   {
     id: 5,
-    name: "Produto 5",
-    price: 50.0,
-    description: "Descrição do Produto 5",
-    image: "https://picsum.photos/id/400/300/350",
+    name: "Produto E",
+    image: "/produto-e.jpg",
+    price: 599.99,
     rating: 4.2,
   },
   {
     id: 6,
-    name: "Produto 6",
-    price: 60.0,
-    description: "Descrição do Produto 6",
-    image: "https://picsum.photos/id/500/300/350",
-    rating: 4.0,
+    name: "Produto F",
+    image: "/produto-f.jpg",
+    price: 699.99,
+    rating: 3.8,
   },
   {
     id: 7,
-    name: "Produto 7",
-    price: 70.0,
-    description: "Descrição do Produto 7",
-    image: "https://picsum.photos/id/600/300/350",
-    rating: 4.5,
+    name: "Produto G",
+    image: "/produto-g.jpg",
+    price: 799.99,
+    rating: 4.7,
   },
   {
     id: 8,
-    name: "Produto 8",
-    price: 80.0,
-    description: "Descrição do Produto 8",
-    image: "https://picsum.photos/id/700/300/350",
+    name: "Produto H",
+    image: "/produto-h.jpg",
+    price: 899.99,
     rating: 4.1,
   },
   {
     id: 9,
-    name: "Produto 9",
-    price: 90.0,
-    description: "Descrição do Produto 9",
-    image: "https://picsum.photos/id/800/300/350",
+    name: "Produto I",
+    image: "/produto-i.jpg",
+    price: 999.99,
     rating: 3.9,
   },
   {
     id: 10,
-    name: "Produto 10",
-    price: 100.0,
-    description: "Descrição do Produto 10",
-    image: "https://picsum.photos/id/900/300/350",
-    rating: 4.7,
+    name: "Produto J",
+    image: "/produto-j.jpg",
+    price: 1099.99,
+    rating: 4.3,
+  },
+  {
+    id: 11,
+    name: "Produto K",
+    image: "/produto-k.jpg",
+    price: 1199.99,
+    rating: 4.6,
+  },
+  {
+    id: 12,
+    name: "Produto L",
+    image: "/produto-l.jpg",
+    price: 1299.99,
+    rating: 4.0,
   },
 ];
+const MOCK_STYLES = [
+  {
+    id: 1,
+    name: "Casual",
+  },
+  {
+    id: 2,
+    name: "Esportivo",
+  },
+  {
+    id: 3,
+    name: "Formal",
+  },
+  {
+    id: 4,
+    name: "Vintage",
+  },
+  {
+    id: 5,
+    name: "Moderno",
+  },
+  { id: 6, name: "Boêmio" },
+];
+
+const MOCK_COLORS = [
+  { id: 1, name: "Vermelho", hex: "#FF0000" },
+  { id: 2, name: "Azul", hex: "#0000FF" },
+  { id: 3, name: "Verde", hex: "#00FF00" },
+  { id: 4, name: "Amarelo", hex: "#FFFF00" },
+  { id: 5, name: "Preto", hex: "#000000" },
+  { id: 6, name: "Branco", hex: "#FFFFFF" },
+];
+
+const PRODUCTS_PER_PAGE = 8; // Quantos produtos por página
 
 export default function AllProducts() {
+  // --- ESTADO CENTRALIZADO ---
+  const [activeFilter, setActiveFilter] = useState(false); // Visibilidade do filtro no mobile
+
+  // Estados para cada filtro
+  const [selectedStyles, setSelectedStyles] = useState([]);
+  const [priceRange, setPriceRange] = useState(1000);
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+
+  // Estado para paginação
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // --- LÓGICA DE FILTRAGEM E PAGINAÇÃO ---
+
+  // useMemo otimiza a performance, refazendo o cálculo apenas quando um filtro muda
+  const filteredProducts = useMemo(() => {
+    return MOCK_PRODUCTS.filter((product) => {
+      // Lógica de filtro de preço
+      if (product.price > priceRange) return false;
+      // Lógica de filtro de avaliação
+      if (selectedRating && product.rating < selectedRating) return false;
+      // Adicione aqui filtros de estilo e cor quando seus produtos tiverem esses dados
+      // Ex: if (selectedStyles.length > 0 && !selectedStyles.includes(product.styleId)) return false;
+      return true;
+    });
+  }, [priceRange, selectedRating, selectedStyles, selectedColor]);
+
+  // Cálculo da paginação com base nos produtos JÁ filtrados
+  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const endIndex = startIndex + PRODUCTS_PER_PAGE;
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+  // Função para limpar todos os filtros
+  const handleClearFilters = () => {
+    setSelectedStyles([]);
+    setPriceRange(1000);
+    setSelectedRating(null);
+    setSelectedColor(null);
+    setCurrentPage(1); // Volta para a primeira página
+  };
+
   return (
-    <div className="p-2 md:p-4 lg:p-8">
-      <nav className="mb-2 text-sm">
-        <ol className="inline-flex list-none p-0">
-          <li className="flex items-center">
-            <Link href="#" className="hover:underline">
-              Home
-            </Link>
-            <span className="mx-2">&gt;</span>
-          </li>
-          <li className="flex items-center">
-            <Link href="#" className="font-semibold hover:underline">
-              Casual
-            </Link>
-          </li>
-        </ol>
-      </nav>
-      <div className="flex items-center justify-around p-2 text-center">
-        <h1 className="text-3xl font-semibold">{MOCK_STYLES[0].name} </h1>
-        <p className="text-gray-600">
-          Exibindo 1-10 produtos no total de {MOCK_PRODUCTS.length}
-        </p>
-      </div>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {MOCK_PRODUCTS.slice(0, 10).map((product) => (
-          <div key={product.id} className="m-2 w-48 rounded-2xl border p-2">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="h-auto w-full"
+    <div className="grid grid-cols-1 gap-8 p-4 md:grid-cols-[280px_1fr] lg:p-8">
+      {/* Coluna de Filtros */}
+
+      {activeFilter && (
+        <div className="fixed inset-0 z-50 bg-black/50 p-4 md:static md:hidden md:bg-transparent md:p-0">
+          <div className="h-full overflow-y-auto">
+            <FilterPanel
+              priceRange={priceRange}
+              onPriceChange={(value) => setPriceRange(Number(value))}
+              selectedRating={selectedRating}
+              onRatingChange={setSelectedRating}
+              onClearFilters={handleClearFilters}
+              selectedColor={MOCK_COLORS}
+              isMobile
             />
-            <h3 className="text-lg font-semibold">{product.name}</h3>
-            <div className="mb-2 flex items-center justify-between gap-2">
-              <p className="text-sm">{getStarRating(product.rating)}</p>
-              <span className="text-gray-600">{product.rating}/5</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <p className="text-lg font-bold">R$ {product.price.toFixed(2)}</p>
-              <button className="rounded bg-blue-500 px-2 py-1 text-white">
-                <ShoppingCartIcon className="inline h-4 w-4" />
-              </button>
+            <div className="mt-4 text-center">
+              <Button
+                variant="outline"
+                className="md:hidden"
+                onClick={() => setActiveFilter(false)}
+              >
+                Fechar Filtros
+              </Button>
             </div>
           </div>
-        ))}
-        <div className="col-span-2 mt-4 flex justify-center md:col-span-3 lg:col-span-4">
+        </div>
+      )}
+
+      <FilterPanel
+        priceRange={priceRange}
+        onPriceChange={(value) => setPriceRange(Number(value))}
+        selectedRating={selectedRating}
+        onRatingChange={setSelectedRating}
+        onClearFilters={handleClearFilters}
+        selectedColor={MOCK_COLORS}
+        isMobile={activeFilter}
+      />
+
+      {/* Coluna de Produtos */}
+      <main>
+        <div className="mb-4 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">Produtos</h1>
+          <Button
+            variant="outline"
+            className="md:hidden"
+            onClick={() => setActiveFilter(!activeFilter)}
+          >
+            <FilterIcon className="mr-2 h-4 w-4" />
+            Filtros
+          </Button>
+        </div>
+        <p className="mb-4 text-gray-600">
+          Exibindo {currentProducts.length} de {filteredProducts.length}{" "}
+          produtos
+        </p>
+
+        {/* Grade de Produtos */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {currentProducts.length > 0 ? (
+            currentProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          ) : (
+            <p className="col-span-full text-center">
+              Nenhum produto encontrado com esses filtros.
+            </p>
+          )}
+        </div>
+
+        {/* Paginação */}
+        <div className="col-span-full mt-8 flex justify-center">
           <Pagination>
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious href="#" />
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentPage((p) => Math.max(1, p - 1));
+                  }}
+                />
               </PaginationItem>
+              {[...Array(totalPages).keys()].map((page) => (
+                <PaginationItem key={page + 1}>
+                  <PaginationLink
+                    href="#"
+                    isActive={currentPage === page + 1}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(page + 1);
+                    }}
+                  >
+                    {page + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
               <PaginationItem>
-                <PaginationLink href="#" isActive>
-                  1
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">2</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentPage((p) => Math.min(totalPages, p + 1));
+                  }}
+                />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
