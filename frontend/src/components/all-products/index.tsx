@@ -110,7 +110,7 @@ const MOCK_PRODUCTS = [
 export default function AllProducts() {
   return (
     <div className="p-2 md:p-4 lg:p-8">
-      <nav className="mb-6 text-sm">
+      <nav className="mb-2 text-sm">
         <ol className="inline-flex list-none p-0">
           <li className="flex items-center">
             <Link href="#" className="hover:underline">
@@ -126,13 +126,13 @@ export default function AllProducts() {
         </ol>
       </nav>
       <div className="flex items-center justify-around p-2 text-center">
-        <h1 className="text-4xl font-bold">{MOCK_STYLES[0].name} </h1>
+        <h1 className="text-3xl font-semibold">{MOCK_STYLES[0].name} </h1>
         <p className="text-gray-600">
-          Exibindo 10 produtos no total de {MOCK_PRODUCTS.length}
+          Exibindo 1-10 produtos no total de {MOCK_PRODUCTS.length}
         </p>
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {MOCK_PRODUCTS.map((product) => (
+        {MOCK_PRODUCTS.slice(0, 10).map((product) => (
           <div key={product.id} className="m-2 w-48 rounded-2xl border p-2">
             <img
               src={product.image}
