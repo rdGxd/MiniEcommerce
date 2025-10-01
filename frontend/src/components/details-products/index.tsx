@@ -562,7 +562,7 @@ export const DetailsProducts = ({
           <Card className="max-w-xs">
             <CardContent className="p-4">
               <Image
-                src="https://picsum.photos/id/50/300/350"
+                src="https://picsum.photos/id/50/300/350?random=6"
                 alt="Produto Relacionado 1"
                 width={300}
                 height={350}
@@ -581,7 +581,7 @@ export const DetailsProducts = ({
           <Card className="max-w-xs">
             <CardContent className="p-4">
               <Image
-                src="https://picsum.photos/id/60/300/350"
+                src="https://picsum.photos/id/60/300/350?random=7"
                 alt="Produto Relacionado 2"
                 width={300}
                 height={350}

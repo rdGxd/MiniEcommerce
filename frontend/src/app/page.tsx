@@ -43,7 +43,6 @@ export default function Home() {
             src="/CasalDaHome.svg"
             alt="Clothes 1"
             width={500}
-            layout="responsive"
             height={500}
             className="h-auto w-full rounded-lg object-cover"
           />

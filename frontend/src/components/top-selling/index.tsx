@@ -13,7 +13,6 @@ export function NewArrivals() {
             alt="New Arrival"
             width={200}
             height={200}
-            layout="responsive"
             className="bg-gray-400"
           />
 
@@ -26,7 +25,6 @@ export function NewArrivals() {
             src={"https://picsum.photos/200/300?random=2"}
             alt="New Arrival"
             width={200}
-            layout="responsive"
             height={200}
             className="bg-gray-400"
           />
@@ -39,7 +37,6 @@ export function NewArrivals() {
             src={"https://picsum.photos/200/300?random=3"}
             alt="New Arrival"
             width={200}
-            layout="responsive"
             height={200}
             className="bg-gray-400"
           />
@@ -52,7 +49,6 @@ export function NewArrivals() {
             src={"https://picsum.photos/200/300?random=4"}
             alt="New Arrival"
             width={200}
-            layout="responsive"
             height={200}
             className="bg-gray-400"
           />
