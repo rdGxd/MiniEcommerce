@@ -9,7 +9,7 @@ export function NewArrivals() {
       <div className="lg:scrollbar-hide grid w-full max-w-3xl grid-cols-2 gap-4 p-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:max-w-5xl lg:grid-cols-5 lg:space-x-4 lg:overflow-x-auto lg:p-0 lg:pr-2 lg:pb-4">
         <div className="flex flex-col gap-2">
           <Image
-            src={"https://picsum.photos/200/300?random=1"}
+            src={"https://picsum.photos/200/300?random=5"}
             alt="New Arrival"
             width={200}
             height={200}
@@ -22,7 +22,7 @@ export function NewArrivals() {
         </div>
         <div className="flex flex-col gap-2">
           <Image
-            src={"https://picsum.photos/200/300?random=2"}
+            src={"https://picsum.photos/200/300?random=6"}
             alt="New Arrival"
             width={200}
             height={200}
@@ -34,7 +34,7 @@ export function NewArrivals() {
         </div>
         <div className="flex flex-col gap-2">
           <Image
-            src={"https://picsum.photos/200/300?random=3"}
+            src={"https://picsum.photos/200/300?random=7"}
             alt="New Arrival"
             width={200}
             height={200}
@@ -46,7 +46,7 @@ export function NewArrivals() {
         </div>
         <div className="flex flex-col gap-2">
           <Image
-            src={"https://picsum.photos/200/300?random=4"}
+            src={"https://picsum.photos/200/300?random=8"}
             alt="New Arrival"
             width={200}
             height={200}
