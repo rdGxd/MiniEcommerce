@@ -1,98 +1,143 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# MiniEcommerce — Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API backend do projeto MiniEcommerce, construído com NestJS, TypeScript e TypeORM (Postgres).
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-   <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este repositório contém a lógica do servidor: módulos de autenticação, usuários, produtos, categorias, pedidos, pagamentos e migrações de banco.
 
-## Description
+## Requisitos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Node.js 18+ (recomendo usar a versão LTS)
+- pnpm (ou npm/yarn, mas os scripts foram testados com pnpm)
+- PostgreSQL (local ou em container)
 
-## Project setup
+## Instalação
+
+1. Instale dependências:
 
 ```bash
-$ pnpm install
+pnpm install
 ```
 
-## Compile and run the project
+2. Crie um arquivo `.env` na raiz com as variáveis de ambiente (exemplo abaixo).
+
+3. Rode migrations (ver seção "Banco de Dados / Migrations") ou execute o app em modo dev.
+
+## Variáveis de ambiente (exemplo .env)
+
+Crie um `.env` na raiz com pelo menos as variáveis abaixo:
+
+```
+# App
+PORT=3001
+
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=mini_ecommerce
+DB_AUTOLOAD_ENTITIES=true
+DB_SYNCHRONIZE=false
+
+# JWT
+JWT_SECRET=uma_chave_forte_aqui
+JWT_EXPIRES_IN=3600
+JWT_ISSUER=mini-ecommerce
+JWT_AUDIENCE=mini-ecommerce-client
+JWT_REFRESH_TOKEN=uma_chave_refresh
+JWT_REFRESH_TOKEN_EXPIRES_IN=604800
+```
+
+Observações:
+
+- Nunca exponha valores sensíveis em repositórios públicos.
+- `DB_SYNCHRONIZE` deve ser `false` em produção.
+
+## Scripts úteis
+
+- `pnpm run start`: inicia o servidor (produção via nest)
+- `pnpm run start:dev`: inicia em modo watch (desenvolvimento)
+- `pnpm run build`: compila o projeto para `dist/`
+- `pnpm run lint`: roda e corrige ESLint
+- `pnpm run format`: formata o código com Prettier
+- `pnpm run test`: roda os testes unitários (Jest)
+- `pnpm run test:e2e`: roda testes end-to-end
+- `pnpm run test:cov`: gera coverage
+
+## Banco de dados e migrations
+
+Este projeto usa TypeORM com um arquivo de data-source em `src/database/data-source.ts`.
+
+- Criar nova migration:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+pnpm exec typeorm-ts-node-commonjs migration:create <MigrationName>
 ```
 
-## Run tests
+- Gerar migration a partir do esquema atual:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm exec typeorm-ts-node-commonjs migration:generate --data-source src/database/data-source.ts <MigrationName>
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- Rodar migrations:
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+pnpm exec typeorm-ts-node-commonjs migration:run --data-source src/database/data-source.ts
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+- Reverter última migration:
 
-## Resources
+```bash
+pnpm exec typeorm-ts-node-commonjs migration:revert --data-source src/database/data-source.ts
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+## Testes
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Unit e integração com Jest. Para rodar todos os testes:
 
-## Support
+```bash
+pnpm run test
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Para rodar testes E2E:
 
-## Stay in touch
+```bash
+pnpm run test:e2e
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Como rodar em desenvolvimento
+
+1. Configure `.env` com credenciais do banco.
+2. Rode o banco (p.ex. via Docker) e as migrations.
+3. Inicie o servidor em modo dev:
+
+```bash
+pnpm run start:dev
+```
+
+A API ficará disponível em <http://localhost:3001> por padrão (porta via `PORT`).
+
+## Observações para desenvolvedores
+
+- O projeto utiliza módulos organizados por feature (`src/*.module.ts`).
+- Autenticação baseada em JWT (veja `src/common/config/jwt-config.ts`).
+- A configuração do banco está em `src/common/config/database-config.ts` e `src/database/data-source.ts`.
+
+## Contribuição
+
+1. Fork este repositório.
+2. Crie uma branch feature: `git checkout -b feat/nova-funcionalidade`.
+3. Abra um merge request com descrição clara.
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Este repositório está marcado como UNLICENSED no `package.json`. Atualize se desejar uma licença específica.
+
+## Contato
+
+Para dúvidas, abra uma issue neste repositório ou entre em contato com os mantenedores.
+
+---
+
+Se quiser, posso também adicionar um `.env.example` e um `docker-compose.yml` para facilitar execução com Docker — quer que eu adicione isso?
