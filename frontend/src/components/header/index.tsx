@@ -12,13 +12,15 @@ export default function Header() {
       <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden">
+            <Button size="icon" className="lg:hidden">
               <MenuIcon className="h-6 w-6" />
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
           <SheetTrigger asChild>
-            <span className="uppercase ml-2 font-bold leading-tight text-2xl">shop.co</span>
+            <span className="ml-2 text-2xl leading-tight font-bold uppercase">
+              shop.co
+            </span>
           </SheetTrigger>
           <SheetContent side="left">
             <Link href="#" prefetch={false}>
@@ -26,19 +28,39 @@ export default function Header() {
               <span className="sr-only">ShadCN</span>
             </Link>
             <div className="grid gap-2 py-6">
-              <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              <Link
+                href="#"
+                className="flex w-full items-center py-2 text-lg font-semibold"
+                prefetch={false}
+              >
                 Home
               </Link>
-              <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              <Link
+                href="#"
+                className="flex w-full items-center py-2 text-lg font-semibold"
+                prefetch={false}
+              >
                 About
               </Link>
-              <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              <Link
+                href="#"
+                className="flex w-full items-center py-2 text-lg font-semibold"
+                prefetch={false}
+              >
                 Services
               </Link>
-              <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              <Link
+                href="#"
+                className="flex w-full items-center py-2 text-lg font-semibold"
+                prefetch={false}
+              >
                 Portfolio
               </Link>
-              <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              <Link
+                href="#"
+                className="flex w-full items-center py-2 text-lg font-semibold"
+                prefetch={false}
+              >
                 Contact
               </Link>
             </div>
@@ -98,10 +120,10 @@ export default function Header() {
           </NavigationMenuList>
         </NavigationMenu>
         <div className="ml-auto flex gap-2">
-          <Button variant="outline">
+          <Button>
             <SearchIcon />
           </Button>
-          <Button variant="outline">
+          <Button>
             <UserCircleIcon />
           </Button>
           <Button>

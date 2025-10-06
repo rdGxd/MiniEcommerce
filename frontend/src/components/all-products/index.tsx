@@ -133,6 +133,14 @@ const MOCK_COLORS = [
   { id: 6, name: "Branco", hex: "#FFFFFF" },
 ];
 
+const MOCK_SIZES = [
+  { id: 1, name: "PP" },
+  { id: 2, name: "P" },
+  { id: 3, name: "M" },
+  { id: 4, name: "G" },
+  { id: 5, name: "GG" },
+];
+
 const PRODUCTS_PER_PAGE = 8; // Quantos produtos por página
 
 export default function AllProducts() {
@@ -192,6 +200,8 @@ export default function AllProducts() {
               onRatingChange={setSelectedRating}
               onClearFilters={handleClearFilters}
               selectedColor={MOCK_COLORS}
+              selectedStyles={MOCK_STYLES}
+              selectedSizes={MOCK_SIZES}
               isMobile
             />
             <div className="mt-4 text-center">
@@ -215,6 +225,8 @@ export default function AllProducts() {
         onClearFilters={handleClearFilters}
         selectedColor={MOCK_COLORS}
         isMobile={activeFilter}
+        selectedStyles={MOCK_STYLES}
+        selectedSizes={MOCK_SIZES}
       />
 
       {/* Coluna de Produtos */}

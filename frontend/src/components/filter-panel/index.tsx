@@ -14,8 +14,10 @@ interface FilterPanelProps {
   readonly selectedRating: number | null;
   readonly onRatingChange: (rating: number | null) => void;
   readonly onClearFilters: () => void;
-  readonly selectedColor: Color[] ;
+  readonly selectedColor: Color[];
   readonly isMobile?: boolean;
+  readonly selectedStyles: { id: number; name: string }[];
+  readonly selectedSizes: { id: number; name: string }[];
 }
 
 export function FilterPanel({
@@ -25,6 +27,8 @@ export function FilterPanel({
   onRatingChange,
   onClearFilters,
   selectedColor,
+  selectedSizes,
+  selectedStyles,
   isMobile = false,
 }: FilterPanelProps) {
   // Função auxiliar para avaliação
@@ -40,6 +44,26 @@ export function FilterPanel({
         <div className="mt-20 block md:hidden">
           <div className="w-full rounded-2xl bg-white p-4 shadow-lg dark:bg-gray-800">
             <h2 className="text-xl font-semibold">Filtros</h2>
+
+            {/* Filtro de Estilos */}
+            <h3 className="mt-4 mb-2 text-lg font-semibold">Estilos</h3>
+            <div className="mb-4 flex flex-wrap gap-2">
+              {selectedStyles.map((style) => (
+                <button
+                  key={style.id}
+                  className={`rounded border px-3 py-1 text-sm hover:bg-gray-200 dark:hover:bg-gray-700 ${
+                    selectedStyles.includes(style) ? "bg-gray-200" : ""
+                  }`}
+                  onClick={() => {
+                    onClearFilters();
+                    onRatingChange(null);
+                    onPriceChange(1000);
+                  }}
+                >
+                  {style.name}
+                </button>
+              ))}
+            </div>
 
             {/* Filtro de Preço */}
             <h3 className="mt-4 mb-2 text-lg font-semibold">Preço até</h3>
@@ -70,6 +94,7 @@ export function FilterPanel({
               </Button>
             ))}
 
+            {/* Filtro de Cores */}
             <h3 className="mt-4 mb-2 text-lg font-semibold">Cores</h3>
             <div className="mb-4 flex flex-wrap gap-2">
               {selectedColor.map((color) => (
@@ -88,6 +113,26 @@ export function FilterPanel({
                   }}
                 />
               ))}
+            </div>
+
+            {/* Filtro de Tamanhos */}
+            <div>
+              <h3>Tamanhos</h3>
+              <div className="mb-4 flex flex-wrap gap-2">
+                {selectedSizes.map((size) => (
+                  <button
+                    key={size.id}
+                    className="rounded border px-3 py-1 text-sm hover:bg-gray-200 dark:hover:bg-gray-700"
+                    onClick={() => {
+                      onClearFilters();
+                      onRatingChange(null);
+                      onPriceChange(1000);
+                    }}
+                  >
+                    {size.name}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="mt-6">
@@ -108,6 +153,26 @@ export function FilterPanel({
           <div className="w-full rounded-2xl bg-white p-4 shadow-lg dark:bg-gray-800">
             <h2 className="text-xl font-semibold">Filtros</h2>
 
+            {/* Filtro de Estilos */}
+            <h3 className="mt-4 mb-2 text-lg font-semibold">Estilos</h3>
+            <div className="mb-4 flex flex-wrap gap-2">
+              {selectedStyles.map((style) => (
+                <button
+                  key={style.id}
+                  className={`rounded border px-3 py-1 text-sm hover:bg-gray-200 dark:hover:bg-gray-700 ${
+                    selectedStyles.includes(style) ? "bg-gray-200" : ""
+                  }`}
+                  onClick={() => {
+                    onClearFilters();
+                    onRatingChange(null);
+                    onPriceChange(1000);
+                  }}
+                >
+                  {style.name}
+                </button>
+              ))}
+            </div>
+
             {/* Filtro de Preço */}
             <h3 className="mt-4 mb-2 text-lg font-semibold">Preço até</h3>
             <input
@@ -137,6 +202,7 @@ export function FilterPanel({
               </Button>
             ))}
 
+            {/* Filtro de Cores */}
             <h3 className="mt-4 mb-2 text-lg font-semibold">Cores</h3>
             <div className="mb-4 flex flex-wrap gap-2">
               {selectedColor.map((color) => (
@@ -155,6 +221,26 @@ export function FilterPanel({
                   }}
                 />
               ))}
+            </div>
+
+            {/* Filtro de Tamanhos */}
+            <div>
+              <h3>Tamanhos</h3>
+              <div className="mb-4 flex flex-wrap gap-2">
+                {selectedSizes.map((size) => (
+                  <button
+                    key={size.id}
+                    className="rounded border px-3 py-1 text-sm hover:bg-gray-200 dark:hover:bg-gray-700"
+                    onClick={() => {
+                      onClearFilters(); // Limpa outros filtros ao selecionar um tamanho
+                      onRatingChange(null); // Limpa avaliação ao selecionar um tamanho
+                      onPriceChange(1000); // Reseta o preço ao selecionar um tamanho
+                    }}
+                  >
+                    {size.name}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="mt-6">
