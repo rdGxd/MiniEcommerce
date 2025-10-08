@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+.git
+.gitignore
+npm-debug.log
+pnpm-lock.yaml
+Dockerfile
+docker-compose.override.yml
+*.local
+*.env
