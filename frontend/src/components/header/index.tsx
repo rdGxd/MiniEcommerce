@@ -13,6 +13,7 @@ import {
   SearchIcon,
   ShoppingCartIcon,
   UserCircleIcon,
+  UserIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { JSX, SVGProps, useEffect, useState } from "react";
@@ -99,11 +100,29 @@ export default function Header() {
             <SearchIcon />
           </Button>
 
-          {isLoggedIn !== null && (
-            <Button size="icon" aria-label={isLoggedIn ? "Perfil" : "Entrar"}>
-              {isLoggedIn ? <UserCircleIcon /> : <LogInIcon />}
+          {isLoggedIn && (
+            <Button size="icon" aria-label="Perfil do usuário">
+              <Link href="/profile">
+                <UserCircleIcon />
+              </Link>
             </Button>
           )}
+
+          <Button size="icon" aria-label="Login">
+            {!isLoggedIn && (
+              <Link href="/login">
+                <LogInIcon />
+              </Link>
+            )}
+          </Button>
+
+          <Button size="icon" aria-label="Registrar">
+            {!isLoggedIn && (
+              <Link href="/signup">
+                <UserIcon />
+              </Link>
+            )}
+          </Button>
 
           <Button size="icon" aria-label="Carrinho de compras">
             <ShoppingCartIcon />
