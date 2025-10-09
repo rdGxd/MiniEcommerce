@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
 import { TokenPayloadParam } from '../common/decorators/token-payload.decorator';
 import { PayloadDto } from '../common/dto/payload.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
@@ -14,21 +21,25 @@ import { ResponseTokenDto } from './dto/response-token.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @HttpCode(HttpStatus.OK)
   @Post('login')
   create(@Body() dto: LoginAuthDto): Promise<ResponseTokenDto> {
     return this.authService.login(dto);
   }
 
+  @HttpCode(HttpStatus.CREATED)
   @Post('register')
   register(@Body() dto: CreateUserDto): Promise<ResponseUserDto> {
     return this.authService.register(dto);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Get('refresh')
   refresh(@Body() dto: RefreshTokenDto): Promise<ResponseTokenDto> {
     return this.authService.refreshToken(dto);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Get('profile')
   profile(
     @TokenPayloadParam() tokenPayload: PayloadDto,

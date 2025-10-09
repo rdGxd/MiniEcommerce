@@ -16,10 +16,13 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const router = useRouter();
   const form = useForm({
     mode: "onBlur",
     reValidateMode: "onChange",
@@ -33,6 +36,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    toast.dismiss();
 
     try {
       const result = await createUser(form.getValues());
@@ -42,6 +46,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       }
       toast.success("User created successfully");
       form.reset();
+      router.push("/login");
     } catch {
       toast.error("Error creating user");
       form.reset();
@@ -114,7 +119,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                   Sign up with Google
                 </Button>
                 <FieldDescription className="px-6 text-center">
-                  Already have an account? <a href="#">Sign in</a>
+                  Already have an account? <Link href="/login">Sign in</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
