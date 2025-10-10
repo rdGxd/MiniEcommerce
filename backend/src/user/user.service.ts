@@ -3,21 +3,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { HashingProtocol } from 'src/common/hashing/hashing-protocol';
 import { PaginatedResult } from 'src/common/interfaces/paginated-result';
 import { USER_ERRORS } from 'src/constants/user.constants';
-import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ResponseUserDto } from './dto/response-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
 import { UserMapper } from './mapper/user-mapper';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly userRepository: UserRepository,
     private readonly userMapper: UserMapper,
     private readonly hashingService: HashingProtocol,
   ) {}
@@ -55,7 +53,7 @@ export class UserService {
   }
 
   async findOne(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
+    const user = await this.userRepository.findById(id);
     if (!user) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
@@ -63,7 +61,8 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.userRepository.findOneBy({ id });
+    const user = await this.userRepository.findById(id);
+
     if (!user) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
@@ -83,11 +82,12 @@ export class UserService {
   }
 
   async remove(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user) {
+    const user = await this.userRepository.findById(id);
+    if (user === null) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
     const result = await this.userRepository.remove(user);
+
     if (!result) {
       throw new BadRequestException(USER_ERRORS.DELETION_FAILED);
     }
@@ -96,8 +96,8 @@ export class UserService {
 
   // Métodos adicionais para autenticação
   async findUserByEmailAddress(email: string) {
-    const user = await this.userRepository.findOneBy({ email });
-    if (!user) {
+    const user = await this.userRepository.findByEmail(email);
+    if (user === null) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
 
@@ -105,8 +105,8 @@ export class UserService {
   }
 
   async findUserById(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user) {
+    const user = await this.userRepository.findById(id);
+    if (user === null) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
     return user;
