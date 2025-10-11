@@ -5,7 +5,7 @@ import { type Repository } from 'typeorm';
 import { ResponseUserDto } from '../dto/response-user.dto';
 import { User } from '../entities/user.entity';
 import { UserMapper } from '../mapper/user-mapper';
-import { UserService } from '../user.service';
+import { UserService } from '../service/user.service';
 
 describe('UserService', () => {
   let service: UserService;

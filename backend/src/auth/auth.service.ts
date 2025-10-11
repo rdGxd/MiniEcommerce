@@ -12,7 +12,7 @@ import { HashingProtocol } from '../common/hashing/hashing-protocol';
 import { USER_ERRORS } from '../constants/user.constants';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '../user/entities/user.entity';
-import { UserService } from '../user/user.service';
+import { UserService } from '../user/service/user.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 

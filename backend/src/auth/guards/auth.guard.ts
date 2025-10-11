@@ -12,7 +12,7 @@ import { Request } from 'express';
 import { jwtConfig } from '../../common/config/jwt-config';
 import { REQUEST_TOKEN_PAYLOAD_KEY } from '../../constants/auth.constants';
 import { USER_ERRORS } from '../../constants/user.constants';
-import { UserService } from '../../user/user.service';
+import { UserService } from '../../user/service/user.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

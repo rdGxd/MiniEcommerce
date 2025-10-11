@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PayloadDto } from 'src/common/dto/payload.dto';
 import { PaymentStatus } from 'src/common/enums/payment-enums';
 import { USER_ERRORS } from 'src/constants/user.constants';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/user/service/user.service';
 import { Repository } from 'typeorm';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Payment } from './entities/payment.entity';

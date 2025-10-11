@@ -6,16 +6,17 @@ import {
 import { HashingProtocol } from 'src/common/hashing/hashing-protocol';
 import { PaginatedResult } from 'src/common/interfaces/paginated-result';
 import { USER_ERRORS } from 'src/constants/user.constants';
-import { CreateUserDto } from './dto/create-user.dto';
-import { ResponseUserDto } from './dto/response-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserMapper } from './mapper/user-mapper';
-import { UserRepository } from './user.repository';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { ResponseUserDto } from '../dto/response-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { UserMapper } from '../mapper/user-mapper';
+import { UserRepositoryContract } from '../repository/abstract-user-repository';
+
 
 @Injectable()
 export class UserService {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: UserRepositoryContract,
     private readonly userMapper: UserMapper,
     private readonly hashingService: HashingProtocol,
   ) {}
