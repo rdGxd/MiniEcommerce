@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { Category } from '../../category/entities/category.entity';
 import { OrderItem } from '../../order-item/entities/order-item.entity';
 

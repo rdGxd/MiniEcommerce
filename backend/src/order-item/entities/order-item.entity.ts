@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { Order } from '../../order/entities/order.entity';
 import { Product } from '../../product/entities/product.entity';
 

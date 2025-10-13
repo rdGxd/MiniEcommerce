@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+
 import { OrderItem } from '../entities/order-item.entity';
 import { OrderItemMapper } from '../mapper/order-item-mapper';
-import { OrderItemService } from '../order-item.service';
+import { OrderItemService } from '../service/order-item.service';
 
 const repositoryMock = {
   find: jest.fn(),

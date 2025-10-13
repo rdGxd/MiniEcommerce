@@ -6,12 +6,13 @@ import {
 import { HashingProtocol } from 'src/common/hashing/hashing-protocol';
 import { PaginatedResult } from 'src/common/interfaces/paginated-result';
 import { USER_ERRORS } from 'src/constants/user.constants';
+
 import { CreateUserDto } from '../dto/create-user.dto';
 import { ResponseUserDto } from '../dto/response-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { User } from '../entities/user.entity';
 import { UserMapper } from '../mapper/user-mapper';
-import { UserRepositoryContract } from '../repository/abstract-user-repository';
-
+import { UserRepositoryContract } from '../repository/contract-user-repository';
 
 @Injectable()
 export class UserService {
@@ -54,7 +55,7 @@ export class UserService {
   }
 
   async findOne(id: string) {
-    const user = await this.userRepository.findById(id);
+    const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
@@ -62,19 +63,26 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.userRepository.findById(id);
+    const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
-    user.email = updateUserDto?.email ?? user.email;
-    user.role = updateUserDto?.role ?? user.role;
+
+    const updatedData: Partial<User> = {
+      email: updateUserDto?.email ?? user.email,
+      role: updateUserDto?.role ?? user.role,
+    };
 
     if (updateUserDto.password) {
-      user.password = await this.hashingService.hash(updateUserDto.password);
+      updatedData.password = await this.hashingService.hash(
+        updateUserDto.password,
+      );
     }
 
-    const userUpdated = await this.userRepository.save(user);
+    await this.userRepository.update(id, updatedData);
+    const userUpdated = await this.userRepository.findOneBy({ id });
+
     if (!userUpdated) {
       throw new BadRequestException(USER_ERRORS.UPDATE_FAILED);
     }
@@ -83,7 +91,7 @@ export class UserService {
   }
 
   async remove(id: string) {
-    const user = await this.userRepository.findById(id);
+    const user = await this.userRepository.findOneBy({ id });
     if (user === null) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
@@ -97,7 +105,7 @@ export class UserService {
 
   // Métodos adicionais para autenticação
   async findUserByEmailAddress(email: string) {
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.userRepository.findOneBy({ email });
     if (user === null) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }
@@ -106,7 +114,7 @@ export class UserService {
   }
 
   async findUserById(id: string) {
-    const user = await this.userRepository.findById(id);
+    const user = await this.userRepository.findOneBy({ id });
     if (user === null) {
       throw new NotFoundException(USER_ERRORS.NOT_FOUND);
     }

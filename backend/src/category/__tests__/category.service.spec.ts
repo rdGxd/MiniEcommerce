@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { CategoryService } from '../category.service';
+
 import { Category } from '../entities/category.entity';
 import { CategoryMapper } from '../mapper/category-mapper';
+import { CategoryService } from '../service/category.service';
 
 const repositoryMock = {
   find: jest.fn(),

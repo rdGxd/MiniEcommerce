@@ -1,17 +1,18 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
 } from '@nestjs/common';
 import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
 import { UserRoles } from 'src/common/enums/role.enum';
-import { CreateOrderItemDto } from './dto/create-order-item.dto';
-import { UpdateOrderItemDto } from './dto/update-order-item.dto';
-import { OrderItemService } from './order-item.service';
+
+import { CreateOrderItemDto } from '../dto/create-order-item.dto';
+import { UpdateOrderItemDto } from '../dto/update-order-item.dto';
+import { OrderItemService } from '../service/order-item.service';
 
 @Controller('order-item')
 export class OrderItemController {

@@ -1,18 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CATEGORY_ERRORS } from '../constants/category.constants';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { ResponseCategoryDto } from './dto/response-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Category } from './entities/category.entity';
-import { CategoryMapper } from './mapper/category-mapper';
+
+import { CATEGORY_ERRORS } from '../../constants/category.constants';
+import { CreateCategoryDto } from '../dto/create-category.dto';
+import { ResponseCategoryDto } from '../dto/response-category.dto';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
+import { CategoryMapper } from '../mapper/category-mapper';
+import { CategoryRepositoryContract } from '../repository/contract-category-repository';
 
 @Injectable()
 export class CategoryService {
   constructor(
-    @InjectRepository(Category)
-    private readonly categoryRepository: Repository<Category>,
+    private readonly categoryRepository: CategoryRepositoryContract,
     private readonly categoryMapper: CategoryMapper,
   ) {}
 
@@ -38,22 +36,23 @@ export class CategoryService {
     return this.categoryMapper.toDto(category);
   }
 
-  // TODO: Falta pegar o token do usuário logado para fazer a atualização
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
       throw new NotFoundException(CATEGORY_ERRORS.NOT_FOUND);
     }
-    category.name = updateCategoryDto.name ?? category.name;
 
-    const savedCategory = await this.categoryRepository.save(category);
-    if (!savedCategory) {
+    await this.categoryRepository.update(id, {
+      name: updateCategoryDto.name ?? category.name,
+    });
+
+    const updatedCategory = await this.categoryRepository.findOneBy({ id });
+    if (!updatedCategory) {
       throw new NotFoundException(CATEGORY_ERRORS.FAILED_UPDATED);
     }
-    return this.categoryMapper.toDto(savedCategory);
+    return this.categoryMapper.toDto(updatedCategory);
   }
 
-  // TODO: Falta pegar o token do usuário logado para fazer a atualização
   async remove(id: string) {
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
@@ -63,6 +62,6 @@ export class CategoryService {
     if (!result) {
       throw new NotFoundException(CATEGORY_ERRORS.FAILED_DELETED);
     }
-    return result;
+    return this.categoryMapper.toDto(result);
   }
 }

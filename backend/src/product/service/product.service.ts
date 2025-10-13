@@ -3,19 +3,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PRODUCT_ERRORS } from 'src/constants/product.constants';
-import { Repository } from 'typeorm';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { Product } from './entities/product.entity';
-import { ProductMapper } from './mapper/product-mapper';
+
+import { CreateProductDto } from '../dto/create-product.dto';
+import { UpdateProductDto } from '../dto/update-product.dto';
+import { ProductMapper } from '../mapper/product-mapper';
+import { ProductRepositoryContract } from '../repository/contract-product-repository';
 
 @Injectable()
 export class ProductService {
   constructor(
-    @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
+    private readonly productRepository: ProductRepositoryContract,
     private readonly productMapper: ProductMapper,
   ) {}
 

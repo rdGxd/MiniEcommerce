@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { UserRoles } from '../../common/enums/role.enum';
 import { Order } from '../../order/entities/order.entity';
 import { Payment } from '../../payment/entities/payment.entity';

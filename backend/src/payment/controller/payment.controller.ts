@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { TokenPayloadParam } from 'src/common/decorators/token-payload.decorator';
 import { PayloadDto } from 'src/common/dto/payload.dto';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { PaymentService } from './payment.service';
+
+import { CreatePaymentDto } from '../dto/create-payment.dto';
+import { PaymentService } from '../service/payment.service';
 
 @Controller('payment')
 export class PaymentController {

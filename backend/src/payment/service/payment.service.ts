@@ -1,19 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PayloadDto } from 'src/common/dto/payload.dto';
 import { PaymentStatus } from 'src/common/enums/payment-enums';
 import { USER_ERRORS } from 'src/constants/user.constants';
 import { UserService } from 'src/user/service/user.service';
-import { Repository } from 'typeorm';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { Payment } from './entities/payment.entity';
-import { PaymentMapper } from './mapper/payment-mapper';
+
+import { CreatePaymentDto } from '../dto/create-payment.dto';
+import { Payment } from '../entities/payment.entity';
+import { PaymentMapper } from '../mapper/payment-mapper';
+import { PaymentRepositoryContract } from '../repository/contract-payment-repository';
 
 @Injectable()
 export class PaymentService {
   constructor(
-    @InjectRepository(Payment)
-    private readonly paymentRepository: Repository<Payment>,
+    private readonly paymentRepository: PaymentRepositoryContract,
     private readonly userService: UserService,
     private readonly paymentMapper: PaymentMapper,
   ) {}
@@ -28,13 +27,15 @@ export class PaymentService {
     const statuses = Object.values(PaymentStatus);
     const status = statuses[Math.floor(Math.random() * statuses.length)];
 
-    const payment = this.paymentRepository.create({
+    const payment = new Payment();
+    Object.assign(payment, {
       ...createPaymentDto,
       user: { id: payload.sub },
       status,
     });
 
-    return this.paymentMapper.toDto(payment);
+    const savedPayment = await this.paymentRepository.save(payment);
+    return this.paymentMapper.toDto(savedPayment);
   }
 
   async findAll(userId: string): Promise<Payment[]> {

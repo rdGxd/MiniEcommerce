@@ -3,7 +3,8 @@ import { Test, type TestingModule } from '@nestjs/testing';
 import { jwtConfig } from 'src/common/config/jwt-config';
 import { HashingProtocol } from 'src/common/hashing/hashing-protocol';
 import { UserService } from 'src/user/service/user.service';
-import { AuthService } from '../auth.service';
+
+import { AuthService } from '../service/auth.service';
 
 const hashingMock: Partial<HashingProtocol> = {
   hash: jest.fn(),

@@ -1,47 +1,50 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { CreateUserDto } from "../dto/create-user.dto";
-import { User } from "../entities/user.entity";
-import { UserRepositoryContract } from "./abstract-user-repository";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import {
+  FindManyOptions,
+  FindOneOptions,
+  FindOptionsWhere,
+  Repository,
+} from 'typeorm';
+
+import { User } from '../entities/user.entity';
+import { UserRepositoryContract } from './contract-user-repository';
 
 @Injectable()
 export class UserRepository extends UserRepositoryContract {
-
-  constructor(@InjectRepository(User) private readonly typeOrmRepo: Repository<User>) {
+  constructor(
+    @InjectRepository(User) private readonly repository: Repository<User>,
+  ) {
     super();
   }
 
-  save(user: CreateUserDto | Partial<User> | User): Promise<User> {
-    const entity = this.typeOrmRepo.create(user as Partial<User>);
-    return this.typeOrmRepo.save(entity);
+  async save(user: Partial<User> | User): Promise<User> {
+    return await this.repository.save(user);
   }
 
-  findAll(): Promise<User[]> {
-    return this.typeOrmRepo.find();
+  async find(options?: FindManyOptions<User>): Promise<User[]> {
+    return await this.repository.find(options);
   }
 
-  findById(id: string): Promise<User | null> {
-    return this.typeOrmRepo.findOne({ where: { id } });
+  async findOne(options: FindOneOptions<User>): Promise<User | null> {
+    return await this.repository.findOne(options);
   }
 
-  update(id: string, updateUserDto: Partial<CreateUserDto> | Partial<User>): Promise<User | null> {
-  const entity = this.typeOrmRepo.create({ ...(updateUserDto as Partial<User>), id });
-  return this.typeOrmRepo.save(entity);
+  async findOneBy(criteria: FindOptionsWhere<User>): Promise<User | null> {
+    return await this.repository.findOneBy(criteria);
   }
 
-  remove(user: User): Promise<User> {
-    return this.typeOrmRepo.remove(user);
+  async findAndCount(
+    options: FindManyOptions<User>,
+  ): Promise<[User[], number]> {
+    return await this.repository.findAndCount(options);
   }
 
-  findByEmail(email: string): Promise<User | null> {
-    return this.typeOrmRepo.findOne({ where: { email } });
+  async remove(user: User): Promise<User> {
+    return await this.repository.remove(user);
   }
 
-  findAndCount(options: { skip: number; take: number; }): Promise<[User[], number]> {
-    return this.typeOrmRepo.findAndCount({
-      skip: options.skip,
-      take: options.take,
-    });
+  async update(id: string, user: Partial<User>): Promise<void> {
+    await this.repository.update(id, user);
   }
 }

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HashingModule } from 'src/common/hashing/hashing.module';
+
 import { UserController } from './controller/user.controller';
 import { User } from './entities/user.entity';
 import { UserMapper } from './mapper/user-mapper';
-import { UserRepositoryContract } from './repository/abstract-user-repository';
+import { UserRepositoryContract } from './repository/contract-user-repository';
 import { UserRepository } from './repository/user.repository';
 import { UserService } from './service/user.service';
 

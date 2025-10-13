@@ -1,20 +1,21 @@
 import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Post,
 } from '@nestjs/common';
-import { TokenPayloadParam } from '../common/decorators/token-payload.decorator';
-import { PayloadDto } from '../common/dto/payload.dto';
-import { CreateUserDto } from '../user/dto/create-user.dto';
-import { ResponseUserDto } from '../user/dto/response-user.dto';
-import { AuthService } from './auth.service';
-import { Public } from './decorators/set-is-public-policy.decorator';
-import { LoginAuthDto } from './dto/login-auth.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { ResponseTokenDto } from './dto/response-token.dto';
+
+import { TokenPayloadParam } from '../../common/decorators/token-payload.decorator';
+import { PayloadDto } from '../../common/dto/payload.dto';
+import { CreateUserDto } from '../../user/dto/create-user.dto';
+import { ResponseUserDto } from '../../user/dto/response-user.dto';
+import { Public } from '../decorators/set-is-public-policy.decorator';
+import { LoginAuthDto } from '../dto/login-auth.dto';
+import { RefreshTokenDto } from '../dto/refresh-token.dto';
+import { ResponseTokenDto } from '../dto/response-token.dto';
+import { AuthService } from '../service/auth.service';
 
 @Controller('auth')
 @Public()

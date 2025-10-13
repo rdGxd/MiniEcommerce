@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { HashingProtocol } from './hashing-protocol';
+
 import { HashingService } from './hashing.service';
+import { HashingProtocol } from './hashing-protocol';
 
 @Module({
   imports: [],

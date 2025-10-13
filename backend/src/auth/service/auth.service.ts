@@ -6,15 +6,16 @@ import {
 } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConfig } from '../common/config/jwt-config';
-import { PayloadDto } from '../common/dto/payload.dto';
-import { HashingProtocol } from '../common/hashing/hashing-protocol';
-import { USER_ERRORS } from '../constants/user.constants';
-import { CreateUserDto } from '../user/dto/create-user.dto';
-import { User } from '../user/entities/user.entity';
-import { UserService } from '../user/service/user.service';
-import { LoginAuthDto } from './dto/login-auth.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+
+import { jwtConfig } from '../../common/config/jwt-config';
+import { PayloadDto } from '../../common/dto/payload.dto';
+import { HashingProtocol } from '../../common/hashing/hashing-protocol';
+import { USER_ERRORS } from '../../constants/user.constants';
+import { CreateUserDto } from '../../user/dto/create-user.dto';
+import { User } from '../../user/entities/user.entity';
+import { UserService } from '../../user/service/user.service';
+import { LoginAuthDto } from '../dto/login-auth.dto';
+import { RefreshTokenDto } from '../dto/refresh-token.dto';
 
 @Injectable()
 export class AuthService {

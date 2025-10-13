@@ -1,21 +1,19 @@
 import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
+    BadRequestException,
+    Injectable,
+    NotFoundException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { ORDER_ERRORS } from '../constants/order.constants';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
-import { Order } from './entities/order.entity';
-import { OrderMapper } from './mapper/order-mapper';
+
+import { ORDER_ERRORS } from '../../constants/order.constants';
+import { CreateOrderDto } from '../dto/create-order.dto';
+import { UpdateOrderDto } from '../dto/update-order.dto';
+import { OrderMapper } from '../mapper/order-mapper';
+import { OrderRepositoryContract } from '../repository/contract-order-repository';
 
 @Injectable()
 export class OrderService {
   constructor(
-    @InjectRepository(Order)
-    private readonly orderRepository: Repository<Order>,
+    private readonly orderRepository: OrderRepositoryContract,
     private readonly orderMapper: OrderMapper,
   ) {}
 
@@ -55,23 +53,25 @@ export class OrderService {
   }
 
   async update(id: string, updateOrderDto: UpdateOrderDto) {
-    const order = await this.orderRepository.findOne({ where: { id } });
+    const order = await this.orderRepository.findOneBy({ id });
     if (!order) {
       throw new NotFoundException(ORDER_ERRORS.ORDER_NOT_FOUND);
     }
 
-    order.total = updateOrderDto.total ?? order.total;
-    order.status = updateOrderDto.status ?? order.status;
+    await this.orderRepository.update(id, {
+      total: updateOrderDto.total ?? order.total,
+      status: updateOrderDto.status ?? order.status,
+    });
 
-    const savedOrder = await this.orderRepository.save(order);
-    if (!savedOrder) {
+    const updatedOrder = await this.orderRepository.findOneBy({ id });
+    if (!updatedOrder) {
       throw new BadRequestException(ORDER_ERRORS.ORDER_UPDATE_FAILED);
     }
-    return this.orderMapper.toDto(savedOrder);
+    return this.orderMapper.toDto(updatedOrder);
   }
 
   async remove(id: string) {
-    const order = await this.orderRepository.findOne({ where: { id } });
+    const order = await this.orderRepository.findOneBy({ id });
     if (!order) {
       throw new NotFoundException(ORDER_ERRORS.ORDER_NOT_FOUND);
     }

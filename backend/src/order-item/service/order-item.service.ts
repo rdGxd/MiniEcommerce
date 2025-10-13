@@ -1,17 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { ORDER_ITEM_ERRORS } from '../constants/order-item.constants';
-import { CreateOrderItemDto } from './dto/create-order-item.dto';
-import { UpdateOrderItemDto } from './dto/update-order-item.dto';
-import { OrderItem } from './entities/order-item.entity';
-import { OrderItemMapper } from './mapper/order-item-mapper';
+
+import { ORDER_ITEM_ERRORS } from '../../constants/order-item.constants';
+import { CreateOrderItemDto } from '../dto/create-order-item.dto';
+import { UpdateOrderItemDto } from '../dto/update-order-item.dto';
+import { OrderItemMapper } from '../mapper/order-item-mapper';
+import { OrderItemRepositoryContract } from '../repository/contract-order-item-repository';
 
 @Injectable()
 export class OrderItemService {
   constructor(
-    @InjectRepository(OrderItem)
-    private readonly orderItemRepository: Repository<OrderItem>,
+    private readonly orderItemRepository: OrderItemRepositoryContract,
     private readonly orderItemMapper: OrderItemMapper,
   ) {}
 
@@ -46,13 +44,17 @@ export class OrderItemService {
     if (!orderItem) {
       throw new NotFoundException(ORDER_ITEM_ERRORS.NOT_FOUND);
     }
-    orderItem.quantity = updateOrderItemDto.quantity ?? orderItem.quantity;
-    orderItem.price = updateOrderItemDto.price ?? orderItem.price;
-    const isUpdated = await this.orderItemRepository.save(orderItem);
-    if (!isUpdated) {
+
+    await this.orderItemRepository.update(id, {
+      quantity: updateOrderItemDto.quantity ?? orderItem.quantity,
+      price: updateOrderItemDto.price ?? orderItem.price,
+    });
+
+    const updatedOrderItem = await this.orderItemRepository.findOneBy({ id });
+    if (!updatedOrderItem) {
       throw new Error(ORDER_ITEM_ERRORS.CANNOT_UPDATE);
     }
-    return this.orderItemMapper.toDto(isUpdated);
+    return this.orderItemMapper.toDto(updatedOrderItem);
   }
 
   async remove(id: string) {

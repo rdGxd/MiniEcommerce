@@ -9,9 +9,10 @@ import {
 } from '@nestjs/common';
 import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
 import { UserRoles } from 'src/common/enums/role.enum';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductService } from './product.service';
+
+import { CreateProductDto } from '../dto/create-product.dto';
+import { UpdateProductDto } from '../dto/update-product.dto';
+import { ProductService } from '../service/product.service';
 
 @Controller('product')
 export class ProductController {

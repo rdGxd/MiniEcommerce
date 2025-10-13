@@ -1,5 +1,6 @@
-import { registerAs } from '@nestjs/config';
 import 'dotenv/config';
+
+import { registerAs } from '@nestjs/config';
 console.log(process.env.DB_HOST);
 export default registerAs('database', () => ({
   type: 'postgres',

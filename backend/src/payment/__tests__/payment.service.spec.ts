@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserService } from 'src/user/service/user.service';
+
 import { Payment } from '../entities/payment.entity';
 import { PaymentMapper } from '../mapper/payment-mapper';
-import { PaymentService } from '../payment.service';
+import { PaymentService } from '../service/payment.service';
 
 const repositoryMock = {
   find: jest.fn(),

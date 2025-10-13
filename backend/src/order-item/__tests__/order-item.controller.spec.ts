@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OrderItemController } from '../order-item.controller';
-import { OrderItemService } from '../order-item.service';
+
+import { OrderItemController } from '../controller/order-item.controller';
+import { OrderItemService } from '../service/order-item.service';
 
 const orderItemServiceMock = {
   create: jest.fn(),

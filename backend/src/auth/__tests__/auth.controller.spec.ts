@@ -1,6 +1,7 @@
 import { Test, type TestingModule } from '@nestjs/testing';
-import { AuthController } from '../auth.controller';
-import { AuthService } from '../auth.service';
+
+import { AuthController } from '../controller/auth.controller';
+import { AuthService } from '../service/auth.service';
 
 const authServiceMock: Partial<AuthService> = {
   login: jest.fn(),
