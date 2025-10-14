@@ -1,7 +1,8 @@
 "use client";
 
+import { useProducts } from "@/contexts/ProductsContext";
 import { FilterIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { FilterPanel } from "../filter-panel";
 import { ProductCard } from "../product-card";
 import { Button } from "../ui/button";
@@ -14,92 +15,6 @@ import {
   PaginationPrevious,
 } from "../ui/pagination";
 
-const MOCK_PRODUCTS = [
-  {
-    id: 1,
-    name: "Produto A",
-    image: "https://picsum.photos/200/300?random=1",
-    price: 199.99,
-    rating: 4.5,
-  },
-  {
-    id: 2,
-    name: "Produto B",
-    image: "https://picsum.photos/200/300?random=2",
-    price: 299.99,
-    rating: 4.0,
-  },
-  {
-    id: 3,
-    name: "Produto C",
-    image: "https://picsum.photos/200/300?random=3",
-    price: 399.99,
-    rating: 3.5,
-  },
-  {
-    id: 4,
-    name: "Produto D",
-    image: "https://picsum.photos/200/300?random=4",
-    price: 499.99,
-    rating: 5.0,
-  },
-  {
-    id: 5,
-    name: "Produto E",
-    image: "https://picsum.photos/200/300?random=5",
-    price: 599.99,
-    rating: 4.2,
-  },
-  {
-    id: 6,
-    name: "Produto F",
-    image: "https://picsum.photos/200/300?random=6",
-    price: 699.99,
-    rating: 3.8,
-  },
-  {
-    id: 7,
-    name: "Produto G",
-    image: "https://picsum.photos/200/300?random=7",
-    price: 799.99,
-    rating: 4.7,
-  },
-  {
-    id: 8,
-    name: "Produto H",
-    image: "https://picsum.photos/200/300?random=8",
-    price: 899.99,
-    rating: 4.1,
-  },
-  {
-    id: 9,
-    name: "Produto I",
-    image: "https://picsum.photos/200/300?random=9",
-    price: 999.99,
-    rating: 3.9,
-  },
-  {
-    id: 10,
-    name: "Produto J",
-    image: "https://picsum.photos/200/300?random=10",
-    price: 1099.99,
-    rating: 4.3,
-  },
-  {
-    id: 11,
-    name: "Produto K",
-    image: "https://picsum.photos/200/300?random=11",
-    price: 1199.99,
-    rating: 4.6,
-  },
-  {
-    id: 12,
-    name: "Produto L",
-    image: "https://picsum.photos/200/300?random=12",
-    price: 1299.99,
-    rating: 4.0,
-  },
-];
 const MOCK_STYLES = [
   {
     id: 1,
@@ -141,49 +56,40 @@ const MOCK_SIZES = [
   { id: 5, name: "GG" },
 ];
 
-const PRODUCTS_PER_PAGE = 8; // Quantos produtos por página
-
 export default function AllProducts() {
-  // --- ESTADO CENTRALIZADO ---
+  // --- CONTEXTO DE PRODUTOS ---
+  const { products, currentPage, setCurrentPage, itemsPerPage } = useProducts();
+
+  // --- ESTADO LOCAL ---
   const [activeFilter, setActiveFilter] = useState(false); // Visibilidade do filtro no mobile
 
-  // Estados para cada filtro
-  const [selectedStyles, setSelectedStyles] = useState([]);
+  // Estados locais para os filtros
   const [priceRange, setPriceRange] = useState(1000);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
-  const [selectedColor, setSelectedColor] = useState(null);
 
-  // Estado para paginação
-  const [currentPage, setCurrentPage] = useState(1);
+  // --- LÓGICA DE FILTROS E PAGINAÇÃO ---
 
-  // --- LÓGICA DE FILTRAGEM E PAGINAÇÃO ---
+  // Filtrar produtos baseado nos filtros locais
+  const filteredProducts = products.filter((product) => {
+    const priceFilter = product.price <= priceRange;
+    const ratingFilter =
+      !selectedRating || (product.rating && product.rating >= selectedRating);
+    return priceFilter && ratingFilter;
+  });
 
-  // useMemo otimiza a performance, refazendo o cálculo apenas quando um filtro muda
-  const filteredProducts = useMemo(() => {
-    return MOCK_PRODUCTS.filter((product) => {
-      // Lógica de filtro de preço
-      if (product.price > priceRange) return false;
-      // Lógica de filtro de avaliação
-      if (selectedRating && product.rating < selectedRating) return false;
-      // Adicione aqui filtros de estilo e cor quando seus produtos tiverem esses dados
-      // Ex: if (selectedStyles.length > 0 && !selectedStyles.includes(product.styleId)) return false;
-      return true;
-    });
-  }, [priceRange, selectedRating, selectedStyles, selectedColor]);
-
-  // Cálculo da paginação com base nos produtos JÁ filtrados
-  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
-  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
-  const endIndex = startIndex + PRODUCTS_PER_PAGE;
+  // Calcular produtos da página atual
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
   const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+  // Calcular total de páginas
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   // Função para limpar todos os filtros
   const handleClearFilters = () => {
-    setSelectedStyles([]);
     setPriceRange(1000);
     setSelectedRating(null);
-    setSelectedColor(null);
-    setCurrentPage(1); // Volta para a primeira página
+    setCurrentPage(1);
   };
 
   return (
@@ -269,7 +175,9 @@ export default function AllProducts() {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    setCurrentPage((p) => Math.max(1, p - 1));
+                    if (currentPage > 1) {
+                      setCurrentPage(currentPage - 1);
+                    }
                   }}
                 />
               </PaginationItem>
@@ -292,7 +200,9 @@ export default function AllProducts() {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    setCurrentPage((p) => Math.min(totalPages, p + 1));
+                    if (currentPage < totalPages) {
+                      setCurrentPage(currentPage + 1);
+                    }
                   }}
                 />
               </PaginationItem>

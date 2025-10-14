@@ -1,11 +1,10 @@
 'use server';
 import { api } from "@/helper/axios";
 import { LoginUserData, loginUserSchema } from "@/validators/loginUser";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 
 export async function loginUser(data: LoginUserData) {
   const validatedData = loginUserSchema.parse(data);
-  const cookiesStore = await cookies();
 
   if (!validatedData) {
     throw new Error("Invalid data");
@@ -18,18 +17,12 @@ export async function loginUser(data: LoginUserData) {
       throw new Error("Error logging in");
     }
 
-    cookiesStore.set({
-      name: "accessToken",
-      value: response.data.data.accessToken,
-      httpOnly: false,
-      maxAge: response.data.data.expiresIn,
-
+    Cookies.set("accessToken", response.data.data.accessToken, {
+      expires: response.data.data.expiresIn,
     });
-    cookiesStore.set({
-      name: "refreshToken",
-      value: response.data.data.refreshToken,
-      httpOnly: false,
-      maxAge: response.data.data.refreshTokenExpiresIn,
+
+    Cookies.set("refreshToken", response.data.data.refreshToken, {
+      expires: response.data.data.refreshTokenExpiresIn,
     });
 
     return response.data;

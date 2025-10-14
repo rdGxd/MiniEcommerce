@@ -24,7 +24,6 @@ export class ProductController {
   }
 
   @Get()
-  @SetRoutePolicy(UserRoles.ADMIN)
   findAll() {
     return this.productService.findAll();
   }

@@ -73,10 +73,9 @@ export function FilterPanel({
               max="1000"
               step="10"
               value={priceRange}
-              // Usamos onMouseUp/onTouchEnd para evitar atualizar a URL a cada pixel movido
+              onChange={(e) => onPriceChange(e.currentTarget.value)}
               onMouseUp={(e) => onPriceChange(e.currentTarget.value)}
               onTouchEnd={(e) => onPriceChange(e.currentTarget.value)}
-              // Você pode adicionar um onChange para feedback visual se quiser
               className="w-full"
             />
             <div className="text-center font-medium">R$ {priceRange}</div>
@@ -181,10 +180,9 @@ export function FilterPanel({
               max="1000"
               step="10"
               value={priceRange}
-              // Usamos onMouseUp/onTouchEnd para evitar atualizar a URL a cada pixel movido
+              onChange={(e) => onPriceChange(e.currentTarget.value)}
               onMouseUp={(e) => onPriceChange(e.currentTarget.value)}
               onTouchEnd={(e) => onPriceChange(e.currentTarget.value)}
-              // Você pode adicionar um onChange para feedback visual se quiser
               className="w-full"
             />
             <div className="text-center font-medium">R$ {priceRange}</div>

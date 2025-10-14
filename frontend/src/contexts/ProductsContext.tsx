@@ -1,7 +1,15 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-
+import { api } from "@/helper/axios";
+import Cookie from "js-cookie";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 export interface Product {
   id: string;
   name: string;
@@ -38,63 +46,15 @@ interface ProductsContextType {
   refreshProducts: () => Promise<void>;
 }
 
-const ProductsContext = createContext<ProductsContextType | undefined>(undefined);
+const ProductsContext = createContext<ProductsContextType | undefined>(
+  undefined,
+);
 
-// Mock de produtos para desenvolvimento
-const MOCK_PRODUCTS: Product[] = [
-  {
-    id: '1',
-    name: 'Produto A',
-    imageUrl: 'https://picsum.photos/200/300?random=1',
-    price: 199.99,
-    rating: 4.5,
-    description: 'Descrição do Produto A',
-    stock: 10,
-    category: 'electronics',
-  },
-  {
-    id: '2',
-    name: 'Produto B',
-    imageUrl: 'https://picsum.photos/200/300?random=2',
-    price: 299.99,
-    rating: 4.0,
-    description: 'Descrição do Produto B',
-    stock: 5,
-    category: 'clothing',
-  },
-  {
-    id: '3',
-    name: 'Produto C',
-    imageUrl: 'https://picsum.photos/200/300?random=3',
-    price: 399.99,
-    rating: 3.5,
-    description: 'Descrição do Produto C',
-    stock: 8,
-    category: 'electronics',
-  },
-  {
-    id: '4',
-    name: 'Produto D',
-    imageUrl: 'https://picsum.photos/200/300?random=4',
-    price: 499.99,
-    rating: 5.0,
-    description: 'Descrição do Produto D',
-    stock: 3,
-    category: 'home',
-  },
-  {
-    id: '5',
-    name: 'Produto E',
-    imageUrl: 'https://picsum.photos/200/300?random=5',
-    price: 599.99,
-    rating: 4.2,
-    description: 'Descrição do Produto E',
-    stock: 15,
-    category: 'clothing',
-  },
-];
-
-export function ProductsProvider({ children }: { readonly children: React.ReactNode }) {
+export function ProductsProvider({
+  children,
+}: {
+  readonly children: React.ReactNode;
+}) {
   const [products, setProducts] = useState<Product[]>([]);
   const [filters, setFilters] = useState<ProductFilter>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -108,32 +68,35 @@ export function ProductsProvider({ children }: { readonly children: React.ReactN
 
     // Filtro por categoria
     if (filters.category) {
-      filtered = filtered.filter(product =>
-        product.category?.toLowerCase() === filters.category?.toLowerCase()
+      filtered = filtered.filter(
+        (product) =>
+          product.category?.toLowerCase() === filters.category?.toLowerCase(),
       );
     }
 
     // Filtro por faixa de preço
     if (filters.priceRange) {
-      filtered = filtered.filter(product =>
-        product.price >= filters.priceRange!.min &&
-        product.price <= filters.priceRange!.max
+      filtered = filtered.filter(
+        (product) =>
+          product.price >= filters.priceRange!.min &&
+          product.price <= filters.priceRange!.max,
       );
     }
 
     // Filtro por rating
     if (filters.rating) {
-      filtered = filtered.filter(product =>
-        (product.rating || 0) >= filters.rating!
+      filtered = filtered.filter(
+        (product) => (product.rating || 0) >= filters.rating!,
       );
     }
 
     // Filtro por busca
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchLower) ||
-        product.description?.toLowerCase().includes(searchLower)
+      filtered = filtered.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchLower) ||
+          product.description?.toLowerCase().includes(searchLower),
       );
     }
 
@@ -141,9 +104,9 @@ export function ProductsProvider({ children }: { readonly children: React.ReactN
   }, [products, filters]);
 
   // Calcular total de páginas
-  const totalPages = useMemo(() =>
-    Math.ceil(filteredProducts.length / itemsPerPage),
-    [filteredProducts.length, itemsPerPage]
+  const totalPages = useMemo(
+    () => Math.ceil(filteredProducts.length / itemsPerPage),
+    [filteredProducts.length, itemsPerPage],
   );
 
   // Função para buscar produtos (mock por enquanto)
@@ -153,15 +116,22 @@ export function ProductsProvider({ children }: { readonly children: React.ReactN
       setError(null);
 
       // Simular delay de API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // TODO: Substituir por chamada real à API
-      // const response = await api.get('/products');
-      // setProducts(response.data);
+      const token = Cookie.get("accessToken");
 
-      setProducts(MOCK_PRODUCTS);
+      const response = await api.get("/product", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setProducts(response.data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao carregar produtos');
+      setError(
+        err instanceof Error ? err.message : "Erro ao carregar produtos",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -181,30 +151,33 @@ export function ProductsProvider({ children }: { readonly children: React.ReactN
     setCurrentPage(1);
   }, [filters]);
 
-  const value: ProductsContextType = useMemo(() => ({
-    products,
-    filteredProducts,
-    filters,
-    isLoading,
-    error,
-    currentPage,
-    totalPages,
-    itemsPerPage,
-    setFilters,
-    setCurrentPage,
-    setItemsPerPage,
-    refreshProducts,
-  }), [
-    products,
-    filteredProducts,
-    filters,
-    isLoading,
-    error,
-    currentPage,
-    totalPages,
-    itemsPerPage,
-    refreshProducts,
-  ]);
+  const value: ProductsContextType = useMemo(
+    () => ({
+      products,
+      filteredProducts,
+      filters,
+      isLoading,
+      error,
+      currentPage,
+      totalPages,
+      itemsPerPage,
+      setFilters,
+      setCurrentPage,
+      setItemsPerPage,
+      refreshProducts,
+    }),
+    [
+      products,
+      filteredProducts,
+      filters,
+      isLoading,
+      error,
+      currentPage,
+      totalPages,
+      itemsPerPage,
+      refreshProducts,
+    ],
+  );
 
   return (
     <ProductsContext.Provider value={value}>
