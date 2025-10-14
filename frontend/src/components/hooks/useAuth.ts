@@ -1,15 +1,4 @@
-"use client";
+// Este arquivo foi substituído pelo novo AuthContext
+// Use: import { useAuth } from '@/contexts/AuthContext'
 
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
-
-export function useAuth() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = Cookies.get("accessToken");
-    setIsLoggedIn(!!token);
-  }, []);
-
-  return { isLoggedIn };
-}
+export * from "@/contexts/AuthContext";

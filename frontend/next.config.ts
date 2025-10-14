@@ -8,11 +8,7 @@ const nextConfig: NextConfig = {
     domains: ["picsum.photos"],
     unoptimized: true, // Necessário para export estático
   },
-  // Desabilitar otimizações SSR/SSG
-  experimental: {
-    // Forçar runtime do cliente
-    runtime: "edge",
-  },
+
 };
 
 export default nextConfig;

@@ -1,40 +1,56 @@
+import { useCart } from "@/contexts/CartContext";
 import { Button } from "../ui/button";
 
 export function OrderSummary() {
+  const { subtotal, shipping, tax, total, itemCount } = useCart();
+
   return (
-    <div className="border p-6 rounded-2xl border-gray-200">
-      <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
-      <div className="flex justify-between mb-2">
-        <span>Subtotal</span>
-        <span>$59.97</span>
-      </div>
-      <div className="flex justify-between mb-2">
-        <span>Shipping</span>
-        <span>$5.00</span>
-      </div>
-      <div className="flex justify-between mb-4">
-        <span>Tax</span>
-        <span>$6.50</span>
-      </div>
-      <div className="border-t pt-4 flex justify-between font-bold text-lg">
-        <span>Total</span>
-        <span>$71.47</span>
-      </div>
+    <div className="rounded-2xl border border-gray-200 p-6">
+      <h2 className="mb-4 text-2xl font-bold">Order Summary</h2>
+
+      {itemCount === 0 ? (
+        <p className="py-4 text-center text-gray-500">
+          Nenhum item no carrinho
+        </p>
+      ) : (
+        <>
+          <div className="mb-2 flex justify-between">
+            <span>
+              Subtotal ({itemCount} {itemCount === 1 ? "item" : "itens"})
+            </span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+          <div className="mb-2 flex justify-between">
+            <span>Shipping</span>
+            <span>${shipping.toFixed(2)}</span>
+          </div>
+          <div className="mb-4 flex justify-between">
+            <span>Tax</span>
+            <span>${tax.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between border-t pt-4 text-lg font-bold">
+            <span>Total</span>
+            <span>${total.toFixed(2)}</span>
+          </div>
+        </>
+      )}
 
       <div className="mt-4">
-        <label className="block mb-2 font-medium" htmlFor="promo-code">
+        <label className="mb-2 block font-medium" htmlFor="promo-code">
           Promo Code
         </label>
         <input
           type="text"
           id="promo-code"
-          className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           placeholder="Enter promo code"
         />
-        <Button className="mt-2 w-full bg-gray-200 text-black py-2 rounded-lg hover:bg-gray-300 transition-colors"> Apply
+        <Button className="mt-2 w-full rounded-lg bg-gray-200 py-2 text-black transition-colors hover:bg-gray-300">
+          {" "}
+          Apply
         </Button>
       </div>
-      <Button className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
+      <Button className="mt-6 w-full rounded-lg bg-blue-600 py-3 text-white transition-colors hover:bg-blue-700">
         Checkout
       </Button>
     </div>

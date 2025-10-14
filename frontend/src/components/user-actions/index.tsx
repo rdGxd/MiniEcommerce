@@ -1,6 +1,11 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import {
   LogInIcon,
+  LogOutIcon,
   SearchIcon,
   ShoppingCartIcon,
   UserCircleIcon,
@@ -9,11 +14,14 @@ import {
 import Link from "next/link";
 import { ModeToggle } from "../mode-toggle";
 
-interface UserActionsProps {
-  isLoggedIn: boolean;
-}
+export function UserActions() {
+  const { isLoggedIn, logout } = useAuth();
+  const { itemCount } = useCart();
 
-export function UserActions({ isLoggedIn }: UserActionsProps) {
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className="flex items-center gap-2">
       <Button size="icon" variant="ghost" aria-label="Pesquisar">
@@ -21,11 +29,21 @@ export function UserActions({ isLoggedIn }: UserActionsProps) {
       </Button>
 
       {isLoggedIn ? (
-        <Button size="icon" variant="ghost" aria-label="Perfil do usuário">
-          <Link href="/profile">
-            <UserCircleIcon />
-          </Link>
-        </Button>
+        <>
+          <Button size="icon" variant="ghost" aria-label="Perfil do usuário">
+            <Link href="/profile">
+              <UserCircleIcon />
+            </Link>
+          </Button>
+          <Button
+            size="icon"
+            variant="ghost"
+            aria-label="Logout"
+            onClick={handleLogout}
+          >
+            <LogOutIcon />
+          </Button>
+        </>
       ) : (
         <>
           <Button size="icon" variant="ghost" aria-label="Login">
@@ -41,8 +59,20 @@ export function UserActions({ isLoggedIn }: UserActionsProps) {
         </>
       )}
 
-      <Button size="icon" variant="ghost" aria-label="Carrinho de compras">
-        <ShoppingCartIcon />
+      <Button
+        size="icon"
+        variant="ghost"
+        aria-label="Carrinho de compras"
+        className="relative"
+      >
+        <Link href="/cart">
+          <ShoppingCartIcon />
+          {itemCount > 0 && (
+            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+              {itemCount}
+            </span>
+          )}
+        </Link>
       </Button>
 
       <ModeToggle />

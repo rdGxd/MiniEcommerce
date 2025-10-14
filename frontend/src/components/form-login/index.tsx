@@ -16,6 +16,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,6 +28,7 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
+  const { login } = useAuth();
   const form = useForm({
     mode: "onBlur",
     reValidateMode: "onChange",
@@ -39,13 +41,24 @@ export function LoginForm({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     toast.dismiss();
     e.preventDefault();
-    const response = await loginUser(form.getValues());
-    if (!response) {
+    try {
+      const response = await loginUser(form.getValues());
+      if (response?.data) {
+        // Atualizar contexto de autenticação
+        login(response.data.accessToken, response.data.refreshToken, {
+          id: response.data.user?.id || "1",
+          email: form.getValues().email,
+        });
+        toast.success("Logged in successfully");
+        form.reset();
+        router.push("/");
+      } else {
+        toast.error("Error logging in");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
       toast.error("Error logging in");
     }
-    toast.success("Logged in successfully");
-    form.reset();
-    router.push("/");
   };
 
   return (
