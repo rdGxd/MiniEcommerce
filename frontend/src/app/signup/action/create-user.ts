@@ -12,7 +12,6 @@ export const createUser = async (data: SignupUserData) => {
 
   try {
     const response = await api.post("/auth/register", validatedData);
-    console.log(response);
     if (response.status !== 201) {
       throw new Error("Error creating user");
     }

@@ -64,7 +64,7 @@ export function ProductsProvider({
 
   // Filtrar produtos baseado nos filtros aplicados
   const filteredProducts = useMemo(() => {
-    let filtered = [...products];
+    let filtered = products;
 
     // Filtro por categoria
     if (filters.category) {

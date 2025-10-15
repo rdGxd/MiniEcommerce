@@ -12,7 +12,6 @@ export async function loginUser(data: LoginUserData) {
 
   try {
     const response = await api.post("/auth/login", validatedData);
-    console.log(response.data.data);
     if (response.status !== 200) {
       throw new Error("Error logging in");
     }

@@ -47,7 +47,10 @@ export class ProductService {
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
-    const product = await this.productRepository.findOne({ where: { id: id } });
+    const product = await this.productRepository.findOne({
+      where: { id: id },
+      relations: ['categories'],
+    });
     if (!product) {
       throw new NotFoundException(PRODUCT_ERRORS.NOT_FOUND);
     }
@@ -65,7 +68,10 @@ export class ProductService {
   }
 
   async remove(id: string) {
-    const product = await this.productRepository.findOneBy({ id: id });
+    const product = await this.productRepository.findOne({
+      where: { id: id },
+      relations: ['categories'],
+    });
     if (!product) {
       throw new NotFoundException(PRODUCT_ERRORS.NOT_FOUND);
     }

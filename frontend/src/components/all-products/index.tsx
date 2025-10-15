@@ -58,7 +58,14 @@ const MOCK_SIZES = [
 
 export default function AllProducts() {
   // --- CONTEXTO DE PRODUTOS ---
-  const { products, currentPage, setCurrentPage, itemsPerPage } = useProducts();
+  const {
+    products,
+    currentPage,
+    setCurrentPage,
+    itemsPerPage,
+    isLoading,
+    error,
+  } = useProducts();
 
   // --- ESTADO LOCAL ---
   const [activeFilter, setActiveFilter] = useState(false); // Visibilidade do filtro no mobile
@@ -69,8 +76,11 @@ export default function AllProducts() {
 
   // --- LÓGICA DE FILTROS E PAGINAÇÃO ---
 
+  // Verificação de segurança: garantir que products é um array
+  const safeProducts = Array.isArray(products) ? products : [];
+
   // Filtrar produtos baseado nos filtros locais
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = safeProducts.filter((product) => {
     const priceFilter = product.price <= priceRange;
     const ratingFilter =
       !selectedRating || (product.rating && product.rating >= selectedRating);
@@ -91,6 +101,34 @@ export default function AllProducts() {
     setSelectedRating(null);
     setCurrentPage(1);
   };
+
+  // Estado de loading
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
+          <p className="text-gray-600">Carregando produtos...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Estado de erro
+  if (error) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <div className="text-center">
+          <p className="mb-4 text-red-600">
+            Erro ao carregar produtos: {error}
+          </p>
+          <Button onClick={() => window.location.reload()}>
+            Tentar novamente
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 gap-8 p-4 md:grid-cols-[280px_1fr] lg:p-8">
