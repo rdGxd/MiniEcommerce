@@ -29,6 +29,7 @@ export class ProductMapper {
     dto.description = entity.description;
     dto.price = entity.price;
     dto.stock = entity.stock;
+    dto.imageUrl = entity.imageUrl;
     dto.categories = entity.categories
       ? entity.categories.map(category => ({
           id: category.id,

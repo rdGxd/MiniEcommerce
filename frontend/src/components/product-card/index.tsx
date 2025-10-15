@@ -15,12 +15,13 @@ export function ProductCard({ product }: ProductCardProps) {
         className="h-auto w-full rounded-lg object-cover"
       />
       <h3 className="mt-2 text-lg font-semibold">{product.name}</h3>
+      <p className="text-sm text-gray-600">{product.description}</p>
       <div className="mb-2 flex items-center justify-between gap-2">
         <div className="text-sm">{getStarRating(product.rating ?? 0)}</div>
         <span className="text-sm text-gray-600">{product.rating}/5</span>
       </div>
       <div className="flex items-center justify-between">
-        <p className="text-xl font-bold">R$ {product.price.toFixed(2)}</p>
+        <p className="text-xl font-bold">R$ {product.price}</p>
         <button className="rounded bg-blue-500 p-2 text-white hover:bg-blue-600">
           <ShoppingCartIcon className="h-5 w-5" />
         </button>

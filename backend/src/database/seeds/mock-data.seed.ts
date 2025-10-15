@@ -115,16 +115,66 @@ export class MockDataSeed {
     const products: Product[] = [];
 
     const productTemplates = [
-      { name: 'Smartphone Samsung Galaxy', description: 'Smartphone Android com tela AMOLED', priceRange: [800, 1500] },
-      { name: 'Notebook Dell Inspiron', description: 'Notebook para uso doméstico e profissional', priceRange: [2000, 4000] },
-      { name: 'Camiseta Polo', description: 'Camiseta polo de algodão premium', priceRange: [50, 120] },
-      { name: 'Tênis Nike Air', description: 'Tênis esportivo para corrida', priceRange: [200, 500] },
-      { name: 'Livro "Clean Code"', description: 'Livro sobre programação limpa', priceRange: [40, 80] },
-      { name: 'Perfume Importado', description: 'Perfume masculino/feminino importado', priceRange: [150, 400] },
-      { name: 'Console PlayStation', description: 'Console de videogame Sony', priceRange: [2000, 3000] },
-      { name: 'Pneu Michelin', description: 'Pneu para carros de passeio', priceRange: [300, 600] },
-      { name: 'Cafeteira Nespresso', description: 'Cafeteira automática para cápsulas', priceRange: [200, 800] },
-      { name: 'Proteína Whey', description: 'Suplemento proteico para exercícios', priceRange: [80, 200] }
+      {
+        name: 'Smartphone Samsung Galaxy',
+        description: 'Smartphone Android com tela AMOLED',
+        priceRange: [800, 1500],
+        imageUrl: 'https://picsum.photos/200/300',
+      },
+      {
+        name: 'Notebook Dell Inspiron',
+        description: 'Notebook para uso doméstico e profissional',
+        priceRange: [2000, 4000],
+        imageUrl: 'https://picsum.photos/200/300',
+      },
+      {
+        name: 'Camiseta Polo',
+        description: 'Camiseta polo de algodão premium',
+        priceRange: [50, 120],
+        imageUrl: 'https://picsum.photos/200/300',
+      },
+      {
+        name: 'Tênis Nike Air',
+        description: 'Tênis esportivo para corrida',
+        priceRange: [200, 500],
+        imageUrl: 'https://picsum.photos/200/300',
+      },
+      {
+        name: 'Livro "Clean Code"',
+        description: 'Livro sobre programação limpa',
+        priceRange: [40, 80],
+        imageUrl: 'https://picsum.photos/200/300',
+      },
+      {
+        name: 'Perfume Importado',
+        description: 'Perfume masculino/feminino importado',
+        priceRange: [150, 400],
+        imageUrl: 'https://picsum.photos/200/300',
+      },
+      {
+        name: 'Console PlayStation',
+        description: 'Console de videogame Sony',
+        priceRange: [2000, 3000],
+        imageUrl: 'https://picsum.photos/200/300',
+      },
+      {
+        name: 'Pneu Michelin',
+        description: 'Pneu para carros de passeio',
+        priceRange: [300, 600],
+        imageUrl: 'https://picsum.photos/200/300',
+      },
+      {
+        name: 'Cafeteira Nespresso',
+        description: 'Cafeteira automática para cápsulas',
+        priceRange: [200, 800],
+        imageUrl: 'https://picsum.photos/200/300',
+      },
+      {
+        name: 'Proteína Whey',
+        description: 'Suplemento proteico para exercícios',
+        priceRange: [80, 200],
+        imageUrl: 'https://picsum.photos/200/300',
+      },
     ];
 
     for (let i = 0; i < 50; i++) {

@@ -126,8 +126,8 @@ export function ProductsProvider({
           Authorization: `Bearer ${token}`,
         },
       });
-
-      setProducts(response.data);
+      console.log(response.data);
+      setProducts(response.data.data);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Erro ao carregar produtos",

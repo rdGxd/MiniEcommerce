@@ -10,6 +10,7 @@ import {
 import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
 import { UserRoles } from 'src/common/enums/role.enum';
 
+import { Public } from 'src/auth/decorators/set-is-public-policy.decorator';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { ProductService } from '../service/product.service';
@@ -24,6 +25,7 @@ export class ProductController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.productService.findAll();
   }
