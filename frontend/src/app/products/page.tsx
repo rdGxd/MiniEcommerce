@@ -1,6 +1,6 @@
 import AllProducts from "@/components/all-products";
 
-export default function CategoryPage() {
+export default function ProductPage() {
   return (
     <div>
       <AllProducts />

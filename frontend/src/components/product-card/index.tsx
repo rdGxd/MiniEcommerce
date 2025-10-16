@@ -1,14 +1,26 @@
 import { Product } from "@/contexts/ProductsContext";
 import { getStarRating } from "@/helper/rating";
 import { ShoppingCartIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   readonly product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/products/details/${product.id}`);
+  };
+
   return (
-    <div key={product.id} className="w-full rounded-2xl border p-4">
+    <button
+      type="button"
+      key={product.id}
+      className="w-full cursor-pointer rounded-2xl border bg-white p-4 text-left hover:shadow-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      onClick={handleClick}
+    >
       <img
         src={product.imageUrl}
         alt={product.name}
@@ -22,10 +34,15 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
       <div className="flex items-center justify-between">
         <p className="text-xl font-bold">R$ {product.price}</p>
-        <button className="rounded bg-blue-500 p-2 text-white hover:bg-blue-600">
-          <ShoppingCartIcon className="h-5 w-5" />
-        </button>
+        <span>
+          <button
+            className="rounded bg-blue-500 p-2 text-white hover:bg-blue-600"
+            tabIndex={-1}
+          >
+            <ShoppingCartIcon className="h-5 w-5" />
+          </button>
+        </span>
       </div>
-    </div>
+    </button>
   );
 }

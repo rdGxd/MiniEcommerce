@@ -193,3 +193,12 @@ export function useProducts(): ProductsContextType {
   }
   return context;
 }
+
+
+export function fetchProductById(id: string): Promise<Product | undefined> {
+  return api
+    .get(`/product/${id}`, {
+      headers: { Authorization: `Bearer ${Cookie.get("accessToken")}` },
+    })
+    .then((response) => response.data.data[0]);
+}
