@@ -9,6 +9,5 @@ interface ProductDetailsProps {
 
 export default function ProductDetails({ params }: ProductDetailsProps) {
   const { id } = params;
-  console.log("Rendering ProductDetails component123213131", id);
-  return <DetailsProducts />;
+  return <DetailsProducts productId={id} />;
 }

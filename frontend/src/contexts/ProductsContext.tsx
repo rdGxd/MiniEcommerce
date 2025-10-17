@@ -202,3 +202,17 @@ export function fetchProductById(id: string): Promise<Product | undefined> {
     })
     .then((response) => response.data.data[0]);
 }
+
+// Função utilitária para encontrar produto por ID em uma lista de produtos
+export function getProductById(products: Product[], productId: string): Product | undefined {
+  return products.find((product) => product.id === productId);
+}
+
+// Hook customizado para obter um produto por ID do contexto
+export function useProductById(productId: string): Product | undefined {
+  const context = useContext(ProductsContext);
+  if (context === undefined) {
+    throw new Error("useProductById must be used within a ProductsProvider");
+  }
+  return context.products.find((product) => product.id === productId);
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useProductById } from "@/contexts/ProductsContext";
 import { getStarRating } from "@/helper/rating";
 import { CircleCheckIcon } from "lucide-react";
 import Image from "next/image";
@@ -47,11 +48,23 @@ interface ProductFormData {
   quantity: number;
 }
 
+// Adiciona interface que corresponde ao Product presente no ProductsContext
+interface ContextProduct {
+  id: string;
+  name: string;
+  price: number;
+  imageUrl?: string;
+  rating?: number;
+  description?: string;
+  stock?: number;
+  category?: string;
+}
+
 // Mock de dados atualizado para refletir o layout da imagem
 const MOCK_PRODUCT: Product = {
   id: "123",
   name: "Classic Graphic T-Shirt",
-  price: 260.0,
+  price: 260,
   rating: 4.8,
   description:
     "Made from a soft and breathable cotton-blend, this classic graphic tee combines comfort with style. Featuring a unique graphic print, it's perfect for casual wear. Available in multiple colors and sizes to suit your preference.",
@@ -157,26 +170,56 @@ const MOCK_FAQS = [
   },
 ];
 
-export const DetailsProducts = ({
-  product = MOCK_PRODUCT,
-}: {
-  product?: Product;
-}) => {
+export const DetailsProducts = ({ productId }: { productId: string }) => {
   const [activeTab, setActiveTab] = useState<"details" | "reviews" | "faqs">(
     "details",
   );
 
+  // ALTERAÇÃO: usa o hook customizado para obter o produto do contexto
+  const product = useProductById(productId);
+
+  // Função que mapeia ContextProduct | undefined para o Product completo usado pelo componente
+  const mapToDetailProduct = (ctx?: ContextProduct): Product => {
+    if (!ctx) return MOCK_PRODUCT;
+    return {
+      id: ctx.id,
+      name: ctx.name,
+      price: ctx.price,
+      rating: ctx.rating ?? MOCK_PRODUCT.rating,
+      description: ctx.description ?? MOCK_PRODUCT.description,
+      mainImage: ctx.imageUrl ?? MOCK_PRODUCT.mainImage,
+      galleryImages: ctx.imageUrl
+        ? [ctx.imageUrl, ...MOCK_PRODUCT.galleryImages]
+        : MOCK_PRODUCT.galleryImages,
+      colors: MOCK_PRODUCT.colors, // fallback: usar cores do mock (o contexto atual não fornece)
+      sizes: MOCK_PRODUCT.sizes, // fallback: usar tamanhos do mock
+    };
+  };
+
+  // Derivado seguro para usar em JSX (sempre tem todos os campos)
+  const detail = mapToDetailProduct(product);
+
+  // Inicializar o formulário com valores do MOCK_PRODUCT (não acessar product indefinido)
   const { register, handleSubmit, setValue, watch } = useForm<ProductFormData>({
     defaultValues: {
-      selectedColor: product.colors[0]?.value || "",
-      selectedSize: product.sizes[0]?.value || "",
+      selectedColor: MOCK_PRODUCT.colors[0]?.value || "",
+      selectedSize: MOCK_PRODUCT.sizes[0]?.value || "",
       quantity: 1,
     },
   });
 
+  // Quando o produto do contexto chegar, atualizamos os valores do form
+  useEffect(() => {
+    const d = mapToDetailProduct(product);
+    setValue("selectedColor", d.colors[0]?.value || "");
+    setValue("selectedSize", d.sizes[0]?.value || "");
+    setValue("quantity", 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
+
   const onSubmit: SubmitHandler<ProductFormData> = (data) => {
     console.log("Adicionando ao carrinho:", {
-      productId: product.id,
+      productId: detail.id,
       ...data,
     });
     alert(
@@ -237,7 +280,8 @@ export const DetailsProducts = ({
             </Link>
             <span className="mx-2">&gt;</span>
           </li>
-          <li className="flex items-center text-gray-700">{product.name}</li>
+          {/* USO ALTERADO: usar detail (sempre definido) */}
+          <li className="flex items-center text-gray-700">{detail.name}</li>
         </ol>
       </nav>
 
@@ -246,11 +290,11 @@ export const DetailsProducts = ({
         <div className="flex w-full flex-col items-center lg:w-1/2">
           <div className="mb-4 w-full">
             <Image
-              src={product.mainImage}
-              alt={product.name}
+              src={detail.mainImage}
+              alt={detail.name}
               width={600}
               height={700}
-              layout="responsive" // Para responsividade
+              layout="responsive"
               objectFit="cover"
               className="rounded-lg shadow-md"
             />
@@ -261,16 +305,14 @@ export const DetailsProducts = ({
             className="w-full max-w-sm lg:max-w-md"
           >
             <CarouselContent className="-ml-2">
-              {" "}
-              {/* Ajuste de margem para espaçamento */}
-              {product.galleryImages.map((imgSrc, index) => (
+              {detail.galleryImages.map((imgSrc, index) => (
                 <CarouselItem key={index + 1} className="basis-1/4 pl-2">
                   <div className="cursor-pointer rounded-md border border-gray-200 p-1 transition-colors duration-200 hover:border-blue-500">
                     <Card>
                       <CardContent className="flex aspect-square items-center justify-center p-0">
                         <Image
                           src={imgSrc}
-                          alt={`${product.name} - imagem ${index + 1}`}
+                          alt={`${detail.name} - imagem ${index + 1}`}
                           width={100}
                           height={120}
                           objectFit="cover"
@@ -282,8 +324,7 @@ export const DetailsProducts = ({
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="-left-4" />{" "}
-            {/* Posição dos botões do carousel */}
+            <CarouselPrevious className="-left-4" />
             <CarouselNext className="-right-4" />
           </Carousel>
         </div>
@@ -291,11 +332,11 @@ export const DetailsProducts = ({
         {/* Lado Direito: Detalhes e Opções do Produto */}
         <div className="w-full p-4 lg:w-1/2 lg:p-0">
           <h1 className="mb-2 text-4xl font-extrabold text-gray-900">
-            {product.name}
+            {detail.name}
           </h1>
           <div className="mb-4 flex items-baseline">
             <p className="mr-2 text-xl font-bold text-gray-800">
-              {product.price.toLocaleString("pt-BR", {
+              {detail.price.toLocaleString("pt-BR", {
                 style: "currency",
                 currency: "BRL",
               })}
@@ -308,12 +349,12 @@ export const DetailsProducts = ({
           <div className="mb-6 flex items-center">
             <span className="text-yellow-400">{getStarRating(5)}</span>
             <span className="ml-2 text-sm text-gray-600">
-              {product.rating.toFixed(1)}/5 ({reviewsCount} Avaliações)
+              {detail.rating.toFixed(1)}/5 ({reviewsCount} Avaliações)
             </span>
           </div>
 
           <p className="mb-8 leading-relaxed text-gray-700">
-            {product.description}
+            {detail.description}
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -329,7 +370,7 @@ export const DetailsProducts = ({
                 </span>
               </Label>
               <div className="mt-2 flex gap-3">
-                {product.colors.map((color) => (
+                {detail.colors.map((color) => (
                   <button
                     key={color.value}
                     type="button"
@@ -340,13 +381,12 @@ export const DetailsProducts = ({
                     }
                     className={`h-8 w-8 rounded-full border-2 transition-all duration-200 ease-in-out ${
                       watch("selectedColor") === color.value
-                        ? "border-blue-600 ring-2 ring-blue-300" // Estilo quando selecionado
+                        ? "border-blue-600 ring-2 ring-blue-300"
                         : "border-gray-300 hover:border-gray-400"
-                    } ${color.value === "white" ? "bg-white" : ""} // Para cor branca`}
+                    } ${color.value === "white" ? "bg-white" : ""}`}
                     style={{ backgroundColor: color.hex || color.value }}
                     aria-label={`Selecionar cor ${color.name}`}
                   >
-                    {/* Para cores claras, pode adicionar uma borda escura interna para contraste */}
                     {color.value === "white" &&
                       watch("selectedColor") !== color.value && (
                         <div className="h-full w-full rounded-full border border-gray-200 opacity-70"></div>
@@ -372,7 +412,7 @@ export const DetailsProducts = ({
                 </span>
               </Label>
               <div className="mt-2 flex gap-2">
-                {product.sizes.map((size) => (
+                {detail.sizes.map((size) => (
                   <button
                     key={size.value}
                     type="button"
@@ -383,7 +423,7 @@ export const DetailsProducts = ({
                     }
                     className={`rounded-md border px-4 py-2 text-sm font-medium transition-all duration-200 ease-in-out ${
                       watch("selectedSize") === size.value
-                        ? "border-gray-900 bg-gray-900 text-white" // Estilo quando selecionado
+                        ? "border-gray-900 bg-gray-900 text-white"
                         : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50"
                     } `}
                   >
