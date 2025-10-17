@@ -50,14 +50,17 @@ interface ProductFormData {
 
 // Adiciona interface que corresponde ao Product presente no ProductsContext
 interface ContextProduct {
-  id: string;
-  name: string;
-  price: number;
-  imageUrl?: string;
-  rating?: number;
-  description?: string;
-  stock?: number;
-  category?: string;
+  data: {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    imageUrl: string;
+    categories: { id: string; name: string }[];
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 // Mock de dados atualizado para refletir o layout da imagem
@@ -180,17 +183,15 @@ export const DetailsProducts = ({ productId }: { productId: string }) => {
 
   // Função que mapeia ContextProduct | undefined para o Product completo usado pelo componente
   const mapToDetailProduct = (ctx?: ContextProduct): Product => {
-    if (!ctx) return MOCK_PRODUCT;
+    if (!ctx?.data) return MOCK_PRODUCT;
     return {
-      id: ctx.id,
-      name: ctx.name,
-      price: ctx.price,
-      rating: ctx.rating ?? MOCK_PRODUCT.rating,
-      description: ctx.description ?? MOCK_PRODUCT.description,
-      mainImage: ctx.imageUrl ?? MOCK_PRODUCT.mainImage,
-      galleryImages: ctx.imageUrl
-        ? [ctx.imageUrl, ...MOCK_PRODUCT.galleryImages]
-        : MOCK_PRODUCT.galleryImages,
+      id: ctx.data.id,
+      name: ctx.data.name,
+      price: ctx.data.price,
+      rating: MOCK_PRODUCT.rating, // fallback: usar rating do mock
+      description: ctx.data.description,
+      mainImage: ctx.data.imageUrl,
+      galleryImages: [ctx.data.imageUrl, ...MOCK_PRODUCT.galleryImages],
       colors: MOCK_PRODUCT.colors, // fallback: usar cores do mock (o contexto atual não fornece)
       sizes: MOCK_PRODUCT.sizes, // fallback: usar tamanhos do mock
     };

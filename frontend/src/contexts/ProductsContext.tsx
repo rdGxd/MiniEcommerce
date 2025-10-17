@@ -1,7 +1,6 @@
 'use client';
 
 import { api } from "@/helper/axios";
-import Cookie from "js-cookie";
 import {
   createContext,
   useCallback,
@@ -11,14 +10,17 @@ import {
   useState,
 } from "react";
 export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  imageUrl?: string;
-  rating?: number;
-  description?: string;
-  stock?: number;
-  category?: string;
+  data: {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    imageUrl: string;
+    categories: { id: string; name: string }[];
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 export interface ProductFilter {
@@ -27,7 +29,6 @@ export interface ProductFilter {
     min: number;
     max: number;
   };
-  rating?: number;
   search?: string;
 }
 
@@ -68,9 +69,10 @@ export function ProductsProvider({
 
     // Filtro por categoria
     if (filters.category) {
-      filtered = filtered.filter(
-        (product) =>
-          product.category?.toLowerCase() === filters.category?.toLowerCase(),
+      filtered = filtered.filter((product) =>
+        product.data.categories?.some(
+          (cat) => cat.name.toLowerCase() === filters.category?.toLowerCase(),
+        ),
       );
     }
 
@@ -78,25 +80,20 @@ export function ProductsProvider({
     if (filters.priceRange) {
       filtered = filtered.filter(
         (product) =>
-          product.price >= filters.priceRange!.min &&
-          product.price <= filters.priceRange!.max,
+          product.data.price >= filters.priceRange!.min &&
+          product.data.price <= filters.priceRange!.max,
       );
     }
 
-    // Filtro por rating
-    if (filters.rating) {
-      filtered = filtered.filter(
-        (product) => (product.rating || 0) >= filters.rating!,
-      );
-    }
+    // Nota: Filtro por rating removido pois não existe no backend
 
     // Filtro por busca
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
       filtered = filtered.filter(
         (product) =>
-          product.name.toLowerCase().includes(searchLower) ||
-          product.description?.toLowerCase().includes(searchLower),
+          product.data.name.toLowerCase().includes(searchLower) ||
+          product.data.description?.toLowerCase().includes(searchLower),
       );
     }
 
@@ -109,25 +106,30 @@ export function ProductsProvider({
     [filteredProducts.length, itemsPerPage],
   );
 
-  // Função para buscar produtos (mock por enquanto)
+  // Função para buscar produtos da API
   const fetchProducts = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      // Simular delay de API
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await api.get("/product");
 
-      // TODO: Substituir por chamada real à API
-      const token = Cookie.get("accessToken");
+      // A API retorna { data: [...] }, então acessamos response.data.data
+      const productsArray = response.data.data;
 
-      const response = await api.get("/product", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response.data);
-      setProducts(response.data.data);
+      // Verificar se é um array
+      if (!Array.isArray(productsArray)) {
+        throw new TypeError(
+          `Resposta inesperada da API. Esperava array em data.data, recebeu: ${typeof productsArray}`,
+        );
+      }
+
+      // Mapear os dados do backend para a estrutura esperada pelo frontend
+      const mappedProducts = productsArray.map((productData: any) => ({
+        data: productData,
+      }));
+
+      setProducts(mappedProducts);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Erro ao carregar produtos",
@@ -189,23 +191,24 @@ export function ProductsProvider({
 export function useProducts(): ProductsContextType {
   const context = useContext(ProductsContext);
   if (context === undefined) {
-    throw new Error('useProducts must be used within a ProductsProvider');
+    throw new Error("useProducts must be used within a ProductsProvider");
   }
   return context;
 }
 
-
 export function fetchProductById(id: string): Promise<Product | undefined> {
   return api
-    .get(`/product/${id}`, {
-      headers: { Authorization: `Bearer ${Cookie.get("accessToken")}` },
-    })
-    .then((response) => response.data.data[0]);
+    .get(`/product/${id}`)
+    .then((response) => ({ data: response.data }))
+    .catch(() => undefined);
 }
 
 // Função utilitária para encontrar produto por ID em uma lista de produtos
-export function getProductById(products: Product[], productId: string): Product | undefined {
-  return products.find((product) => product.id === productId);
+export function getProductById(
+  products: Product[],
+  productId: string,
+): Product | undefined {
+  return products.find((product) => product.data.id === productId);
 }
 
 // Hook customizado para obter um produto por ID do contexto
@@ -214,5 +217,5 @@ export function useProductById(productId: string): Product | undefined {
   if (context === undefined) {
     throw new Error("useProductById must be used within a ProductsProvider");
   }
-  return context.products.find((product) => product.id === productId);
+  return context.products.find((product) => product.data.id === productId);
 }

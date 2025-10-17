@@ -15,46 +15,7 @@ import {
   PaginationPrevious,
 } from "../ui/pagination";
 
-const MOCK_STYLES = [
-  {
-    id: 1,
-    name: "Casual",
-  },
-  {
-    id: 2,
-    name: "Esportivo",
-  },
-  {
-    id: 3,
-    name: "Formal",
-  },
-  {
-    id: 4,
-    name: "Vintage",
-  },
-  {
-    id: 5,
-    name: "Moderno",
-  },
-  { id: 6, name: "Boêmio" },
-];
 
-const MOCK_COLORS = [
-  { id: 1, name: "Vermelho", hex: "#FF0000" },
-  { id: 2, name: "Azul", hex: "#0000FF" },
-  { id: 3, name: "Verde", hex: "#00FF00" },
-  { id: 4, name: "Amarelo", hex: "#FFFF00" },
-  { id: 5, name: "Preto", hex: "#000000" },
-  { id: 6, name: "Branco", hex: "#FFFFFF" },
-];
-
-const MOCK_SIZES = [
-  { id: 1, name: "PP" },
-  { id: 2, name: "P" },
-  { id: 3, name: "M" },
-  { id: 4, name: "G" },
-  { id: 5, name: "GG" },
-];
 
 export default function AllProducts() {
   // --- CONTEXTO DE PRODUTOS ---
@@ -72,7 +33,6 @@ export default function AllProducts() {
 
   // Estados locais para os filtros
   const [priceRange, setPriceRange] = useState(1000);
-  const [selectedRating, setSelectedRating] = useState<number | null>(null);
 
   // --- LÓGICA DE FILTROS E PAGINAÇÃO ---
 
@@ -81,10 +41,8 @@ export default function AllProducts() {
 
   // Filtrar produtos baseado nos filtros locais
   const filteredProducts = safeProducts.filter((product) => {
-    const priceFilter = product.price <= priceRange;
-    const ratingFilter =
-      !selectedRating || (product.rating && product.rating >= selectedRating);
-    return priceFilter && ratingFilter;
+    const priceFilter = product.data.price <= priceRange;
+    return priceFilter;
   });
 
   // Calcular produtos da página atual
@@ -98,7 +56,6 @@ export default function AllProducts() {
   // Função para limpar todos os filtros
   const handleClearFilters = () => {
     setPriceRange(1000);
-    setSelectedRating(null);
     setCurrentPage(1);
   };
 
@@ -122,7 +79,7 @@ export default function AllProducts() {
           <p className="mb-4 text-red-600">
             Erro ao carregar produtos: {error}
           </p>
-          <Button onClick={() => window.location.reload()}>
+          <Button onClick={() => globalThis.location.reload()}>
             Tentar novamente
           </Button>
         </div>
@@ -140,12 +97,7 @@ export default function AllProducts() {
             <FilterPanel
               priceRange={priceRange}
               onPriceChange={(value) => setPriceRange(Number(value))}
-              selectedRating={selectedRating}
-              onRatingChange={setSelectedRating}
               onClearFilters={handleClearFilters}
-              selectedColor={MOCK_COLORS}
-              selectedStyles={MOCK_STYLES}
-              selectedSizes={MOCK_SIZES}
               isMobile
             />
             <div className="mt-4 text-center">
@@ -164,13 +116,8 @@ export default function AllProducts() {
       <FilterPanel
         priceRange={priceRange}
         onPriceChange={(value) => setPriceRange(Number(value))}
-        selectedRating={selectedRating}
-        onRatingChange={setSelectedRating}
         onClearFilters={handleClearFilters}
-        selectedColor={MOCK_COLORS}
         isMobile={activeFilter}
-        selectedStyles={MOCK_STYLES}
-        selectedSizes={MOCK_SIZES}
       />
 
       {/* Coluna de Produtos */}
@@ -195,7 +142,7 @@ export default function AllProducts() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {currentProducts.length > 0 ? (
             currentProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.data.id} product={product} />
             ))
           ) : (
             <p className="col-span-full text-center">
@@ -219,7 +166,7 @@ export default function AllProducts() {
                   }}
                 />
               </PaginationItem>
-              {[...Array(totalPages).keys()].map((page) => (
+              {[...new Array(totalPages).keys()].map((page) => (
                 <PaginationItem key={page + 1}>
                   <PaginationLink
                     href="#"
