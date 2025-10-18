@@ -2,6 +2,7 @@
 
 import { useCart } from "@/contexts/CartContext";
 import { Trash2Icon } from "lucide-react";
+import Image from "next/image";
 import { Button } from "../ui/button";
 
 export function CartItems() {
@@ -22,16 +23,17 @@ export function CartItems() {
           key={item.id}
           className="flex items-center gap-4 border-b p-2 pb-4 last:border-0"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={item.imageUrl || "https://picsum.photos/200/300?random=1"}
             alt={item.name}
+            width={200}
+            height={300}
             className="h-36 w-24 object-cover"
           />
           <div className="flex h-full flex-1 flex-col justify-between border-l border-dashed border-gray-200 pl-4">
             <h2 className="text-lg font-semibold">{item.name}</h2>
             <p className="text-xl font-bold text-black">
-              ${item.price.toFixed(2)}
+              {"$" + item.price.toFixed(2)}
             </p>
 
             <div className="">

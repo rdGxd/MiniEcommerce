@@ -2,12 +2,12 @@ import { DetailsProducts } from "@/components/details-products";
 
 
 interface ProductDetailsProps {
-  readonly params: {
+  readonly params: Promise<{
     readonly id: string;
-  };
+  }>;
 }
 
-export default function ProductDetails({ params }: ProductDetailsProps) {
-  const { id } = params;
+export default async function ProductDetails({ params }: ProductDetailsProps) {
+  const { id } = await params;
   return <DetailsProducts productId={id} />;
 }

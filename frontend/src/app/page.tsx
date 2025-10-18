@@ -55,36 +55,35 @@ export default function Home() {
           alt="Versace"
           width={116}
           height={23}
-          layout="responsive"
+          className="h-auto w-full object-contain"
         />
         <Image
           src={"/zara-logo-1.svg"}
           alt="Zara"
           width={63}
           height={26}
-          layout="responsive"
+          className="h-auto w-full object-contain"
         />
         <Image
           src={"/gucci-logo-1.svg"}
           alt="Gucci"
           width={109}
           height={25}
-          layout="responsive"
+          className="h-auto w-full object-contain"
         />
         <Image
           src={"/prada-logo-1.svg"}
           alt="Prada"
           width={127}
           height={21}
-          layout="responsive"
+          className="h-auto w-full object-contain"
         />
         <Image
           src={"/Calvin.svg"}
           alt="Calvin Klein"
           width={134}
           height={21}
-          className="col-span-2"
-          layout="responsive"
+          className="col-span-2 h-auto w-full object-contain"
         />
       </div>
       <NewArrivals />

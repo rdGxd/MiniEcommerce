@@ -295,9 +295,7 @@ export const DetailsProducts = ({ productId }: { productId: string }) => {
               alt={detail.name}
               width={600}
               height={700}
-              layout="responsive"
-              objectFit="cover"
-              className="rounded-lg shadow-md"
+              className="h-auto w-full rounded-lg object-cover shadow-md"
             />
           </div>
           {/* Miniaturas */}
@@ -316,8 +314,7 @@ export const DetailsProducts = ({ productId }: { productId: string }) => {
                           alt={`${detail.name} - imagem ${index + 1}`}
                           width={100}
                           height={120}
-                          objectFit="cover"
-                          className="rounded-sm"
+                          className="rounded-sm object-cover"
                         />
                       </CardContent>
                     </Card>
@@ -607,8 +604,7 @@ export const DetailsProducts = ({ productId }: { productId: string }) => {
                 alt="Produto Relacionado 1"
                 width={300}
                 height={350}
-                objectFit="cover"
-                className="mb-4 rounded-md"
+                className="mb-4 rounded-md object-cover"
               />
               <h4 className="mb-2 text-lg font-semibold text-gray-900">
                 Produto Relacionado 1
@@ -626,8 +622,7 @@ export const DetailsProducts = ({ productId }: { productId: string }) => {
                 alt="Produto Relacionado 2"
                 width={300}
                 height={350}
-                objectFit="cover"
-                className="mb-4 rounded-md"
+                className="mb-4 rounded-md object-cover"
               />
               <h4 className="mb-2 text-lg font-semibold text-gray-900">
                 Produto Relacionado 2
