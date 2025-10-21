@@ -3,8 +3,8 @@ import 'dotenv/config';
 import { DataSource } from 'typeorm';
 
 import { Category } from '../category/entities/category.entity';
-import { Order } from '../order/entities/order.entity';
 import { OrderItem } from '../order-item/entities/order-item.entity';
+import { Order } from '../order/entities/order.entity';
 import { Payment } from '../payment/entities/payment.entity';
 import { Product } from '../product/entities/product.entity';
 import { User } from '../user/entities/user.entity';

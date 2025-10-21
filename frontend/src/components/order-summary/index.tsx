@@ -1,10 +1,40 @@
 "use client";
 
 import { useCart } from "@/contexts/CartContext";
+import { api } from "@/helper/axios";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 import { Button } from "../ui/button";
 
 export function OrderSummary() {
   const { subtotal, shipping, tax, total, itemCount } = useCart();
+
+  const handlePayout = async () => {
+    try {
+      const sendToPayout = await api.post(
+        "/payment",
+        {
+          amount: total,
+          currency: "BRL",
+          method: "CREDIT_CARD",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        },
+      );
+      if (sendToPayout.status !== 201) {
+        toast.error("Erro ao processar pagamento. Tente novamente.");
+      }
+      toast.success("Pagamento processado com sucesso!");
+
+      console.log(sendToPayout);
+    } catch {
+      toast.error("Erro ao processar pagamento. Tente novamente.");
+    }
+  };
 
   return (
     <div className="rounded-2xl border border-gray-200 p-6">
@@ -20,19 +50,19 @@ export function OrderSummary() {
             <span>
               Subtotal ({itemCount} {itemCount === 1 ? "item" : "itens"})
             </span>
-            <span>${subtotal.toFixed(2)}</span>
+            <span>R$ {subtotal.toFixed(2)}</span>
           </div>
           <div className="mb-2 flex justify-between">
             <span>Shipping</span>
-            <span>${shipping.toFixed(2)}</span>
+            <span>R$ {shipping.toFixed(2)}</span>
           </div>
           <div className="mb-4 flex justify-between">
             <span>Tax</span>
-            <span>${tax.toFixed(2)}</span>
+            <span>R$ {tax.toFixed(2)}</span>
           </div>
           <div className="flex justify-between border-t pt-4 text-lg font-bold">
             <span>Total</span>
-            <span>${total.toFixed(2)}</span>
+            <span>R$ {total.toFixed(2)}</span>
           </div>
         </>
       )}
@@ -52,7 +82,10 @@ export function OrderSummary() {
           Apply
         </Button>
       </div>
-      <Button className="mt-6 w-full rounded-lg bg-blue-600 py-3 text-white transition-colors hover:bg-blue-700">
+      <Button
+        className="mt-6 w-full rounded-lg bg-blue-600 py-3 text-white transition-colors hover:bg-blue-700"
+        onClick={handlePayout}
+      >
         Checkout
       </Button>
     </div>

@@ -10,10 +10,10 @@ import { UserActions } from "../user-actions";
 // Estrutura de dados mais robusta
 const navItems = [
   { name: "Home", href: "/" },
-  { name: "Shop", href: "/shop" },
-  { name: "On Sale", href: "/sale" },
-  { name: "New Arrivals", href: "/new" },
-  { name: "Brands", href: "/brands" },
+  { name: "Products", href: "/products" },
+  { name: "On Sale", href: "/" },
+  { name: "New Arrivals", href: "/" },
+  { name: "Brands", href: "/" },
 ];
 
 export default function Header() {

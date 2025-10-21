@@ -57,6 +57,7 @@ export function AuthProvider({ children }: { readonly children: React.ReactNode 
 
     // Limpar estado do usuário
     setUser(null);
+
   }, []);
 
   const refreshTokenFn = useCallback(async (): Promise<boolean> => {

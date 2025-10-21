@@ -1,10 +1,10 @@
 import {
-    Body,
-    Controller,
-    Get,
-    HttpCode,
-    HttpStatus,
-    Post,
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
 } from '@nestjs/common';
 
 import { TokenPayloadParam } from '../../common/decorators/token-payload.decorator';
