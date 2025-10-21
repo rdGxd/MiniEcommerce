@@ -1,15 +1,12 @@
 import { Product } from "@/contexts/ProductsContext";
 import { ShoppingCartIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   readonly product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const router = useRouter();
-
   // Verificação de segurança
   if (!product?.data) {
     return (

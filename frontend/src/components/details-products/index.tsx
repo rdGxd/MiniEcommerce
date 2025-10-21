@@ -1,5 +1,6 @@
 "use client";
 
+import { useCart } from "@/contexts/CartContext";
 import { useProductById } from "@/contexts/ProductsContext";
 import { getStarRating } from "@/helper/rating";
 import { CircleCheckIcon } from "lucide-react";
@@ -177,6 +178,7 @@ export const DetailsProducts = ({ productId }: { productId: string }) => {
   const [activeTab, setActiveTab] = useState<"details" | "reviews" | "faqs">(
     "details",
   );
+  const cart = useCart();
 
   // ALTERAÇÃO: usa o hook customizado para obter o produto do contexto
   const product = useProductById(productId);
@@ -219,13 +221,14 @@ export const DetailsProducts = ({ productId }: { productId: string }) => {
   }, [product]);
 
   const onSubmit: SubmitHandler<ProductFormData> = (data) => {
-    console.log("Adicionando ao carrinho:", {
-      productId: detail.id,
-      ...data,
-    });
-    alert(
-      `Produto adicionado ao carrinho: \nCor: ${data.selectedColor}\nTamanho: ${data.selectedSize}\nQuantidade: ${data.quantity}`,
-    );
+    const cartItem = {
+      id: detail.id,
+      name: detail.name,
+      price: detail.price,
+      quantity: data.quantity,
+      imageUrl: detail.mainImage,
+    };
+    cart.addItem(cartItem);
   };
 
   // Watch para a quantidade para poder incrementar/decrementar

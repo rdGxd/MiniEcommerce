@@ -28,13 +28,11 @@ export function CartItems() {
             alt={item.name}
             width={200}
             height={300}
-            className="h-36 w-24 object-cover"
+            className="object-cover"
           />
-          <div className="flex h-full flex-1 flex-col justify-between border-l border-dashed border-gray-200 pl-4">
+          <div className="flex h-full flex-1 flex-col items-center justify-center border-l border-dashed border-gray-200 pl-4">
             <h2 className="text-lg font-semibold">{item.name}</h2>
-            <p className="text-xl font-bold text-black">
-              {"$" + item.price.toFixed(2)}
-            </p>
+            <p className="text-xl font-bold text-black">{"R$ " + item.price}</p>
 
             <div className="">
               <Button
