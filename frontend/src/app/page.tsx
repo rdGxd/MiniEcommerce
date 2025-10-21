@@ -4,6 +4,7 @@ import { TopSelling } from "@/components/new-arrivals";
 import { NewArrivals } from "@/components/top-selling";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -17,9 +18,14 @@ export default function Home() {
           Discover a wide range of clothing options tailored to your unique
           taste and preferences.
         </p>
-        <Button size="lg" className="w-full cursor-pointer md:w-1/2">
-          Shop Now
-        </Button>
+        <Link
+          href="/products"
+          className="w-full cursor-pointer md:w-1/2 lg:w-1/4"
+        >
+          <Button className="w-full cursor-pointer bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
+            Shop Now
+          </Button>
+        </Link>
       </div>
 
       <div className="grid w-full max-w-3xl grid-cols-2 gap-4 p-2 sm:grid-cols-3 lg:col-span-10 lg:max-w-5xl">

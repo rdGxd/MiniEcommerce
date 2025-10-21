@@ -3,6 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { HashingProtocol } from 'src/common/hashing/hashing-protocol';
 import { type Repository } from 'typeorm';
 
+import { UserRoles } from 'src/common/enums/role.enum';
 import { ResponseUserDto } from '../dto/response-user.dto';
 import { User } from '../entities/user.entity';
 import { UserMapper } from '../mapper/user-mapper';
@@ -64,7 +65,7 @@ describe('UserService', () => {
         email: 'test@example.com',
         id: '1',
         name: 'Test User',
-        role: 'user',
+        role: UserRoles.USER,
       };
 
       const createUser = {

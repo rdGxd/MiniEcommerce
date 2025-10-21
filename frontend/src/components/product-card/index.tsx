@@ -1,5 +1,6 @@
 import { Product } from "@/contexts/ProductsContext";
 import { ShoppingCartIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
@@ -18,16 +19,10 @@ export function ProductCard({ product }: ProductCardProps) {
     );
   }
 
-  const handleClick = () => {
-    router.push(`/products/details/${product.data.id}`);
-  };
-
   return (
-    <button
-      type="button"
-      key={product.data.id}
+    <Link
+      href={`/products/details/${product.data.id}`}
       className="w-full cursor-pointer rounded-2xl border bg-white p-4 text-left hover:shadow-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      onClick={handleClick}
     >
       <img
         src={product.data.imageUrl}
@@ -50,6 +45,6 @@ export function ProductCard({ product }: ProductCardProps) {
           </button>
         </span>
       </div>
-    </button>
+    </Link>
   );
 }
