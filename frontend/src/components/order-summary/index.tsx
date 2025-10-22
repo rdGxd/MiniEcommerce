@@ -25,13 +25,25 @@ export function OrderSummary() {
           },
         },
       );
-      if (sendToPayout.status !== 201) {
+
+      if (sendToPayout.status === 201) {
+        const paymentData = sendToPayout.data;
+
+        // Verificar o status do pagamento retornado pelo backend
+        if (paymentData.status === "COMPLETED") {
+          toast.success("Pagamento processado com sucesso!");
+        } else if (paymentData.data.status === "PENDING") {
+          toast.info("Pagamento está sendo processado...");
+        } else if (paymentData.data.status === "FAILED") {
+          toast.error("Falha no processamento do pagamento.");
+        } else {
+          toast.warning(`Status do pagamento: ${paymentData.data.status}`);
+        }
+      } else {
         toast.error("Erro ao processar pagamento. Tente novamente.");
       }
-      toast.success("Pagamento processado com sucesso!");
-
-      console.log(sendToPayout);
-    } catch {
+    } catch (error) {
+      console.error("Payment error:", error);
       toast.error("Erro ao processar pagamento. Tente novamente.");
     }
   };

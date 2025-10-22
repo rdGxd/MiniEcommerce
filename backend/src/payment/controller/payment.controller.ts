@@ -14,6 +14,7 @@ export class PaymentController {
     @Body() createPaymentDto: CreatePaymentDto,
     @TokenPayloadParam() payload: PayloadDto,
   ) {
+    console.log(payload);
     return this.paymentService.create(createPaymentDto, payload);
   }
 

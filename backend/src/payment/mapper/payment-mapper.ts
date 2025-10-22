@@ -25,6 +25,7 @@ export class PaymentMapper {
     dto.amount = entity.amount;
     dto.currency = entity.currency;
     dto.userId = entity.user.id;
+    dto.status = entity.status;
     dto.createdAt = entity.createdAt;
     dto.updatedAt = entity.updatedAt;
     return dto;
