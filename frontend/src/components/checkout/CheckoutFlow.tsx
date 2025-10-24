@@ -1,6 +1,7 @@
 import { useOrderItems } from "@/components/hooks/useOrderItems";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { api } from "@/helper/axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -12,11 +13,9 @@ export function CheckoutFlow() {
   // Simular criação de um pedido (você precisará implementar a API de order)
   const createOrder = async (): Promise<string> => {
     // Aqui você faria a chamada para criar um Order
-    // const response = await api.post('/order', { userId });
-    // return response.data.id;
-
-    // Para exemplo, vou retornar um ID simulado
-    return `order-${Date.now()}`;
+    const response = await api.post("/order", { total });
+    console.log("Ordem criada:", response.data);
+    return `${response.data.id}`;
   };
 
   const handleCheckout = async () => {
@@ -48,7 +47,6 @@ export function CheckoutFlow() {
 
       // Redirecionar para página de confirmação ou detalhes do pedido
       // router.push(`/orders/${orderId}`);
-
     } catch (error) {
       console.error("Erro no checkout:", error);
       toast.error("Erro ao finalizar pedido. Tente novamente.");
@@ -98,7 +96,7 @@ export function CheckoutFlow() {
 
       {/* Status do pedido atual */}
       {currentOrderId && (
-        <div className="rounded-lg bg-green-50 border border-green-200 p-4">
+        <div className="rounded-lg border border-green-200 bg-green-50 p-4">
           <p className="text-green-700">
             ✅ Pedido {currentOrderId} criado com sucesso!
           </p>

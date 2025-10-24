@@ -1,16 +1,18 @@
 import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    ParseUUIDPipe,
-    Patch,
-    Post,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
 import { UserRoles } from 'src/common/enums/role.enum';
 
+import { TokenPayloadParam } from 'src/common/decorators/token-payload.decorator';
+import { PayloadDto } from 'src/common/dto/payload.dto';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { UpdateOrderDto } from '../dto/update-order.dto';
 import { OrderService } from '../service/order.service';
@@ -20,8 +22,11 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.orderService.create(createOrderDto);
+  create(
+    @Body() createOrderDto: CreateOrderDto,
+    @TokenPayloadParam() payload: PayloadDto,
+  ) {
+    return this.orderService.create(createOrderDto, payload);
   }
 
   @Get()

@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { api } from "@/helper/axios";
 import { useState } from "react";
 
 interface Product {
@@ -50,14 +51,15 @@ export default function ProductCategoryDiagnostic() {
 
     try {
       // Buscar produtos
-      const productsResponse = await fetch("/api/products");
-      if (!productsResponse.ok) throw new Error("Erro ao buscar produtos");
-      const products: Product[] = await productsResponse.json();
+      const productsResponse = await api.get("/product");
+      if (!productsResponse.data) throw new Error("Erro ao buscar produtos");
+      const products: Product[] = await productsResponse.data.data;
 
       // Buscar categorias
-      const categoriesResponse = await fetch("/api/categories");
-      if (!categoriesResponse.ok) throw new Error("Erro ao buscar categorias");
-      const categories: Category[] = await categoriesResponse.json();
+      const categoriesResponse = await api.get("/category");
+      if (!categoriesResponse.data)
+        throw new Error("Erro ao buscar categorias");
+      const categories: Category[] = await categoriesResponse.data.data;
 
       // Calcular estatísticas
       const productsWithoutCategories = products.filter(

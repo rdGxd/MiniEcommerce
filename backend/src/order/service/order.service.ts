@@ -1,9 +1,10 @@
 import {
-    BadRequestException,
-    Injectable,
-    NotFoundException,
+  BadRequestException,
+  Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 
+import { PayloadDto } from 'src/common/dto/payload.dto';
 import { ORDER_ERRORS } from '../../constants/order.constants';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { UpdateOrderDto } from '../dto/update-order.dto';
@@ -17,8 +18,8 @@ export class OrderService {
     private readonly orderMapper: OrderMapper,
   ) {}
 
-  async create(createOrderDto: CreateOrderDto) {
-    const order = this.orderMapper.toEntity(createOrderDto);
+  async create(createOrderDto: CreateOrderDto, payload: PayloadDto) {
+    const order = this.orderMapper.toEntity(createOrderDto, payload.sub);
     const savedOrder = await this.orderRepository.save(order);
 
     if (!savedOrder) {

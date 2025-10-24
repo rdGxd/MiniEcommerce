@@ -7,11 +7,11 @@ import { Order } from '../entities/order.entity';
 
 @Injectable()
 export class OrderMapper {
-  toEntity(dto: CreateOrderDto) {
+  toEntity(dto: CreateOrderDto, userId: string) {
     const order = new Order();
 
     const user = new User();
-    user.id = dto.userId;
+    user.id = userId;
 
     order.user = user;
 
